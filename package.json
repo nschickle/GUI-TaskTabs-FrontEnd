@@ -4,9 +4,9 @@
   "description": "Task Tabs",
   "main": "index.js",
   "scripts": {
-    "postinstall": "npm i -g react-scripts-ts",
+    "postinstall": "npm i -g typescript && npm i -g react-scripts-ts",
     "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
-    "start": "SET PORT=$PORT && react-scripts-ts start"
+    "start": "set PORT=$PORT && react-scripts-ts start"
   },
   "repository": {
     "type": "git",
