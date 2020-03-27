@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import { SubTaskButton } from './subTaskButton';
 import { SubTask } from './subtaskType';
+import { Button } from 'react-bootstrap';
 
 interface ColumnProps {
     height: number;
@@ -63,7 +64,7 @@ export class SubTaskColumn extends React.Component<SubTaskColumnProps>{
         const height = this.checkHeight();
         return (
             <Column height = {height}>
-                <NewTaskButton>+ New Task</NewTaskButton>
+                <Button>+ New Task</Button>
                 {this.props.subtasks.map((task) => {
                     return <SubTaskButton name={task.name} percentage={task.percentage} key={task.id} changeHead={this.props.changeHead} taskHead={task}></SubTaskButton>;
                 })}

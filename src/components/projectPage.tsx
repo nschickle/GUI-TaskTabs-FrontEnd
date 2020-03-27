@@ -42,13 +42,13 @@ const testSharedWith: IUser[] = [
 // TODO
 // Use database queries to grab all the necessary data here and parse throughout app
 const testProjectData: SubTask = {
-  name: "Project 1", percentage: 20, id: 0, description: "Project 1", startDate: new Date(2020, 2, 14), 
-    dueDate: new Date(2020, 2, 28), status: "active", assignee: "Steve", tags: testTaskTags, 
-    owner: testOwner, sharedWith: testSharedWith, subtasks: 
+  name: "Project 1", percentage: 20, id: 0, description: "Project 1", startDate: new Date(2020, 2, 14),
+    dueDate: new Date(2020, 2, 28), status: "active", assignee: "Steve", tags: testTaskTags,
+    owner: testOwner, sharedWith: testSharedWith, subtasks:
     [
     {
-      name: "Task 1", percentage: 60, id: 1, description: "Task 1", startDate: new Date(2020, 2, 14), 
-        dueDate: new Date(2020, 2, 26), status: "active", assignee: "Steve", tags: testTaskTags, 
+      name: "Task 1", percentage: 60, id: 1, description: "Task 1", startDate: new Date(2020, 2, 14),
+        dueDate: new Date(2020, 2, 26), status: "active", assignee: "Steve", tags: testTaskTags,
         owner: testOwner, sharedWith: testSharedWith, subtasks:
         [
           { name: "SubTask 1", percentage: 0, id: 7, description: "test", startDate: new Date(2020, 2, 14),
@@ -63,58 +63,58 @@ const testProjectData: SubTask = {
           { name: "SubTask 4", percentage: 100, id: 10, description: "test", startDate: new Date(2020, 2, 14),
           dueDate: new Date(2020, 2, 26), status: "active", assignee: "Steve", tags: testTaskTags,
           owner: testOwner, sharedWith: testSharedWith, subtasks: [] },
-          { name: "SubTask 5", percentage: 0, id: 11, description: "test", startDate: new Date(2020, 2, 14), 
-          dueDate: new Date(2020, 2, 27), status: "active", assignee: "Steve", tags: testTaskTags, 
+          { name: "SubTask 5", percentage: 0, id: 11, description: "test", startDate: new Date(2020, 2, 14),
+          dueDate: new Date(2020, 2, 27), status: "active", assignee: "Steve", tags: testTaskTags,
           owner: testOwner, sharedWith: testSharedWith, subtasks: [] },
         ]
     },
     {
-      name: "Task 2", percentage: 0, id: 2, description: "test", startDate: new Date(2020, 2, 14), 
-      dueDate: new Date(2020, 2, 24), status: "active", assignee: "Steve", tags: testTaskTags, 
+      name: "Task 2", percentage: 0, id: 2, description: "test", startDate: new Date(2020, 2, 14),
+      dueDate: new Date(2020, 2, 24), status: "active", assignee: "Steve", tags: testTaskTags,
       owner: testOwner, sharedWith: testSharedWith, subtasks:
         [
           {
-            name: "Subtask 1", percentage: 0, id: 12, description: "Subtask 1", startDate: new Date(2020, 2, 14), 
-            dueDate: new Date(2020, 2, 26), status: "active", assignee: "Steve", tags: testTaskTags, 
+            name: "Subtask 1", percentage: 0, id: 12, description: "Subtask 1", startDate: new Date(2020, 2, 14),
+            dueDate: new Date(2020, 2, 26), status: "active", assignee: "Steve", tags: testTaskTags,
             owner: testOwner, sharedWith: testSharedWith, subtasks:
               [
-                { name: "Sub-Subtask 1", percentage: 0, id: 13, description: "test", startDate: new Date(2020, 2, 14), 
-                dueDate: new Date(2020, 2, 27), status: "active", assignee: "Steve", tags: testTaskTags, 
+                { name: "Sub-Subtask 1", percentage: 0, id: 13, description: "test", startDate: new Date(2020, 2, 14),
+                dueDate: new Date(2020, 2, 27), status: "active", assignee: "Steve", tags: testTaskTags,
                 owner: testOwner, sharedWith: testSharedWith, subtasks: [] },
-                { name: "Sub-Subtask 2", percentage: 0, id: 14, description: "test", startDate: new Date(2020, 2, 14), 
-                dueDate: new Date(2020, 2, 26), status: "active", assignee: "Steve", tags: testTaskTags, 
+                { name: "Sub-Subtask 2", percentage: 0, id: 14, description: "test", startDate: new Date(2020, 2, 14),
+                dueDate: new Date(2020, 2, 26), status: "active", assignee: "Steve", tags: testTaskTags,
                 owner: testOwner, sharedWith: testSharedWith, subtasks: [] },
-                { name: "Sub-Subtask 3", percentage: 0, id: 15, description: "test", startDate: new Date(2020, 2, 14), 
-                dueDate: new Date(2020, 2, 27), status: "active", assignee: "Steve", tags: testTaskTags, 
+                { name: "Sub-Subtask 3", percentage: 0, id: 15, description: "test", startDate: new Date(2020, 2, 14),
+                dueDate: new Date(2020, 2, 27), status: "active", assignee: "Steve", tags: testTaskTags,
                 owner: testOwner, sharedWith: testSharedWith, subtasks: [] },
-                { name: "Sub-Subtask 4", percentage: 0, id: 16, description: "test", startDate: new Date(2020, 2, 14), 
-                dueDate: new Date(2020, 2, 26), status: "active", assignee: "Steve", tags: testTaskTags, 
+                { name: "Sub-Subtask 4", percentage: 0, id: 16, description: "test", startDate: new Date(2020, 2, 14),
+                dueDate: new Date(2020, 2, 26), status: "active", assignee: "Steve", tags: testTaskTags,
                 owner: testOwner, sharedWith: testSharedWith, subtasks: [] },
-                { name: "Sub-Subtask 5", percentage: 0, id: 17, description: "test", startDate: new Date(2020, 2, 14), 
-                dueDate: new Date(2020, 2, 27), status: "active", assignee: "Steve", tags: testTaskTags, 
+                { name: "Sub-Subtask 5", percentage: 0, id: 17, description: "test", startDate: new Date(2020, 2, 14),
+                dueDate: new Date(2020, 2, 27), status: "active", assignee: "Steve", tags: testTaskTags,
                 owner: testOwner, sharedWith: testSharedWith, subtasks: [] },
               ]
           },
         ]
     },
     {
-      name: "Task 3", percentage: 100, id: 3, description: "completed!", startDate: new Date(2020, 2, 14), 
-      dueDate: new Date(2020, 2, 24), status: "active", assignee: "Steve", tags: testTaskTags, 
+      name: "Task 3", percentage: 100, id: 3, description: "completed!", startDate: new Date(2020, 2, 14),
+      dueDate: new Date(2020, 2, 24), status: "active", assignee: "Steve", tags: testTaskTags,
       owner: testOwner, sharedWith: testSharedWith, subtasks:
         [
-          { name: "Subtask 1", percentage: 100, id: 13, description: "all finished!", startDate: new Date(2020, 2, 14), 
-          dueDate: new Date(2020, 2, 27), status: "active", tags: testTaskTags, assignee: "Steve", 
+          { name: "Subtask 1", percentage: 100, id: 13, description: "all finished!", startDate: new Date(2020, 2, 14),
+          dueDate: new Date(2020, 2, 27), status: "active", tags: testTaskTags, assignee: "Steve",
           owner: testOwner, sharedWith: testSharedWith, subtasks: [] },
         ]
     },
-    { name: "Task 4", percentage: 50, id: 4, description: "test", startDate: new Date(2020, 2, 14), 
-    dueDate: new Date(2020, 2, 24), status: "active", assignee: "Steve", tags: testTaskTags, 
+    { name: "Task 4", percentage: 50, id: 4, description: "test", startDate: new Date(2020, 2, 14),
+    dueDate: new Date(2020, 2, 24), status: "active", assignee: "Steve", tags: testTaskTags,
     owner: testOwner, sharedWith: testSharedWith, subtasks: [] },
-    { name: "Task 5", percentage: 81, id: 5, description: "test", startDate: new Date(2020, 2, 14), 
-    dueDate: new Date(2020, 2, 24), status: "active", assignee: "Steve", tags: testTaskTags, 
+    { name: "Task 5", percentage: 81, id: 5, description: "test", startDate: new Date(2020, 2, 14),
+    dueDate: new Date(2020, 2, 24), status: "active", assignee: "Steve", tags: testTaskTags,
     owner: testOwner, sharedWith: testSharedWith, subtasks: [] },
-    { name: "Loooooong task name", percentage: 30.7, id: 6, description: "test", startDate: new Date(2020, 2, 14), 
-    dueDate: new Date(2020, 2, 24), status: "active", tags: testTaskTags, 
+    { name: "Loooooong task name", percentage: 30.7, id: 6, description: "test", startDate: new Date(2020, 2, 14),
+    dueDate: new Date(2020, 2, 24), status: "active", tags: testTaskTags,
     owner: testOwner, sharedWith: testSharedWith, assignee: "Steve", subtasks: [] },
   ]
 };
@@ -158,5 +158,5 @@ export class ProjectPage extends React.Component<{}, { projectHead: SubTask, pro
       return { projectData: newHead };
     })
   }
-  
+
 };
