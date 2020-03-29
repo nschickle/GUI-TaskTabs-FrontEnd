@@ -1,6 +1,9 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 import { TaskProgressBar } from './progressBar';
 import { StatusDropdown } from './statusDropdown';
 import { AssignedDropdown } from './assignedDropdown';
@@ -67,6 +70,14 @@ const LabelText = styled.div`
     font-size: 32px;
     text-align: center;
     margin-bottom: 10px;
+`;
+
+const DueDates = styled.div`
+    font-size: 32px;
+    text-align: center;
+    margin-bottom: 10px;
+	margin-left: 30%;
+	margin-right: auto;
 `;
 
 const CalendarButton = styled.button`
@@ -149,6 +160,9 @@ export class TaskView extends React.Component<TaskViewProps>{
     tags: Tag[];
     owner: User;
     sharedUsers: User[];
+	
+	state = {width: 0, height: 0, dueDate: this.props.dueDate};
+	
 
     constructor(props: TaskViewProps) {
         super(props);
@@ -172,9 +186,16 @@ export class TaskView extends React.Component<TaskViewProps>{
 
         this.tags = props.tags;
 
-        this.state = { width: 0, height: 0 };
+        this.state = { width: 0, height: 0, dueDate: this.props.dueDate};
     }
-
+	
+	handleChange = (date: Date) => {
+		this.setState({
+			dueDate: date
+		});
+		this.calculateDaysLeft();
+	};
+  
     // If the title is too long, we should shorten it to fit the space we have.
     displayName = () => {
         let displayedName = this.props.name;
@@ -187,10 +208,10 @@ export class TaskView extends React.Component<TaskViewProps>{
 
     // Calculates the difference between the current date and the due date
     calculateDaysLeft = () => {
-        if (this.today !== this.props.dueDate) {
-            const dueMonth = this.props.dueDate.getMonth() + 1;
-            const dueYear = this.props.dueDate.getFullYear();
-            const dueDay = this.props.dueDate.getDate();
+        if (this.today !== this.state.dueDate) {
+            const dueMonth = this.state.dueDate.getMonth() + 1;
+            const dueYear = this.state.dueDate.getFullYear();
+            const dueDay = this.state.dueDate.getDate();
             const todayMonth = this.today.getMonth() + 1;
             const todayYear = this.today.getFullYear();
             const todayDay = this.today.getDate();
@@ -295,11 +316,14 @@ export class TaskView extends React.Component<TaskViewProps>{
                         </DeleteButton>
                     </Row>
                     <TaskProgressBar percentage={this.props.completion} />
-                    <LabelText>Date Due:
-                    <CalendarButton>
-                            <LabelText>{this.displayedDueDate}</LabelText>
-                        </CalendarButton>
-                    </LabelText>
+                    <DueDates>
+					<Row>Due Date:
+							<DatePicker
+								selected={this.state.dueDate}
+								onChange={this.handleChange}
+							/>
+						</Row>
+                    </DueDates>
                     <LabelText> {this.displayedDaysLeft} </LabelText>
                     <Row>
                         <StatusDropdown taskStatus={this.status} statusList={this.statusOptions} />
