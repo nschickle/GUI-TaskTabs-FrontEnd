@@ -1,6 +1,4 @@
-
 import * as React from "react";
-import styled from "styled-components";
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -11,10 +9,13 @@ import { SubTaskColumn } from "./subTaskColumn";
 import { SubTask } from "./subtaskType";
 import { TaskView } from "./taskView";
 
-const containerStyle = styled.div`
-    padding-left: 0;
-    padding-right: 0;
-`;
+const styles = {
+    box: {
+        paddingLeft: 0,
+        paddingRight: 0,
+        minWidth: 1300
+    }
+};
 
 interface IUser {
   id: number;
@@ -135,7 +136,7 @@ export class ProjectPage extends React.Component<{}, { projectHead: SubTask, pro
   // but should be replaced.
   public render() {
     return (
-      <Container fluid style={{ paddingLeft: 0, paddingRight: 0 }}>
+      <Container fluid style={styles.box}>
         <Row noGutters={true}>
             <Col sm="3"><ProjectColumn task={this.state.projectHead} changeHead={this.changeHead} /></Col>
             <Col sm="6"><TaskView

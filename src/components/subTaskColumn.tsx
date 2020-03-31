@@ -1,5 +1,4 @@
 import * as React from 'react';
-import styled from 'styled-components';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -21,7 +20,8 @@ const styles = {
         margin: 0,
         borderStyle: "solid",
         borderColor: "gray",
-        height: window.innerHeight
+        height: window.innerHeight,
+        minWidth: 200
     }
 };
 

@@ -1,5 +1,4 @@
 import * as React from "react";
-import styled from "styled-components";
 
 import { ProjectButton } from "./newProjectButton";
 import { SubTaskButton } from "./subTaskButton";
@@ -15,7 +14,8 @@ const styles = {
         margin: 0,
         borderStyle: "solid",
         borderColor: "gray",
-        height: window.innerHeight
+        height: window.innerHeight,
+        minWidth: 250
     }
 };
 

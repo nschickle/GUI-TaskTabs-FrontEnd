@@ -1,5 +1,4 @@
 import * as React from 'react';
-import styled from 'styled-components';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -19,6 +18,9 @@ const styles = {
     user: {
         fontSize: 24,
         width: 110
+    },
+    box: {
+        minWidth: 100
     }
 };
 
@@ -50,7 +52,7 @@ export class ShareUsers extends React.Component<ShareUserProps> {
         });
 
         return (
-            <Container>
+            <Container style={styles.box}>
                 <Row noGutters={true}>
                     <ListGroup horizontal>
                         <ListGroup>

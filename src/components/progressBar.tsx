@@ -10,6 +10,7 @@ const ProgressBar = styled.div`
     border: 1px solid #333;
     position: relative;
     margin: auto;
+    min-width: 300px;
 `;
 
 const SubTaskProgressBar = styled.div`

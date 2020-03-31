@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
-import ProgressBar from 'react-bootstrap/ProgressBar';
 
 import { TaskProgressBar } from './progressBar';
 import { SubTask } from './subtaskType';
@@ -26,8 +25,9 @@ const SubTaskName = styled.div`
     font-size: 32px;
     position: absolute;
     z-index: 99;
-    left: 100px;
+    left: 25px;
     margin-top: 15px;
+    min-width: 225px;
 `;
 
 interface SubTaskButtonProps {
@@ -52,8 +52,8 @@ export class SubTaskButton extends React.Component<SubTaskButtonProps>{
 
     // If the title is too long, we should shorten it to fit the space we have.
     checkNameLength = () => {
-        if (this.name.length > 16) {
-            this.displayedName = this.name.substring(0, 15);
+        if (this.name.length > 9) {
+            this.displayedName = this.name.substring(0, 8);
             this.displayedName += "...";
         }
     }

@@ -28,10 +28,12 @@ const styles = {
     },
     container: {
         paddingLeft: 0,
-        paddingRight: 0
+        paddingRight: 0,
+        minWidth: 650
     },
     row: {
-        paddingTop:50
+        paddingTop:50,
+        minWidth: 300
     },
     saveButton: {
         height: 100,
@@ -50,16 +52,14 @@ const styles = {
     sharedTab: {
         bottom: 0,
         left: 0,
-        margin: 0,
         borderColor: "gray",
         borderStyle: "solid",
-        width: 750,
         padding: 0
     },
     historyButton: {
-        marginTop: 0,
         height: 150,
-        width: 160
+        width: 160,
+        fontSize: 32
     }
 }
 
@@ -67,6 +67,7 @@ const Title = styled.div`
     font-size: 72px;
     margin-left: 50px;
     text-align: center;
+    min-width: 200px;
 `;
 
 const LabelText = styled.div`
@@ -300,7 +301,7 @@ export class TaskView extends React.Component<TaskViewProps>{
                     </Form>
                 </Row>
                 <Row noGutters={true}>
-                    <Col md="10" style={styles.sharedTab}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} /> </Col>
+                    <Col md="9" style={styles.sharedTab}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} /> </Col>
                     <Col md="2">
                         <Button
                             variant = "outline-info"
