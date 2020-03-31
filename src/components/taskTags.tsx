@@ -1,35 +1,16 @@
 import * as React from 'react';
-import styled from 'styled-components';
 
-const Tags = styled.div`
-    text-align: center;
-    margin: 10px;
-`;
+import Button from 'react-bootstrap/Button';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
 
-const LabelText = styled.label`
-    font-size: 32px;
-`;
-
-// Have a visual signifier that a user could remove a tag if they wanted to
-// when they click on it
-const TagButton = styled.button`
-    border: none;
-    margin: 5px;
-    :hover {
-        cursor: pointer;
-        text-decoration: line-through;
+const styles = {
+    tagBox: {
+        margin: "auto"
+    },
+    tagText: {
+        fontSize: 24
     }
-`;
-
-const ButtonText = styled.div`
-    font-size: 32px;
-`;
-
-const AddTagButton = styled.button`
-    border-radius: 100%;
-    width: 50px;
-    height: 50px;
-`;
+};
 
 interface Tag {
     tag: string;
@@ -53,16 +34,15 @@ export class TaskTags extends React.Component<TaskTagsProps> {
         const tagArray = this.tags.map((item , i) =>
         {
             return (
-                <TagButton key={item.id}> <ButtonText> {item.tag} </ButtonText> </TagButton>
+                <Button key={item.id} variant="outline-secondary" style={styles.tagText}> {item.tag}</Button>
             )
         });
 
         return(
-            <Tags>
-                <LabelText> Tags: </LabelText>
+            <ButtonGroup style={styles.tagBox}>
                 {tagArray}
-                <AddTagButton><ButtonText>+</ButtonText></AddTagButton>
-            </Tags>
+                <Button variant="outline-secondary" style={styles.tagText}> + </Button>
+            </ButtonGroup>
         )
     }
 }

@@ -1,29 +1,29 @@
 import * as React from 'react';
-import styled from 'styled-components';
+
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
 
 import { SubTaskButton } from './subTaskButton';
 import { SubTask } from './subtaskType';
-import { Button } from 'react-bootstrap';
 
-interface ColumnProps {
-    height: number;
-};
-
-const Column = styled.div`
-  display: flex;
-  flex-direction: column;
-  border-width: 5px 5px 5px 0px;
-  border-style: solid;
-  height: ${(props: ColumnProps) => props.height}px;
-`;
-
-const NewTaskButton = styled.button`
-    height: 100px;
-    width: 400px;
-    :hover {
-        cursor: pointer;
+const styles = {
+    button: {
+        width: window.innerWidth,
+        height: 100,
+        fontSize: 32
+    },
+    box: {
+        paddingRight: 0,
+        paddingLeft: 0,
+        margin: 0,
+        borderStyle: "solid",
+        borderColor: "gray",
+        height: window.innerHeight,
+        minWidth: 200
     }
-`;
+};
 
 interface SubTaskColumnProps {
     subtasks: SubTask[];
@@ -36,39 +36,22 @@ export class SubTaskColumn extends React.Component<SubTaskColumnProps>{
 
     constructor(props: SubTaskColumnProps) {
         super(props);
-
-        this.state = { height: 0 };
-    }
-
-    updateDimensions = () => {
-        this.setState({ height: window.innerHeight });
-    };
-
-    // When this object is displayed, add an event that check for window resizes.
-    componentDidMount() {
-        window.addEventListener('resize', this.updateDimensions);
-    }
-
-    // Remove event when the object is unmounted.
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.updateDimensions);
-    }
-
-    // Make sure column doesn't get too small
-    checkHeight = () => {
-        const height = window.innerHeight;
-        return height > 825 ? height : 825;
     }
 
     render() {
-        const height = this.checkHeight();
         return (
-            <Column height = {height}>
-                <Button>+ New Task</Button>
-                {this.props.subtasks.map((task) => {
-                    return <SubTaskButton name={task.name} percentage={task.percentage} key={task.id} changeHead={this.props.changeHead} taskHead={task}></SubTaskButton>;
-                })}
-            </Column>
+            <Container>
+                <Col style={styles.box}>
+                    <Row noGutters={true}>
+                        <Button style={styles.button} size="lg" variant="outline-primary"> + New Task </Button>
+                    </Row>
+                    <Row noGutters={true}>
+                        {this.props.subtasks.map((task) => {
+                            return <SubTaskButton name={task.name} percentage={task.percentage} key={task.id} changeHead={this.props.changeHead} taskHead={task}></SubTaskButton>;
+                        })}
+                    </Row>
+                </Col>
+            </Container>
         );
     }
 };

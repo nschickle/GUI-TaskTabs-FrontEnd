@@ -1,19 +1,12 @@
 import * as React from 'react';
-import styled from 'styled-components';
 
-const LabelText = styled.label`
-    font-size: 32px;
-    display: block;
-    text-align: center;
-    margin: auto;
-    margin-right: 10px;
-    margin-bottom: 10px;
-`;
+import Form from 'react-bootstrap/Form';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
-const Select = styled.select`
-    font-size: 32px;
-    margin: 5px;
-`;
+const font = {
+    fontSize: 32
+};
 
 interface Options {
     id: number;
@@ -29,7 +22,6 @@ interface StatusState {
 interface StatusDropdownProps {
     taskStatus: string;
     statusList: Options[];
-
 }
 
 export class StatusDropdown extends React.Component<StatusDropdownProps, StatusState> {
@@ -54,7 +46,6 @@ export class StatusDropdown extends React.Component<StatusDropdownProps, StatusS
         const taskStatus = this.state.taskStatus;
 
         // Maps through the array given and sets up the options
-        // Needs to be done in the render() function or will not produce the proper output
         const arrayOp = this.options.map((item, i) => {
             return (
                 <option key={item.id} value={item.value}>{item.label}</option>
@@ -62,11 +53,22 @@ export class StatusDropdown extends React.Component<StatusDropdownProps, StatusS
         });
 
         return(
-            <LabelText>Status:
-                <Select value={taskStatus} onChange={this.handleChange}>
-                    {arrayOp}
-                </Select>
-            </LabelText>
+            <Form style={font}>
+                <Form.Group as={Row} controlId="statusDropdown">
+                    <Form.Label column sm="4">Status:</Form.Label>
+                    <Col sm="8">
+                        <Form.Control
+                            as="select"
+                            onChange={this.handleChange}
+                            defaultValue={taskStatus}
+                            size="lg"
+                            style={font}
+                        >
+                            {arrayOp}
+                        </Form.Control>
+                    </Col>
+                </Form.Group>
+            </Form>
         )
     }
 }

@@ -1,27 +1,33 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Button from 'react-bootstrap/Button';
+
 import { TaskProgressBar } from './progressBar';
 import { SubTask } from './subtaskType';
 
-// With the percentage bars there, it might not be apparent that they are buttons.
-// With a hover state, we can make that clear by changing the mouse pointer to the pointer hand.
-const TaskButton = styled.button`
-    height: 110px;
-    width: 400px;
-    padding: 0px;
-    position: relative;
-    :hover {
-        cursor: pointer;
+const styles = {
+    button: {
+        width: window.innerWidth,
+        height: 100,
+        fontSize: 32,
+        padding: 0,
+        margin: 0
+    },
+    progress: {
+        height: 100
     }
-`;
+};
 
 const SubTaskName = styled.div`
     font-size: 32px;
     position: absolute;
     z-index: 99;
-    top: 30px;
-    left: 30px;
+    left: 25px;
+    margin-top: 15px;
+    min-width: 225px;
 `;
 
 interface SubTaskButtonProps {
@@ -46,8 +52,8 @@ export class SubTaskButton extends React.Component<SubTaskButtonProps>{
 
     // If the title is too long, we should shorten it to fit the space we have.
     checkNameLength = () => {
-        if (this.name.length > 16) {
-            this.displayedName = this.name.substring(0, 15);
+        if (this.name.length > 9) {
+            this.displayedName = this.name.substring(0, 8);
             this.displayedName += "...";
         }
     }
@@ -59,10 +65,14 @@ export class SubTaskButton extends React.Component<SubTaskButtonProps>{
     render() {
         this.checkNameLength();
         return (
-            <TaskButton onClick={this.onButtonClick}>
-                <SubTaskName>{this.displayedName}</SubTaskName>
-                <TaskProgressBar percentage={this.props.percentage} isTaskButton={true}></TaskProgressBar>
-            </TaskButton>
+            <Container>
+                <Row>
+                    <Button style={styles.button} onClick={this.onButtonClick} variant="outline-dark">
+                        <SubTaskName>{this.displayedName}</SubTaskName>
+                        <TaskProgressBar percentage={this.props.percentage} isTaskButton={true}></TaskProgressBar>
+                    </Button>
+                </Row>
+            </Container>
         );
     }
 };
