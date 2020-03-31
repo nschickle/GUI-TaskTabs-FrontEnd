@@ -2,17 +2,18 @@
 import * as React from "react";
 import styled from "styled-components";
 
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+
 import { ProjectColumn } from "./projectColumn";
 import { SubTaskColumn } from "./subTaskColumn";
 import { SubTask } from "./subtaskType";
 import { TaskView } from "./taskView";
 
-const Container = styled.div`
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  display: flex;
-  flex-direction: row;
+const containerStyle = styled.div`
+    padding-left: 0;
+    padding-right: 0;
 `;
 
 interface IUser {
@@ -134,21 +135,23 @@ export class ProjectPage extends React.Component<{}, { projectHead: SubTask, pro
   // but should be replaced.
   public render() {
     return (
-      <Container>
-        <ProjectColumn task={this.state.projectHead} changeHead={this.changeHead} />
-        <TaskView
-          name={this.state.projectData.name}
-          completion={this.state.projectData.percentage}
-          description={this.state.projectData.description}
-          dueDate={this.state.projectData.dueDate}
-          startDate={this.state.projectData.startDate}
-          status={this.state.projectData.status}
-          assignee={this.state.projectData.assignee}
-          tags={this.state.projectData.tags}
-          owner={this.state.projectData.owner}
-          sharedUsers={this.state.projectData.sharedWith}
-        />
-        <SubTaskColumn subtasks={this.state.projectData.subtasks} changeHead={this.changeHead}></SubTaskColumn>
+      <Container fluid style={{ paddingLeft: 0, paddingRight: 0 }}>
+        <Row noGutters={true}>
+            <Col sm="3"><ProjectColumn task={this.state.projectHead} changeHead={this.changeHead} /></Col>
+            <Col sm="6"><TaskView
+              name={this.state.projectData.name}
+              completion={this.state.projectData.percentage}
+              description={this.state.projectData.description}
+              dueDate={this.state.projectData.dueDate}
+              startDate={this.state.projectData.startDate}
+              status={this.state.projectData.status}
+              assignee={this.state.projectData.assignee}
+              tags={this.state.projectData.tags}
+              owner={this.state.projectData.owner}
+              sharedUsers={this.state.projectData.sharedWith}
+            /></Col>
+            <Col sm="3"><SubTaskColumn subtasks={this.state.projectData.subtasks} changeHead={this.changeHead}></SubTaskColumn></Col>
+        </Row>
       </Container>
     );
   }

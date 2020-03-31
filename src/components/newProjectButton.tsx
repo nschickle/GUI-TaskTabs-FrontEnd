@@ -1,30 +1,27 @@
 import * as React from "react";
 import styled from "styled-components";
 
-const ProjectButtonBox = styled.button`
-    height: 100px;
-    width: 400px;
-    :hover {
-        cursor: pointer;
-    }
-`;
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Button from 'react-bootstrap/Button';
 
-const ButtonText = styled.div`
-    color: black;
-    font-size: 16px;
-`;
+const styles = {
+    button: {
+        width: window.innerWidth,
+        height: 100,
+        fontSize: 32
+    }
+};
 
 export class ProjectButton extends React.Component<{}> {
 
     public render() {
         return (
-            <>
-                <ProjectButtonBox>
-                    <ButtonText>
-                        + New Project
-                    </ButtonText>
-                </ProjectButtonBox>
-            </>
+            <Container fluid>
+                <Row>
+                    <Button style={styles.button} size="lg" variant="outline-primary"> + New Project </Button>
+                </Row>
+            </Container>
         );
     }
 }

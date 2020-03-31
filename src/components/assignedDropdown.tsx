@@ -1,19 +1,13 @@
 import * as React from "react";
 import styled from "styled-components";
 
-const LabelText = styled.label`
-    font-size: 32px;
-    display: block;
-    text-align: center;
-    margin: auto;
-    margin-left: 10px;
-    margin-bottom: 10px;
-`;
+import Form from 'react-bootstrap/Form';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
-const Select = styled.select`
-    font-size: 32px;
-    margin: 5px;
-`;
+const font = {
+    fontSize: 32
+};
 
 interface IUser {
     id: number;
@@ -33,12 +27,14 @@ interface IAssignedDropdownProps {
 
 export class AssignedDropdown extends React.Component<IAssignedDropdownProps, IAssignedState> {
     private options: IUser[];
+    private owner: IUser;
 
     constructor(props: IAssignedDropdownProps) {
         super(props);
         this.state = {assignedState: props.assignedState};
 
         this.options = props.sharedUsers;
+        this.owner = props.owner;
 
         this.handleChange = this.handleChange.bind(this);
     }
@@ -47,7 +43,6 @@ export class AssignedDropdown extends React.Component<IAssignedDropdownProps, IA
         const assignedState = this.state.assignedState;
 
         // Maps through the array given and sets up the options
-        // Needs to be done in the render() function or will not produce the proper output
         const arrayOp = this.options.map((item) => {
             return (
                 <option key={item.id} value={item.id}>{item.name}</option>
@@ -55,17 +50,27 @@ export class AssignedDropdown extends React.Component<IAssignedDropdownProps, IA
         });
 
         return(
-            <LabelText>Assigned to:
-                <Select value={assignedState} onChange={this.handleChange}>
-                    <option value={this.props.owner.id}>{this.props.owner.name}</option>
-                    {arrayOp}
-                </Select>
-            </LabelText>
+            <Form>
+                <Form.Group as={Row} controlId="assigneeDropdown">
+                    <Form.Label column sm="5" style={font}>Assigned To:</Form.Label>
+                    <Col sm="7">
+                        <Form.Control
+                            as="select"
+                            onChange={this.handleChange}
+                            defaultValue={assignedState}
+                            size="lg"
+                            style={font}
+                        >
+                            <option value={this.owner.id}>{this.owner.name}</option>
+                            {arrayOp}
+                        </Form.Control>
+                    </Col>
+                </Form.Group>
+            </Form>
         );
     }
 
     // Handles when state is changed
-    // Will still need to add functionality of the option
     private handleChange(e: React.ChangeEvent<HTMLSelectElement>) {
         this.setState({assignedState: e.target.value});
     }

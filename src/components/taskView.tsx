@@ -4,116 +4,77 @@ import styled from 'styled-components';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+
 import { TaskProgressBar } from './progressBar';
 import { StatusDropdown } from './statusDropdown';
 import { AssignedDropdown } from './assignedDropdown';
 import { TaskTags } from './taskTags';
 import { ShareUsers } from './shareUsers';
 
-interface ColumnProps {
-    height: number;
-};
-
-// The column will remain at its maximum height, so if the window
-// is shrunk , a scrollbar will remain unless the height of the column
-// is changed to the window height
-const Column = styled.div`
-    display: flex;
-    flex-direction: column;
-    height: ${(props: ColumnProps) => props.height}px;
-`;
-
-interface ContainerProps {
-    height: number;
-    width: number;
-};
-
-const Container = styled.div`
-    border-width: 5px;
-    border-style: solid;
-    padding: 50px;
-    height: ${(props: ContainerProps) => props.height}px;
-    width: ${(props: ContainerProps) => props.width}px;
-`;
+const styles = {
+    font: {
+        fontSize: 32
+    },
+    desc: {
+        fontSize: 24,
+        marginTop: 10,
+        marginBottom: 10,
+        maxHeight: 225
+    },
+    container: {
+        paddingLeft: 0,
+        paddingRight: 0
+    },
+    row: {
+        paddingTop:50
+    },
+    saveButton: {
+        height: 100,
+        width: 160,
+        fontSize: 32
+    },
+    deleteButton: {
+        marginTop: 50,
+        fontSize: 32
+    },
+    datePick: {
+        fontSize: 32,
+        margin: "auto",
+        marginTop: 10
+    },
+    sharedTab: {
+        bottom: 0,
+        left: 0,
+        margin: 0,
+        borderColor: "gray",
+        borderStyle: "solid",
+        width: 750,
+        padding: 0
+    },
+    historyButton: {
+        marginTop: 0,
+        height: 150,
+        width: 160
+    }
+}
 
 const Title = styled.div`
     font-size: 72px;
     margin-left: 50px;
-    margin-top: 10px;
-`;
-
-const SaveButton = styled.button`
-    width: 177px;
-    height: 100px;
-`;
-
-const SaveButtonText = styled.div`
-    font-size: 32px;
-    margin: 30px;
-`;
-
-// The delete button is absolutely positioned to the right because the length of the
-// title could influence the button's position.
-const DeleteButton = styled.button`
-    width: 177px;
-    height: 40px;
-    position: absolute;
-    top: 60px;
-    right: 30px;
-`;
-
-const DeleteButtonText = styled.div`
-    font-size: 32px;
+    text-align: center;
 `;
 
 const LabelText = styled.div`
     font-size: 32px;
     text-align: center;
-    margin-bottom: 10px;
-`;
-
-const DueDates = styled.div`
-    font-size: 32px;
-    text-align: center;
-    margin-bottom: 10px;
-	margin-left: 30%;
-	margin-right: auto;
-`;
-
-const CalendarButton = styled.button`
-    width: 180px;
-    height: 50px;
-    margin: 5px;
-`;
-
-// In order to format the description on the page properly, needed to create a seperate div for it
-const DescBox = styled.div`
-    display: flex;
-    flex-direction: row;
-    position: relative;
-    left: 175px;
-    margin-top: 10px;
-`;
-
-const DescText = styled.textarea`
-    font-size: 32px;
     margin: auto;
-    margin-left: 10px;
-    max-width: 600px;
-    max-height: 150px;
-`;
-
-const HistoryButton = styled.button`
-    width: 207px;
-    height: 125px;
-    bottom: 3px;
-    right: 408px;
-`;
-
-const Row = styled.div`
-    display: flex;
-    flex-direction: row;
-    position: relative;
+    margin-bottom: 15px;
+    width: 175px;
 `;
 
 interface Options {
@@ -160,9 +121,9 @@ export class TaskView extends React.Component<TaskViewProps>{
     tags: Tag[];
     owner: User;
     sharedUsers: User[];
-	
+
 	state = {width: 0, height: 0, dueDate: this.props.dueDate};
-	
+
 
     constructor(props: TaskViewProps) {
         super(props);
@@ -188,19 +149,19 @@ export class TaskView extends React.Component<TaskViewProps>{
 
         this.state = { width: 0, height: 0, dueDate: this.props.dueDate};
     }
-	
+
 	handleChange = (date: Date) => {
 		this.setState({
 			dueDate: date
 		});
 		this.calculateDaysLeft();
 	};
-  
+
     // If the title is too long, we should shorten it to fit the space we have.
     displayName = () => {
         let displayedName = this.props.name;
-        if (displayedName.length > 16) {
-            displayedName = displayedName.substring(0, 15);
+        if (displayedName.length > 13) {
+            displayedName = displayedName.substring(0, 13);
             displayedName += "...";
         }
         return displayedName;
@@ -260,36 +221,6 @@ export class TaskView extends React.Component<TaskViewProps>{
         }
     }
 
-    updateDimensions = () => {
-        this.setState({ width: window.innerWidth, height: window.innerHeight });
-    };
-
-    // When this object is displayed, add an event that check for window resizes.
-    componentDidMount() {
-        window.addEventListener('resize', this.updateDimensions);
-    }
-
-    // Remove event when the object is unmounted.
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.updateDimensions);
-    }
-
-    // Return the height the taskView Container should display at.
-    // Prevents the taskView from getting too small.
-    checkHeight = () => {
-        const shareUsersHeight = 208;
-        const height = window.innerHeight - shareUsersHeight;
-        return height > 620 ? height : 620;
-    }
-
-    // Return the width the taskView Container should display at.
-    // Prevents the taskView from getting too small.
-    checkWidth = () => {
-        const totalSidebarWidth = 930;
-        const width = window.innerWidth - totalSidebarWidth;
-        return width > 920 ? width : 920;
-    }
-
     // TODO
     // When the database is integrated, we need to implement the onChange here so that
     // the new text is saved in some way and inserted into the database.
@@ -300,55 +231,87 @@ export class TaskView extends React.Component<TaskViewProps>{
         this.startDateString();
         this.daysLeftCheck();
         const name = this.displayName();
-        const height = this.checkHeight();
-        const width = this.checkWidth();
         const description = this.props.description;
         return (
-            <Column height={window.innerHeight}>
-                <Container height={height} width={width}>
-                    <Row>
-                        <SaveButton>
-                            <SaveButtonText>Save</SaveButtonText>
-                        </SaveButton>
-                        <Title>{name}</Title>
-                        <DeleteButton>
-                            <DeleteButtonText>Delete</DeleteButtonText>
-                        </DeleteButton>
-                    </Row>
-                    <TaskProgressBar percentage={this.props.completion} />
-                    <DueDates>
-					<Row>Due Date:
-							<DatePicker
-								selected={this.state.dueDate}
-								onChange={this.handleChange}
-							/>
-						</Row>
-                    </DueDates>
-                    <LabelText> {this.displayedDaysLeft} </LabelText>
-                    <Row>
-                        <StatusDropdown taskStatus={this.status} statusList={this.statusOptions} />
-                        <AssignedDropdown assignedState={this.props.assignee} sharedUsers={this.sharedUsers} owner={this.owner} />
-                    </Row>
-                    <LabelText> Date Started: {this.displayedStartDate} </LabelText>
-                    <LabelText> Average Time Per Task: N/A Days </LabelText>
-                    <Row>
-                        <DescBox>
-                            <LabelText> Description: </LabelText>
-                            <DescText value={description} onChange={e => null} />
-                        </DescBox>
-                    </Row>
-                    <TaskTags tags={this.tags} />
-
-                </Container>
-                <Row>
-                    <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} />
-                    <HistoryButton>
-                        <LabelText>
-                            History
-                    </LabelText>
-                    </HistoryButton>
+            <Container style={styles.container}>
+                <Row style={styles.row} noGutters={true}>
+                    <Col md="2" >
+                        <Button
+                            variant="outline-success"
+                            size='lg'
+                            block
+                            style={styles.saveButton}
+                        >
+                            Save
+                        </Button>
+                    </Col>
+                    <Col md="8"> <Title>{name}</Title> </Col>
+                    <Col md="2">
+                        <Button
+                            variant="outline-danger"
+                            size='lg'
+                            block
+                            style={styles.deleteButton}
+                        >
+                            Delete
+                        </Button>
+                    </Col>
                 </Row>
-            </Column>
+                <Row noGutters={true}>
+                    <TaskProgressBar percentage={this.props.completion} />
+                </Row>
+                <Row noGutters={true}>
+                    <Form style={styles.datePick}>
+                        <Form.Group as={Row} noGutters={true}>
+                            <Form.Label column sm="4">Due Date: </Form.Label>
+                            <Col sm="8">
+                                <Form.Text style={styles.font}>
+                                    <DatePicker
+                                        selected={this.state.dueDate}
+                                        onChange={this.handleChange}
+                                    />
+                                </Form.Text>
+                            </Col>
+                        </Form.Group>
+                    </Form>
+                </Row>
+                <Row noGutters={true}>
+                    <LabelText> {this.displayedDaysLeft} </LabelText>
+                </Row>
+                <Row>
+                    <Col md="5"> <StatusDropdown taskStatus={this.status} statusList={this.statusOptions} /> </Col>
+                    <Col md="7"><AssignedDropdown assignedState={this.props.assignee} sharedUsers={this.sharedUsers} owner={this.owner} /> </Col>
+                </Row>
+                <Row noGutters={true}>
+                    <Form style={styles.desc}>
+                        <Form.Group as={Row} noGutters={true}>
+                            <Form.Label column sm="2"> Description: </Form.Label>
+                            <Col sm="10">
+                                <Form.Control
+                                    as="textarea"
+                                    rows="4"
+                                    cols="55"
+                                    defaultValue={description}
+                                    onChange={e => null}
+                                    style={styles.desc}
+                                />
+                            </Col>
+                        </Form.Group>
+                    </Form>
+                </Row>
+                <Row noGutters={true}>
+                    <Col md="10" style={styles.sharedTab}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} /> </Col>
+                    <Col md="2">
+                        <Button
+                            variant = "outline-info"
+                            size = "lg"
+                            block
+                            style={styles.historyButton}>
+                            History
+                        </Button>
+                    </Col>
+                </Row>
+            </Container>
         );
     }
 };

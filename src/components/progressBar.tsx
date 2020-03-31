@@ -1,6 +1,8 @@
 import * as React from "react";
 import styled from "styled-components";
 
+import Container from 'react-bootstrap/Container';
+
 const ProgressBar = styled.div`
     height: 130px;
     width: 600px;
@@ -11,10 +13,9 @@ const ProgressBar = styled.div`
 `;
 
 const SubTaskProgressBar = styled.div`
-    height: 105px;
-    width: 395px;
+    height: 90px;
     position: relative;
-    margin: auto;
+    margin: 0;
 `;
 
 const ProgressBarFilling = styled.div`
@@ -63,10 +64,12 @@ export class TaskProgressBar extends React.Component<IProgressBarProps> {
 
         } else {
             return (
-                <ProgressBar>
-                    <ProgressBarFilling percentage={this.props.percentage.toString()} color={color} />
-                    <PercentageText>{this.props.percentage}%</PercentageText>
-                </ProgressBar>
+                <Container>
+                    <ProgressBar>
+                        <ProgressBarFilling percentage={this.props.percentage.toString()} color={color} />
+                        <PercentageText>{this.props.percentage}%</PercentageText>
+                    </ProgressBar>
+                </Container>
             );
         }
     }

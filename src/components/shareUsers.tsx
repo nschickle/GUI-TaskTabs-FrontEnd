@@ -1,47 +1,26 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
-const SharedWithTab = styled.div`
-    display: flex;
-    flex-direction: row;
-    border: solid 2px black;
-    border-top: none;
-    width: 100%;
-`;
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import ListGroup from 'react-bootstrap/ListGroup';
+import Button from 'react-bootstrap/Button';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
 
-const UserText = styled.div`
-    font-size: 32px;
-`;
-
-const OwnerBox = styled.div`
-    border-right: solid 1px black;
-    display: flex;
-    flex-direction: column;
-    padding: 5px;
-    width: 80px;
-`;
-
-const SharedUserBox = styled.div`
-    display: flex;
-    flex-direction: column;
-    padding: 5px;
-    margin-left: 10px;
-`;
-
-const LabelText = styled.label`
-    font-size: 24px;
-    margin-right: 11px;
-`;
-
-const ButtonText = styled.div`
-    font-size: 32px;
-`;
-
-const AddUserButton = styled.button`
-    border-radius: 100%;
-    width: 50px;
-    height: 50px;
-`;
+const styles = {
+    owner: {
+        fontSize: 24,
+        width: 110
+    },
+    sharedW: {
+        fontSize: 24,
+        width: 175
+    },
+    user: {
+        fontSize: 24,
+        width: 110
+    }
+};
 
 interface User {
     id: number;
@@ -66,24 +45,29 @@ export class ShareUsers extends React.Component<ShareUserProps> {
     render() {
         const sharedArray = this.sharedUsers.map((item) => {
             return (
-                <SharedUserBox key={item.id}> <UserText> {item.name} </UserText> </SharedUserBox>
+                <Button key={item.id} style={styles.user} variant="outline-secondary">{item.name}</Button>
             )
         });
 
         return (
-                <SharedWithTab>
-                    <OwnerBox>
-                        <LabelText> Owner </LabelText>
-                        <UserText> {this.owner.name} </UserText>
-                    </OwnerBox>
-                    <SharedUserBox>
-                        <LabelText> Shared With </LabelText>
-                    </SharedUserBox>
-                    {sharedArray}
-                    <AddUserButton>
-                        <ButtonText> + </ButtonText>
-                    </AddUserButton>
-                </SharedWithTab>
+            <Container>
+                <Row noGutters={true}>
+                    <ListGroup horizontal>
+                        <ListGroup>
+                            <ListGroup.Item style={styles.owner}>Owner</ListGroup.Item>
+                            <Button style={styles.owner} variant="outline-secondary">{this.owner.name}</Button>
+                        </ListGroup>
+                        <ListGroup>
+                            <ListGroup.Item style={styles.sharedW}>Shared with</ListGroup.Item>
+                            <ListGroup horizontal>
+                                <ButtonGroup>
+                                    {sharedArray}
+                                </ButtonGroup>
+                            </ListGroup>
+                        </ListGroup>
+                    </ListGroup>
+                </Row>
+            </Container>
         )
     }
 }
