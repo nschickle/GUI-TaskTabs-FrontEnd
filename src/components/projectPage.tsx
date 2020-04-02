@@ -8,6 +8,7 @@ import { ProjectColumn } from "./projectColumn";
 import { SubTaskColumn } from "./subTaskColumn";
 import { SubTask } from "./subtaskType";
 import { TaskView } from "./taskView";
+import ApplicationConfig from './applicationConfig';
 
 const styles = {
   box: {
@@ -51,7 +52,7 @@ export class ProjectPage extends React.Component<{}, { error: any, isLoaded: boo
 
   componentDidMount() {
 
-    fetch("https://tasktabs-backend.herokuapp.com/api/projects", {
+    fetch(`${ApplicationConfig.api.staging.baseUrl}/api/projects`, {
       method: 'get',
     }).then(response => {
 
@@ -61,7 +62,7 @@ export class ProjectPage extends React.Component<{}, { error: any, isLoaded: boo
 
       const taskId = data[0]._id;
       // make a 2nd request and return a promise
-      return fetch(`https://tasktabs-backend.herokuapp.com/api/tasks/${taskId}`); 
+      return fetch(`${ApplicationConfig.api.staging.baseUrl}/api/tasks/${taskId}`); 
     })
     .then(response => {
 
@@ -132,7 +133,7 @@ export class ProjectPage extends React.Component<{}, { error: any, isLoaded: boo
       this.setState(() => {
         return { head: newHead };
       })
-      fetch(`https://tasktabs-backend.herokuapp.com/api/tasks/${newHead}`)
+      fetch(`${ApplicationConfig.api.staging.baseUrl}/api/tasks/${newHead}`)
         .then(res => res.json())
         .then(
           (result) => {

@@ -7,6 +7,7 @@ import Button from 'react-bootstrap/Button';
 
 import { SubTask } from "./subtaskType";
 import { SubTaskButton } from './subTaskButton';
+import ApplicationConfig from './applicationConfig';
 
 const styles = {
     button: {
@@ -59,7 +60,7 @@ export class SubTaskColumn extends React.Component<SubTaskColumnProps, { error: 
     }
 
     getSubtasks = () => {
-        fetch(`https://tasktabs-backend.herokuapp.com/api/subtasks/${this.props.head}`)
+        fetch(`${ApplicationConfig.api.staging.baseUrl}/api/subtasks/${this.props.head}`)
         .then(res => res.json())
         .then(
             (result) => {
