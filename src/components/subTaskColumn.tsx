@@ -32,8 +32,8 @@ interface SubTaskColumnProps {
 
 // This creates the entire right-hand column of project page. It handles the button that creates a new task,
 // and hands down a single element of a subtask array to create subtask buttons one by one.
-export class SubTaskColumn extends React.Component<SubTaskColumnProps, { error: any, isLoaded: boolean, subTasks: SubTask[] }>{
-
+export class SubTaskColumn extends React.Component<SubTaskColumnProps, { error: any, isLoaded: boolean, subTasks: SubTask[]}>{
+    head: number;
     constructor(props: SubTaskColumnProps) {
         super(props);
 
@@ -43,14 +43,19 @@ export class SubTaskColumn extends React.Component<SubTaskColumnProps, { error: 
             subTasks: [],
         };
 
+        this.head = this.props.head;
     }
 
     componentDidMount() {
+        this.head = this.props.head;
         this.getSubtasks();
     }
 
     componentDidUpdate() {
-        this.getSubtasks();
+        if(this.props.head !== this.head) {
+            this.head = this.props.head;
+            this.getSubtasks();
+        }
     }
 
     getSubtasks = () => {

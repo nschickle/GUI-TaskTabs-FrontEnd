@@ -49,7 +49,7 @@ export class ProjectPage extends React.Component<{}, { error: any, isLoaded: boo
     };
   }
 
-  async componentDidMount() {
+  componentDidMount() {
 
     fetch("https://tasktabs-backend.herokuapp.com/api/projects", {
       method: 'get',
