@@ -20,8 +20,9 @@ const styles = {
 };
 
 interface IProjectColumnProps {
-    task: SubTask;
-    changeHead: (newHead: SubTask) => any;
+    projects: SubTask[],
+    head: number,
+    changeHead: (newHead: number) => any,
 }
 
 export class ProjectColumn extends React.Component<IProjectColumnProps> {
@@ -32,13 +33,14 @@ export class ProjectColumn extends React.Component<IProjectColumnProps> {
     }
 
     public render() {
+
         return (
             <Container>
                 <Col style={styles.box} >
                     <ProjectButton />
-                    <SubTaskButton name={this.props.task.name} percentage={this.props.task.percentage}
-                        key={this.props.task.id} changeHead={this.props.changeHead}
-                        taskHead={this.props.task}></SubTaskButton>
+                    {this.props.projects.map((task) => {
+                         return <SubTaskButton name={task.title} percentage={task.progress} key={task._id} changeHead={this.props.changeHead} taskHead={this.props.head}></SubTaskButton>;
+                    })}
                 </Col>
             </Container>
         );

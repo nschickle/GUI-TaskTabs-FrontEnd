@@ -6,7 +6,6 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
 import { SubTaskButton } from './subTaskButton';
-import { SubTask } from './subtaskType';
 
 const styles = {
     button: {
@@ -26,9 +25,13 @@ const styles = {
 };
 
 interface SubTaskColumnProps {
-    subtasks: SubTask[];
-    changeHead: (newHead: SubTask) => any;
+    head: number,
+    changeHead: (newHead: number) => any
 }
+
+const tempTask = [
+    {title: "name1", progress: 50, _id: 99}
+];
 
 // This creates the entire right-hand column of project page. It handles the button that creates a new task,
 // and hands down a single element of a subtask array to create subtask buttons one by one.
@@ -46,8 +49,8 @@ export class SubTaskColumn extends React.Component<SubTaskColumnProps>{
                         <Button style={styles.button} size="lg" variant="outline-primary"> + New Task </Button>
                     </Row>
                     <Row noGutters={true}>
-                        {this.props.subtasks.map((task) => {
-                            return <SubTaskButton name={task.name} percentage={task.percentage} key={task.id} changeHead={this.props.changeHead} taskHead={task}></SubTaskButton>;
+                        {tempTask.map((task) => {
+                            return <SubTaskButton name={task.title} percentage={task.progress} key={task._id} changeHead={this.props.changeHead} taskHead={this.props.head}></SubTaskButton>;
                         })}
                     </Row>
                 </Col>

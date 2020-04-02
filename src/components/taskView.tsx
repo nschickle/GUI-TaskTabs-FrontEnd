@@ -99,10 +99,8 @@ interface TaskViewProps {
     completion: number;
     description: string;
     dueDate: Date;
-    startDate: Date;
     status: string;
     assignee: string;
-    tags: Tag[];
     owner: User;
     sharedUsers: User[];
 };
@@ -111,17 +109,15 @@ interface TaskViewProps {
 export class TaskView extends React.Component<TaskViewProps>{
     name: string;
     displayedName: string;
-    displayedDueDate: string;
     today: Date;
     daysLeft: number;
     displayedDaysLeft: string;
-    displayedStartDate: string;
     status: string;
     statusOptions: Options[];
     assignedOptions: Options[];
-    tags: Tag[];
     owner: User;
     sharedUsers: User[];
+
 
 	state = {width: 0, height: 0, dueDate: this.props.dueDate};
 
@@ -131,10 +127,7 @@ export class TaskView extends React.Component<TaskViewProps>{
         this.displayedName = this.name;
 
         this.today = new Date();
-        this.daysLeft = 0;
         this.displayedDaysLeft = "0 Days Left!";
-        this.displayedDueDate = "1/1/1900";
-        this.displayedStartDate = "1/1/1900";
 
         this.status = props.status;
         this.statusOptions = [
@@ -145,8 +138,6 @@ export class TaskView extends React.Component<TaskViewProps>{
 
         this.owner = props.owner;
         this.sharedUsers = props.sharedUsers;
-
-        this.tags = props.tags;
 
         this.state = { width: 0, height: 0, dueDate: this.props.dueDate};
     }
@@ -170,7 +161,7 @@ export class TaskView extends React.Component<TaskViewProps>{
 
     // Calculates the difference between the current date and the due date
     calculateDaysLeft = () => {
-        if (this.today !== this.state.dueDate) {
+        if (this.props.dueDate && this.today !== this.state.dueDate) {
             const dueMonth = this.state.dueDate.getMonth() + 1;
             const dueYear = this.state.dueDate.getFullYear();
             const dueDay = this.state.dueDate.getDate();
@@ -183,28 +174,13 @@ export class TaskView extends React.Component<TaskViewProps>{
         }
     }
 
-    // Takes the due date and turns it into a string
-    dueDateString = () => {
-        const dueMonth = this.props.dueDate.getMonth() + 1;
-        const dueYear = this.props.dueDate.getFullYear();
-        const dueDay = this.props.dueDate.getDate();
-
-        this.displayedDueDate = dueMonth + "/" + dueDay + "/" + dueYear;
-
-    }
-
-    // Takes the start date and turns it into a string
-    startDateString = () => {
-        const month = this.props.startDate.getMonth() + 1;
-        const year = this.props.startDate.getFullYear();
-        const day = this.props.startDate.getDate();
-
-        this.displayedStartDate = month + "/" + day + "/" + year;
-    }
-
     // Checks how many days are left and changes message accordingly
     daysLeftCheck = () => {
-        if(this.daysLeft >= 0) {
+        console.log(this.daysLeft);
+        if(this.daysLeft === undefined) {
+            this.displayedDaysLeft = null;
+        }
+        else if(this.daysLeft >= 0) {
             if(this.daysLeft === 1) {
                 this.displayedDaysLeft = this.daysLeft + " Day Left!";
             }
@@ -228,8 +204,6 @@ export class TaskView extends React.Component<TaskViewProps>{
     // <DescText value={description} onChange={e => null} />
     render() {
         this.calculateDaysLeft();
-        this.dueDateString();
-        this.startDateString();
         this.daysLeftCheck();
         const name = this.displayName();
         const description = this.props.description;
