@@ -36,7 +36,7 @@ const testSharedWith: IUser[] = [
 
 // ProjectPage contains the entire application past the Google oauth. This should include the left and right sidebars
 // task view, settings user info, etc.
-export class ProjectPage extends React.Component<{}, { error: any, isLoaded: boolean, projects: SubTask[], head: number}>{
+export class ProjectPage extends React.Component<{}, { error: any, isLoaded: boolean, task: SubTask, head: number }>{
 
   constructor(props: {}) {
     super(props);
@@ -44,32 +44,42 @@ export class ProjectPage extends React.Component<{}, { error: any, isLoaded: boo
     this.state = {
       error: null,
       isLoaded: false,
-      projects: [],
-      head: -1,
+      task: null,
+      head: undefined,
     };
   }
 
-  componentDidMount() {
-    fetch("http://localhost:1337/api/projects")
-      .then(res => res.json())
-      .then(
-        (result) => {
-          this.setState({
-            isLoaded: true,
-            projects: result,
-            head: result[0]._id
-          });
-        },
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.
-        (error) => {
-          this.setState({
-            isLoaded: true,
-            error
-          });
-        }
-      );
+  async componentDidMount() {
+
+    fetch("http://localhost:1337/api/projects", {
+      method: 'get',
+    }).then(response => {
+
+      // pass the data as promise to next then block
+      return response.json(); 
+    }).then(data => {
+
+      const taskId = data[0]._id;
+      // make a 2nd request and return a promise
+      return fetch(`http://localhost:1337/api/tasks/${taskId}`); 
+    })
+    .then(response => {
+
+      return response.json();
+    })
+    .catch(error => {
+      this.setState({
+        isLoaded: true,
+        error: error,
+      });
+    }).then(res => {
+      this.setState({
+        isLoaded: true,
+        task: res,
+        head: res._id
+      })
+    })
+
   }
 
   // TODO
@@ -77,7 +87,7 @@ export class ProjectPage extends React.Component<{}, { error: any, isLoaded: boo
   // but should be replaced.
   public render() {
 
-    const { error, isLoaded, projects, head} = this.state;
+    const { error, isLoaded, task, head } = this.state;
     // TODO Style error and loading screens
     if (error) {
       return (
@@ -88,18 +98,17 @@ export class ProjectPage extends React.Component<{}, { error: any, isLoaded: boo
         <>Loading...</>
       );
     } else {
-      console.log(projects[0].deadline);
       return (
         <Container fluid style={styles.box}>
           <Row noGutters={true}>
-            <Col sm="3"><ProjectColumn head={head} projects={projects} changeHead={this.changeHead} /></Col>
+            <Col sm="3"><ProjectColumn changeHead={this.changeHead} /></Col>
             <Col sm="6"><TaskView
-              name={projects[0].title}
-              completion={projects[0].progress}
-              description={projects[0].description}
-              dueDate={projects[0].deadline}
-              status={projects[0].status}
-              assignee={projects[0].title}
+              name={task.title}
+              completion={task.progress}
+              description={task.description}
+              dueDate={new Date}
+              status={task.status}
+              assignee={task.title}
               owner={testOwner}
               sharedUsers={testSharedWith}
             /></Col>
@@ -111,9 +120,31 @@ export class ProjectPage extends React.Component<{}, { error: any, isLoaded: boo
   }
 
   private changeHead = (newHead: number) => {
-    this.setState(() => {
-      return { head: newHead };
-    })
+    const previousHead = this.state.head;
+    if (newHead !== previousHead) {
+      this.setState(() => {
+        return { head: newHead };
+      })
+      fetch(`http://localhost:1337/api/tasks/${newHead}`)
+        .then(res => res.json())
+        .then(
+          (result) => {
+            this.setState({
+              isLoaded: true,
+              task: result,
+            });
+          },
+          // Note: it's important to handle errors here
+          // instead of a catch() block so that we don't swallow
+          // exceptions from actual bugs in components.
+          (error) => {
+            this.setState({
+              isLoaded: true,
+              error
+            });
+          }
+        );
+    }
   }
 
 };

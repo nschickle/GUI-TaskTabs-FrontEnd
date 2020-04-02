@@ -19,30 +19,68 @@ const styles = {
     }
 };
 
-interface IProjectColumnProps {
-    projects: SubTask[],
-    head: number,
+interface ProjectColumnProps {
     changeHead: (newHead: number) => any,
 }
 
-export class ProjectColumn extends React.Component<IProjectColumnProps> {
+export class ProjectColumn extends React.Component<ProjectColumnProps, {error: any, isLoaded: boolean, projects: SubTask[] } > {
 
-    constructor(props: IProjectColumnProps) {
+    constructor(props: ProjectColumnProps) {
         super(props);
 
+        this.state = {
+            error: null,
+            isLoaded: false,
+            projects: [],
+        };
+
+    }
+    componentDidMount() {
+        fetch("http://localhost:1337/api/projects")
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    this.setState({
+                        isLoaded: true,
+                        projects: result,
+                    });
+                },
+                // Note: it's important to handle errors here
+                // instead of a catch() block so that we don't swallow
+                // exceptions from actual bugs in components.
+                (error) => {
+                    this.setState({
+                        isLoaded: true,
+                        error
+                    });
+                }
+            );
     }
 
     public render() {
 
-        return (
-            <Container>
-                <Col style={styles.box} >
-                    <ProjectButton />
-                    {this.props.projects.map((task) => {
-                         return <SubTaskButton name={task.title} percentage={task.progress} key={task._id} changeHead={this.props.changeHead} taskHead={this.props.head}></SubTaskButton>;
-                    })}
-                </Col>
-            </Container>
-        );
+
+        const { error, isLoaded, projects } = this.state;
+        // TODO Style error and loading screens
+        if (error) {
+            return (
+                <>Error!</>
+            );
+        } else if (!isLoaded) {
+            return (
+                <>Loading...</>
+            );
+        } else {
+            return (
+                <Container>
+                    <Col style={styles.box} >
+                        <ProjectButton />
+                        {projects.map((task) => {
+                            return <SubTaskButton name={task.title} percentage={task.progress} key={task._id} changeHead={this.props.changeHead} taskHead={task._id}></SubTaskButton>;
+                        })}
+                    </Col>
+                </Container>
+            );
+        }
     }
 }

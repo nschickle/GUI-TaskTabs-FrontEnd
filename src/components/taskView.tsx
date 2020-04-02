@@ -161,7 +161,8 @@ export class TaskView extends React.Component<TaskViewProps>{
 
     // Calculates the difference between the current date and the due date
     calculateDaysLeft = () => {
-        if (this.props.dueDate && this.today !== this.state.dueDate) {
+        // !! checks for empty, null or undefined value
+        if (!!(this.props.dueDate) && this.today !== this.state.dueDate) {
             const dueMonth = this.state.dueDate.getMonth() + 1;
             const dueYear = this.state.dueDate.getFullYear();
             const dueDay = this.state.dueDate.getDate();
@@ -176,7 +177,6 @@ export class TaskView extends React.Component<TaskViewProps>{
 
     // Checks how many days are left and changes message accordingly
     daysLeftCheck = () => {
-        console.log(this.daysLeft);
         if(this.daysLeft === undefined) {
             this.displayedDaysLeft = null;
         }

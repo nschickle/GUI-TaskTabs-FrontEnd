@@ -5,7 +5,7 @@ export interface SubTask {
     description: string;
     notes: string;
     assignedTo: number;
-    deadline: Date;
+    deadline: string;
     status: string;
     progress: number;
     assignee: string;

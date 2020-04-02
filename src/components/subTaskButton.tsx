@@ -59,8 +59,7 @@ export class SubTaskButton extends React.Component<SubTaskButtonProps>{
     }
 
     onButtonClick = () => {
-        // TODO make this update task correctly
-        this.props.changeHead(2);
+        this.props.changeHead(this.props.taskHead);
     }
 
     render() {
