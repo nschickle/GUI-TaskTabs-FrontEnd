@@ -35,30 +35,37 @@ export class ProjectColumn extends React.Component<ProjectColumnProps, {error: a
         };
 
     }
+
     componentDidMount() {
-        fetch("http://localhost:1337/api/projects")
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    this.setState({
-                        isLoaded: true,
-                        projects: result,
-                    });
-                },
-                // Note: it's important to handle errors here
-                // instead of a catch() block so that we don't swallow
-                // exceptions from actual bugs in components.
-                (error) => {
-                    this.setState({
-                        isLoaded: true,
-                        error
-                    });
-                }
-            );
+        this.getProjects();
+    }
+
+    // If/when the project list needs to be updated to reflect a database
+    // change, a componentDidUpdate() function will need to be added so that
+    // the query can be re-run
+    getProjects = () => {
+        fetch("https://tasktabs-backend.herokuapp.com/api/projects")
+        .then(res => res.json())
+        .then(
+            (result) => {
+                this.setState({
+                    isLoaded: true,
+                    projects: result,
+                });
+            },
+            // Note: it's important to handle errors here
+            // instead of a catch() block so that we don't swallow
+            // exceptions from actual bugs in components.
+            (error) => {
+                this.setState({
+                    isLoaded: true,
+                    error
+                });
+            }
+        );
     }
 
     public render() {
-
 
         const { error, isLoaded, projects } = this.state;
         // TODO Style error and loading screens
