@@ -32,7 +32,7 @@ const styles = {
         minWidth: 650
     },
     row: {
-        paddingTop:50,
+        paddingTop: 50,
         minWidth: 300
     },
     saveButton: {
@@ -119,7 +119,7 @@ export class TaskView extends React.Component<TaskViewProps>{
     sharedUsers: User[];
 
 
-	state = {width: 0, height: 0, dueDate: this.props.dueDate};
+    state = { width: 0, height: 0, dueDate: this.props.dueDate };
 
 
     constructor(props: TaskViewProps) {
@@ -139,15 +139,24 @@ export class TaskView extends React.Component<TaskViewProps>{
         this.owner = props.owner;
         this.sharedUsers = props.sharedUsers;
 
-        this.state = { width: 0, height: 0, dueDate: this.props.dueDate};
+        this.state = { width: 0, height: 0, dueDate: this.props.dueDate };
     }
 
-	handleChange = (date: Date) => {
-		this.setState({
-			dueDate: date
-		});
-		this.calculateDaysLeft();
-	};
+    componentDidUpdate(newProps: TaskViewProps) {
+        const { dueDate } = this.props;
+        if (newProps.dueDate !== dueDate) {
+            this.setState({
+                dueDate: dueDate
+            })
+        }
+    }
+
+    handleChange = (date: Date) => {
+        this.setState({
+            dueDate: date
+        });
+        this.calculateDaysLeft(date);
+    };
 
     // If the title is too long, we should shorten it to fit the space we have.
     displayName = () => {
@@ -160,40 +169,40 @@ export class TaskView extends React.Component<TaskViewProps>{
     }
 
     // Calculates the difference between the current date and the due date
-    calculateDaysLeft = () => {
-        // !! checks for empty, null or undefined value
-        if (!!(this.props.dueDate) && this.today !== this.state.dueDate) {
-            const dueMonth = this.state.dueDate.getMonth() + 1;
-            const dueYear = this.state.dueDate.getFullYear();
-            const dueDay = this.state.dueDate.getDate();
-            const todayMonth = this.today.getMonth() + 1;
-            const todayYear = this.today.getFullYear();
-            const todayDay = this.today.getDate();
-            const divide = 1000 * 60 * 60 * 24;
+    calculateDaysLeft = (dueDate: Date) => {
+        let today = new Date();
+        const dueMonth = dueDate.getMonth() + 1;
+        const dueYear = dueDate.getFullYear();
+        const dueDay = dueDate.getDate();
+        const todayMonth = today.getMonth() + 1;
+        const todayYear = today.getFullYear();
+        const todayDay = today.getDate();
+        const divide = 1000 * 60 * 60 * 24;
 
-            this.daysLeft = Math.floor((Date.UTC(dueYear, dueMonth, dueDay) - Date.UTC(todayYear, todayMonth, todayDay)) / divide);
-        }
+        this.daysLeft = Math.floor((Date.UTC(dueYear, dueMonth, dueDay) - Date.UTC(todayYear, todayMonth, todayDay)) / divide);
     }
 
     // Checks how many days are left and changes message accordingly
     daysLeftCheck = () => {
-        if(this.daysLeft === undefined) {
-            this.displayedDaysLeft = null;
+        // !! checks if something is not null
+        // So !!! checks if something is null
+        if (!!!this.state.dueDate) {
+            return null;
         }
-        else if(this.daysLeft >= 0) {
-            if(this.daysLeft === 1) {
-                this.displayedDaysLeft = this.daysLeft + " Day Left!";
+        else if (this.daysLeft >= 0) {
+            if (this.daysLeft === 1) {
+                return this.daysLeft + " Day Left!";
             }
             else {
-                this.displayedDaysLeft = this.daysLeft + " Days Left!";
+                return this.daysLeft + " Days Left!";
             }
         }
         else {
-            if(this.daysLeft === -1) {
-                this.displayedDaysLeft = Math.abs(this.daysLeft) + " Day Late!";
+            if (this.daysLeft === -1) {
+                return Math.abs(this.daysLeft) + " Day Late!";
             }
             else {
-                this.displayedDaysLeft = Math.abs(this.daysLeft) + " Days Late!";
+                return Math.abs(this.daysLeft) + " Days Late!";
             }
         }
     }
@@ -203,8 +212,11 @@ export class TaskView extends React.Component<TaskViewProps>{
     // the new text is saved in some way and inserted into the database.
     // <DescText value={description} onChange={e => null} />
     render() {
-        this.calculateDaysLeft();
-        this.daysLeftCheck();
+        // We can calculate the date only if state is populated
+        if(!!(this.state.dueDate)) {
+            this.calculateDaysLeft(this.state.dueDate);
+        }
+        const daysLeftString = this.daysLeftCheck();
         const name = this.displayName();
         const description = this.props.description;
         return (
@@ -251,7 +263,7 @@ export class TaskView extends React.Component<TaskViewProps>{
                     </Form>
                 </Row>
                 <Row noGutters={true}>
-                    <LabelText> {this.displayedDaysLeft} </LabelText>
+                    <LabelText> {daysLeftString} </LabelText>
                 </Row>
                 <Row>
                     <Col md="5"> <StatusDropdown taskStatus={this.status} statusList={this.statusOptions} /> </Col>
@@ -278,8 +290,8 @@ export class TaskView extends React.Component<TaskViewProps>{
                     <Col md="9" style={styles.sharedTab}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} /> </Col>
                     <Col md="2">
                         <Button
-                            variant = "outline-info"
-                            size = "lg"
+                            variant="outline-info"
+                            size="lg"
                             block
                             style={styles.historyButton}>
                             History

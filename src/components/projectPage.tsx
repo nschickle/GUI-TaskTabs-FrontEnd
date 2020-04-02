@@ -51,7 +51,7 @@ export class ProjectPage extends React.Component<{}, { error: any, isLoaded: boo
 
   async componentDidMount() {
 
-    fetch("http://localhost:1337/api/projects", {
+    fetch("https://tasktabs-backend.herokuapp.com/api/projects", {
       method: 'get',
     }).then(response => {
 
@@ -61,7 +61,7 @@ export class ProjectPage extends React.Component<{}, { error: any, isLoaded: boo
 
       const taskId = data[0]._id;
       // make a 2nd request and return a promise
-      return fetch(`http://localhost:1337/api/tasks/${taskId}`); 
+      return fetch(`https://tasktabs-backend.herokuapp.com/api/tasks/${taskId}`); 
     })
     .then(response => {
 
@@ -89,6 +89,7 @@ export class ProjectPage extends React.Component<{}, { error: any, isLoaded: boo
 
     const { error, isLoaded, task, head } = this.state;
     // TODO Style error and loading screens
+    
     if (error) {
       return (
         <>Error!</>
@@ -98,6 +99,12 @@ export class ProjectPage extends React.Component<{}, { error: any, isLoaded: boo
         <>Loading...</>
       );
     } else {
+      let deadline;
+      if(!!task.deadline) {
+        deadline = new Date(task.deadline);
+      } else {
+        deadline = null;
+      }
       return (
         <Container fluid style={styles.box}>
           <Row noGutters={true}>
@@ -106,7 +113,7 @@ export class ProjectPage extends React.Component<{}, { error: any, isLoaded: boo
               name={task.title}
               completion={task.progress}
               description={task.description}
-              dueDate={new Date}
+              dueDate={deadline}
               status={task.status}
               assignee={task.title}
               owner={testOwner}
@@ -125,7 +132,7 @@ export class ProjectPage extends React.Component<{}, { error: any, isLoaded: boo
       this.setState(() => {
         return { head: newHead };
       })
-      fetch(`http://localhost:1337/api/tasks/${newHead}`)
+      fetch(`https://tasktabs-backend.herokuapp.com/api/tasks/${newHead}`)
         .then(res => res.json())
         .then(
           (result) => {
