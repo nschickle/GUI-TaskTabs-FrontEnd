@@ -24,7 +24,7 @@ const styles = {
         fontSize: 24,
         marginTop: 10,
         marginBottom: 10,
-        maxHeight: 225
+        maxHeight: 150
     },
     container: {
         paddingLeft: 0,
@@ -88,11 +88,6 @@ interface User {
     id: number;
     name: string;
 };
-
-interface Tag {
-    tag: string;
-    id: number;
-}
 
 interface TaskViewProps {
     name: string;
@@ -276,7 +271,7 @@ export class TaskView extends React.Component<TaskViewProps>{
                             <Col sm="10">
                                 <Form.Control
                                     as="textarea"
-                                    rows="4"
+                                    rows="3"
                                     cols="55"
                                     defaultValue={description}
                                     onChange={e => null}

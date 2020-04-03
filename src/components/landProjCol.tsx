@@ -6,6 +6,7 @@ import Col from 'react-bootstrap/Col';
 import { ProjectButton } from "./newProjectButton";
 import { SubTaskButton } from "./subTaskButton";
 import { SubTask } from "./subtaskType";
+import ApplicationConfig from './applicationConfig';
 
 const styles = {
     box: {
@@ -14,19 +15,19 @@ const styles = {
         margin: 0,
         borderStyle: "solid",
         borderColor: "gray",
-        height: window.innerHeight - 75,
+        height: window.innerHeight-350,
         minWidth: 250
     }
 };
 
-interface ProjectColumnProps {
+interface LandProjectColumnProps {
     changeHead: (newHead: number) => any;
     showProjectPage: any;
 }
 
-export class ProjectColumn extends React.Component<ProjectColumnProps, {error: any, isLoaded: boolean, projects: SubTask[], showProjectPage: any} > {
+export class LandProjectColumn extends React.Component<LandProjectColumnProps, {error: any, isLoaded: boolean, projects: SubTask[], showProjectPage: any}> {
 
-    constructor(props: ProjectColumnProps) {
+    constructor(props: LandProjectColumnProps) {
         super(props);
 
         this.state = {
@@ -35,7 +36,6 @@ export class ProjectColumn extends React.Component<ProjectColumnProps, {error: a
             projects: [],
             showProjectPage: props.showProjectPage
         };
-
     }
 
     componentDidMount() {
@@ -67,9 +67,10 @@ export class ProjectColumn extends React.Component<ProjectColumnProps, {error: a
         );
     }
 
-    public render() {
 
+    public render() {
         const { error, isLoaded, projects, showProjectPage } = this.state;
+
         // TODO Style error and loading screens
         if (error) {
             return (
