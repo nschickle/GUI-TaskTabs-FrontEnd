@@ -7,7 +7,7 @@ import Button from 'react-bootstrap/Button';
 const styles = {
     button: {
         width: window.innerWidth,
-        height: 100,
+        height: 125,
         fontSize: 32
     }
 };

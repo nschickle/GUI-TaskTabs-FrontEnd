@@ -14,7 +14,7 @@ const styles = {
         margin: 0,
         borderStyle: "solid",
         borderColor: "gray",
-        height: window.innerHeight,
+        height: window.innerHeight - 75,
         minWidth: 250
     }
 };
