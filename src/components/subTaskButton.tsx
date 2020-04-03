@@ -33,8 +33,8 @@ const SubTaskName = styled.div`
 interface SubTaskButtonProps {
     percentage: number;
     name: string;
-    taskHead: SubTask;
-    changeHead: (newHead: SubTask) => any;
+    taskHead: number;
+    changeHead: (newHead: number) => any;
 }
 
 // This is a single SubTask button. They live in the right hand side of the project page.

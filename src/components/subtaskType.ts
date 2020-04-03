@@ -1,13 +1,14 @@
 export interface SubTask {
-    name: string;
-    percentage: number;
-    id: number;
+    _id: number;
+    parentID: number;
+    title: string;
     description: string;
-    startDate: Date;
-    dueDate: Date;
+    notes: string;
+    assignedTo: number;
+    deadline: string;
     status: string;
+    progress: number;
     assignee: string;
-    tags: Tag[];
     owner: User;
     sharedWith: User[];
     subtasks: SubTask[];
