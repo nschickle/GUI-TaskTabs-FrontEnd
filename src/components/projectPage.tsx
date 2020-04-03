@@ -15,17 +15,12 @@ const styles = {
     paddingLeft: 0,
     paddingRight: 0,
     minWidth: 1300
-  }
+    }
 };
 
 interface IUser {
   id: number;
   name: string;
-}
-
-interface ITag {
-  tag: string;
-  id: number;
 }
 
 const testOwner: IUser = { id: 0, name: "Super Steve" };
@@ -35,11 +30,16 @@ const testSharedWith: IUser[] = [
   { id: 2, name: "Tiny Steve" },
 ];
 
+interface ProjectPageProps {
+    handleStateChange: any;
+    changeHead: (newHead: number) => any;
+}
+
 // ProjectPage contains the entire application past the Google oauth. This should include the left and right sidebars
 // task view, settings user info, etc.
-export class ProjectPage extends React.Component<{}, { error: any, isLoaded: boolean, task: SubTask, head: number }>{
+export class ProjectPage extends React.Component<ProjectPageProps, { error: any, isLoaded: boolean, task: SubTask, head: number, handleStateChange: any}>{
 
-  constructor(props: {}) {
+  constructor(props: ProjectPageProps) {
     super(props);
 
     this.state = {
@@ -47,6 +47,7 @@ export class ProjectPage extends React.Component<{}, { error: any, isLoaded: boo
       isLoaded: false,
       task: null,
       head: undefined,
+      handleStateChange: props.handleStateChange,
     };
   }
 
@@ -57,12 +58,12 @@ export class ProjectPage extends React.Component<{}, { error: any, isLoaded: boo
     }).then(response => {
 
       // pass the data as promise to next then block
-      return response.json(); 
+      return response.json();
     }).then(data => {
 
       const taskId = data[0]._id;
       // make a 2nd request and return a promise
-      return fetch(`${ApplicationConfig.api.staging.baseUrl}/api/tasks/${taskId}`); 
+      return fetch(`${ApplicationConfig.api.staging.baseUrl}/api/tasks/${taskId}`);
     })
     .then(response => {
 
@@ -83,14 +84,15 @@ export class ProjectPage extends React.Component<{}, { error: any, isLoaded: boo
 
   }
 
+
   // TODO
   // assignedTo should probably be a User, not a string. Fine for now with dummy data,
   // but should be replaced.
   public render() {
 
-    const { error, isLoaded, task, head } = this.state;
+    const { error, isLoaded, task, head, handleStateChange } = this.state;
     // TODO Style error and loading screens
-    
+
     if (error) {
       return (
         <>Error!</>
@@ -109,7 +111,7 @@ export class ProjectPage extends React.Component<{}, { error: any, isLoaded: boo
       return (
         <Container fluid style={styles.box}>
           <Row noGutters={true}>
-            <Col sm="3"><ProjectColumn changeHead={this.changeHead} /></Col>
+            <Col sm="3"><ProjectColumn changeHead={this.changeHead} handleStateChange = {this.state.handleStateChange}/></Col>
             <Col sm="6"><TaskView
               name={task.title}
               completion={task.progress}
@@ -120,13 +122,12 @@ export class ProjectPage extends React.Component<{}, { error: any, isLoaded: boo
               owner={testOwner}
               sharedUsers={testSharedWith}
             /></Col>
-            <Col sm="3"><SubTaskColumn head={head} changeHead={this.changeHead}></SubTaskColumn></Col>
+            <Col sm="3"><SubTaskColumn head={head} changeHead={this.changeHead} handleStateChange = {this.state.handleStateChange}></SubTaskColumn></Col>
           </Row>
         </Container>
       );
     }
   }
-
   private changeHead = (newHead: number) => {
     const previousHead = this.state.head;
     if (newHead !== previousHead) {
@@ -154,5 +155,4 @@ export class ProjectPage extends React.Component<{}, { error: any, isLoaded: boo
         );
     }
   }
-
 };

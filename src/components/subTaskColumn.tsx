@@ -27,13 +27,14 @@ const styles = {
 };
 
 interface SubTaskColumnProps {
-    head: number,
-    changeHead: (newHead: number) => any
+    head: number;
+    changeHead: (newHead: number) => any;
+    handleStateChange: any;
 }
 
 // This creates the entire right-hand column of project page. It handles the button that creates a new task,
 // and hands down a single element of a subtask array to create subtask buttons one by one.
-export class SubTaskColumn extends React.Component<SubTaskColumnProps, { error: any, isLoaded: boolean, subTasks: SubTask[]}>{
+export class SubTaskColumn extends React.Component<SubTaskColumnProps, { error: any, isLoaded: boolean, subTasks: SubTask[], handleStateChange: any;}>{
     head: number;
     constructor(props: SubTaskColumnProps) {
         super(props);
@@ -42,6 +43,7 @@ export class SubTaskColumn extends React.Component<SubTaskColumnProps, { error: 
             error: null,
             isLoaded: false,
             subTasks: [],
+            handleStateChange: props.handleStateChange
         };
 
         this.head = this.props.head;
@@ -82,7 +84,7 @@ export class SubTaskColumn extends React.Component<SubTaskColumnProps, { error: 
     }
 
     render() {
-        const { error, isLoaded, subTasks } = this.state;
+        const { error, isLoaded, subTasks, handleStateChange } = this.state;
         // TODO Style error and loading screens
         if (error) {
             return (
@@ -101,7 +103,7 @@ export class SubTaskColumn extends React.Component<SubTaskColumnProps, { error: 
                         </Row>
                         <Row noGutters={true}>
                             {subTasks.map((task) => {
-                                return <SubTaskButton name={task.title} percentage={task.progress} key={task._id} changeHead={this.props.changeHead} taskHead={task._id}></SubTaskButton>;
+                                return <SubTaskButton name={task.title} percentage={task.progress} key={task._id} changeHead={this.props.changeHead} taskHead={task._id} handleStateChange = {this.state.handleStateChange}></SubTaskButton>;
                             })}
                         </Row>
                     </Col>

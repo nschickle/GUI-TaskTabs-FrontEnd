@@ -19,18 +19,19 @@ const styles = {
     }
 }
 
+const testOwner: IUser = { id: 0, name: "Super Steve" };
+
 interface IUser {
   id: number;
   name: string;
 }
 
 interface INavBarProps {
-    owner: IUser,
-    handleStateChange: any
+    handleStateChange: any;
 }
 
 interface NavBarState {
-    handleStateChange: any
+    handleStateChange: any;
 }
 
 export class NavBar extends React.Component<INavBarProps, NavBarState> {
@@ -39,7 +40,7 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
     constructor(props: INavBarProps) {
         super(props);
 
-        this.owner = props.owner;
+        this.owner = testOwner;
 
         this.state = {handleStateChange: props.handleStateChange};
     }

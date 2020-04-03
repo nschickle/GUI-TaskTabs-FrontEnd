@@ -6,6 +6,7 @@ import Row from 'react-bootstrap/Row';
 
 import { SubTask } from "./subtaskType";
 import { LandProjectColumn } from "./landProjCol";
+import ApplicationConfig from './applicationConfig';
 
 const styles = {
     center: {
@@ -32,30 +33,82 @@ interface IUser {
   name: string;
 }
 
+const testOwner: IUser = { id: 0, name: "Super Steve" };
+
 interface ProjLandProps {
-    projectHead: SubTask;
-    projectData: SubTask;
     handleStateChange: any;
+    changeHead: (newHead: number) => any;
 }
 
-interface ProjLandState {
-    projectHead: any;
-    projectData: any;
-    handleStateChange: any;
-}
-
-export class ProjectLanding extends React.Component<ProjLandProps, ProjLanState> {
+export class ProjectLanding extends React.Component<ProjLandProps,  { error: any, isLoaded: boolean, task: SubTask, head: number, handleStateChange: any}> {
     owner: IUser;
 
     constructor(props: ProjLandProps) {
         super(props);
 
-        this.state = { projectHead: props.projectHead, projectData: props.projectData, handleStateChange: props.handleStateChange};
-        this.owner = props.projectHead.owner;
+        this.state = {
+          error: null,
+          isLoaded: false,
+          task: null,
+          head: undefined,
+          handleStateChange: props.handleStateChange,
+        };
+        this.owner = testOwner;
+    }
 
+    componentDidMount() {
+
+      fetch(`${ApplicationConfig.api.staging.baseUrl}/api/projects`, {
+        method: 'get',
+      }).then(response => {
+
+        // pass the data as promise to next then block
+        return response.json();
+      }).then(data => {
+
+        const taskId = data[0]._id;
+        // make a 2nd request and return a promise
+        return fetch(`${ApplicationConfig.api.staging.baseUrl}/api/tasks/${taskId}`);
+      })
+      .then(response => {
+
+        return response.json();
+      })
+      .catch(error => {
+        this.setState({
+          isLoaded: true,
+          error: error,
+        });
+      }).then(res => {
+        this.setState({
+          isLoaded: true,
+          task: res,
+          head: res._id
+        })
+      })
     }
 
     public render() {
+        const { error, isLoaded, task, head, handleStateChange } = this.state;
+        // TODO Style error and loading screens
+
+        if (error) {
+          return (
+            <>Error!</>
+          );
+        } else if (!isLoaded) {
+          return (
+            <>Loading...</>
+          );
+        } else {
+          let deadline;
+          if(!!task.deadline) {
+            deadline = new Date(task.deadline);
+          } else {
+            deadline = null;
+        }
+    }
+
         return(
             <Container fluid>
                 <Row style={styles.center}>
@@ -65,15 +118,36 @@ export class ProjectLanding extends React.Component<ProjLandProps, ProjLanState>
                     <p style={styles.label}>Welcome, {this.owner.name}. Here are your Projects!</p>
                 </Row>
                 <Row style={styles.projects} noGutters={true}>
-                    <LandProjectColumn task={this.state.projectHead} changeHead={this.changeHead} handleStateChange = {this.state.handleStateChange}/>
+                    <LandProjectColumn changeHead={this.changeHead} handleStateChange = {this.state.handleStateChange}/>
                 </Row>
             </Container>
         );
     }
-
-    private changeHead = (newHead: SubTask) => {
-      this.setState(() => {
-        return { projectData: newHead };
-      })
+    private changeHead = (newHead: number) => {
+      const previousHead = this.state.head;
+      if (newHead !== previousHead) {
+        this.setState(() => {
+          return { head: newHead };
+        })
+        fetch(`${ApplicationConfig.api.staging.baseUrl}/api/tasks/${newHead}`)
+          .then(res => res.json())
+          .then(
+            (result) => {
+              this.setState({
+                isLoaded: true,
+                task: result,
+              });
+            },
+            // Note: it's important to handle errors here
+            // instead of a catch() block so that we don't swallow
+            // exceptions from actual bugs in components.
+            (error) => {
+              this.setState({
+                isLoaded: true,
+                error
+              });
+            }
+          );
+      }
     }
 };
