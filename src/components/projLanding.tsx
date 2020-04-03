@@ -36,11 +36,10 @@ interface IUser {
 const testOwner: IUser = { id: 0, name: "Super Steve" };
 
 interface ProjLandProps {
-    handleStateChange: any;
-    changeHead: (newHead: number) => any;
+    showProjectPage: any;
 }
 
-export class ProjectLanding extends React.Component<ProjLandProps,  { error: any, isLoaded: boolean, task: SubTask, head: number, handleStateChange: any}> {
+export class ProjectLanding extends React.Component<ProjLandProps,  { error: any, isLoaded: boolean, task: SubTask, head: number, showProjectPage: any}> {
     owner: IUser;
 
     constructor(props: ProjLandProps) {
@@ -51,7 +50,7 @@ export class ProjectLanding extends React.Component<ProjLandProps,  { error: any
           isLoaded: false,
           task: null,
           head: undefined,
-          handleStateChange: props.handleStateChange,
+          showProjectPage: props.showProjectPage,
         };
         this.owner = testOwner;
     }
@@ -89,7 +88,7 @@ export class ProjectLanding extends React.Component<ProjLandProps,  { error: any
     }
 
     public render() {
-        const { error, isLoaded, task, head, handleStateChange } = this.state;
+        const { error, isLoaded, task, head, showProjectPage } = this.state;
         // TODO Style error and loading screens
 
         if (error) {
@@ -100,14 +99,7 @@ export class ProjectLanding extends React.Component<ProjLandProps,  { error: any
           return (
             <>Loading...</>
           );
-        } else {
-          let deadline;
-          if(!!task.deadline) {
-            deadline = new Date(task.deadline);
-          } else {
-            deadline = null;
         }
-    }
 
         return(
             <Container fluid>
@@ -118,7 +110,7 @@ export class ProjectLanding extends React.Component<ProjLandProps,  { error: any
                     <p style={styles.label}>Welcome, {this.owner.name}. Here are your Projects!</p>
                 </Row>
                 <Row style={styles.projects} noGutters={true}>
-                    <LandProjectColumn changeHead={this.changeHead} handleStateChange = {this.state.handleStateChange}/>
+                    <LandProjectColumn changeHead={this.changeHead} showProjectPage = {this.state.showProjectPage}/>
                 </Row>
             </Container>
         );

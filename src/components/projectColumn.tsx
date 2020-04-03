@@ -21,10 +21,10 @@ const styles = {
 
 interface ProjectColumnProps {
     changeHead: (newHead: number) => any;
-    handleStateChange: any;
+    showProjectPage: any;
 }
 
-export class ProjectColumn extends React.Component<ProjectColumnProps, {error: any, isLoaded: boolean, projects: SubTask[], handleStateChange: any} > {
+export class ProjectColumn extends React.Component<ProjectColumnProps, {error: any, isLoaded: boolean, projects: SubTask[], showProjectPage: any} > {
 
     constructor(props: ProjectColumnProps) {
         super(props);
@@ -33,7 +33,7 @@ export class ProjectColumn extends React.Component<ProjectColumnProps, {error: a
             error: null,
             isLoaded: false,
             projects: [],
-            handleStateChange: props.handleStateChange
+            showProjectPage: props.showProjectPage
         };
 
     }
@@ -69,7 +69,7 @@ export class ProjectColumn extends React.Component<ProjectColumnProps, {error: a
 
     public render() {
 
-        const { error, isLoaded, projects, handleStateChange } = this.state;
+        const { error, isLoaded, projects, showProjectPage } = this.state;
         // TODO Style error and loading screens
         if (error) {
             return (
@@ -85,7 +85,7 @@ export class ProjectColumn extends React.Component<ProjectColumnProps, {error: a
                     <Col style={styles.box} >
                         <ProjectButton />
                         {projects.map((task) => {
-                            return <SubTaskButton name={task.title} percentage={task.progress} key={task._id} changeHead={this.props.changeHead} taskHead={task._id} handleStateChange = {this.state.handleStateChange}></SubTaskButton>;
+                            return <SubTaskButton name={task.title} percentage={task.progress} key={task._id} changeHead={this.props.changeHead} taskHead={task._id} showProjectPage = {this.state.showProjectPage}></SubTaskButton>;
                         })}
                     </Col>
                 </Container>

@@ -31,13 +31,12 @@ const testSharedWith: IUser[] = [
 ];
 
 interface ProjectPageProps {
-    handleStateChange: any;
-    changeHead: (newHead: number) => any;
+    showProjectPage: any;
 }
 
 // ProjectPage contains the entire application past the Google oauth. This should include the left and right sidebars
 // task view, settings user info, etc.
-export class ProjectPage extends React.Component<ProjectPageProps, { error: any, isLoaded: boolean, task: SubTask, head: number, handleStateChange: any}>{
+export class ProjectPage extends React.Component<ProjectPageProps, { error: any, isLoaded: boolean, task: SubTask, head: number, showProjectPage: any}>{
 
   constructor(props: ProjectPageProps) {
     super(props);
@@ -47,7 +46,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
       isLoaded: false,
       task: null,
       head: undefined,
-      handleStateChange: props.handleStateChange,
+      showProjectPage: props.showProjectPage,
     };
   }
 
@@ -90,7 +89,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
   // but should be replaced.
   public render() {
 
-    const { error, isLoaded, task, head, handleStateChange } = this.state;
+    const { error, isLoaded, task, head, showProjectPage } = this.state;
     // TODO Style error and loading screens
 
     if (error) {
@@ -111,7 +110,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
       return (
         <Container fluid style={styles.box}>
           <Row noGutters={true}>
-            <Col sm="3"><ProjectColumn changeHead={this.changeHead} handleStateChange = {this.state.handleStateChange}/></Col>
+            <Col sm="3"><ProjectColumn changeHead={this.changeHead} showProjectPage = {this.state.showProjectPage}/></Col>
             <Col sm="6"><TaskView
               name={task.title}
               completion={task.progress}
@@ -122,7 +121,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
               owner={testOwner}
               sharedUsers={testSharedWith}
             /></Col>
-            <Col sm="3"><SubTaskColumn head={head} changeHead={this.changeHead} handleStateChange = {this.state.handleStateChange}></SubTaskColumn></Col>
+            <Col sm="3"><SubTaskColumn head={head} changeHead={this.changeHead} showProjectPage = {this.state.showProjectPage}></SubTaskColumn></Col>
           </Row>
         </Container>
       );
