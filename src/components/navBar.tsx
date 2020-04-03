@@ -4,6 +4,7 @@ import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Button from 'react-bootstrap/Button';
+import Dropdown from 'react-bootstrap/Dropdown';
 
 const styles = {
     size: {
@@ -56,7 +57,7 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
                     <Navbar.Brand>TaskTabs</Navbar.Brand>
                     <Navbar.Toggle />
                     <Navbar.Collapse>
-                        <Nav variant="pills">
+                        <Nav>
                             <Button
                                 onClick={this.getProjectLanding}
                                 variant="outline-secondary"
@@ -65,15 +66,20 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
                         </Nav>
                     </Navbar.Collapse>
                     <Navbar.Collapse className="justify-content-end">
-                        <Nav variant="pills">
-                            <Button
-                                variant="outline-secondary"
-                                style={styles.button}>
-                                Settings</Button>
-                            <Button
-                                variant="outline-secondary"
-                                style={styles.button}>
-                                {this.owner.name}</Button>
+                        <Nav>
+                            <Dropdown>
+                                <Dropdown.Toggle
+                                    variant="outline-secondary"
+                                    style={styles.button}
+                                    id="accountDropdown">
+                                    {this.owner.name}
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                    <Dropdown.Item> Account </Dropdown.Item>
+                                    <Dropdown.Item> Settings </Dropdown.Item>
+                                    <Dropdown.Item> Log Out </Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown>
                         </Nav>
                     </Navbar.Collapse>
                 </Navbar>
