@@ -6,7 +6,6 @@ import Row from 'react-bootstrap/Row';
 import { NavBar } from './navBar';
 import { ProjectPage } from './projectPage';
 import { ProjectLanding } from './projLanding';
-import { number } from "prop-types";
 
 interface MainPageProps {
     projectPageUp: boolean;
@@ -45,7 +44,7 @@ export class MainPage extends React.Component<MainPageProps, { projectPageUp: bo
                 <Row>
                 <NavBar hideProjectPage = {this.hideProjectPage}/>
                 </Row>
-                <Row><ProjectPage showProjectPage = {this.showProjectPage} /></Row></Container>;
+                <Row><ProjectPage projectID={this.state.projectID}/></Row></Container>;
         }
         else{
             showPage = <Container fluid>

@@ -15,7 +15,7 @@ interface IUser {
 
 // Needed in order to do anything with changing the state
 interface IAssignedState {
-    assignedState: any;
+    assignedState: string;
 }
 
 interface IAssignedDropdownProps {

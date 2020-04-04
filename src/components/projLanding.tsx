@@ -36,10 +36,10 @@ interface IUser {
 const testOwner: IUser = { id: 0, name: "Super Steve" };
 
 interface ProjLandProps {
-    showProjectPage: any;
+    showProjectPage: (projectID: number) => any;
 }
 
-export class ProjectLanding extends React.Component<ProjLandProps,  { error: any, isLoaded: boolean, task: SubTask, head: number, showProjectPage: any}> {
+export class ProjectLanding extends React.Component<ProjLandProps,  { error: any, isLoaded: boolean, task: SubTask, head: number, showProjectPage: (projectID: number) => any}> {
     owner: IUser;
 
     constructor(props: ProjLandProps) {
@@ -60,7 +60,6 @@ export class ProjectLanding extends React.Component<ProjLandProps,  { error: any
     }
 
     render() {
-        // TODO Style error and loading screens
 
         return(
             <Container fluid>
@@ -71,7 +70,7 @@ export class ProjectLanding extends React.Component<ProjLandProps,  { error: any
                     <p style={styles.label}>Welcome, {this.owner.name}. Here are your Projects!</p>
                 </Row>
                 <Row style={styles.projects} noGutters={true}>
-                    <LandProjectColumn selectProject={this.selectProject} showProjectPage = {this.state.showProjectPage}/>
+                    <LandProjectColumn selectProject={this.selectProject} />
                 </Row>
             </Container>
         );

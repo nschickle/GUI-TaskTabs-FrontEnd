@@ -22,10 +22,9 @@ const styles = {
 
 interface LandProjectColumnProps {
     selectProject: (projectID: number) => any;
-    showProjectPage: any;
 }
 
-export class LandProjectColumn extends React.Component<LandProjectColumnProps, {error: any, isLoaded: boolean, projects: SubTask[], showProjectPage: any}> {
+export class LandProjectColumn extends React.Component<LandProjectColumnProps, {error: any, isLoaded: boolean, projects: SubTask[]}> {
 
     constructor(props: LandProjectColumnProps) {
         super(props);
@@ -34,7 +33,6 @@ export class LandProjectColumn extends React.Component<LandProjectColumnProps, {
             error: null,
             isLoaded: false,
             projects: [],
-            showProjectPage: props.showProjectPage
         };
     }
 
@@ -85,7 +83,7 @@ export class LandProjectColumn extends React.Component<LandProjectColumnProps, {
                     <Col style={styles.box} >
                         <ProjectButton />
                         {projects.map((task) => {
-                            return <SubTaskButton name={task.title} changeHead={this.props.selectProject} percentage={task.progress} key={task._id} taskHead={task._id} showProjectPage = {this.state.showProjectPage}></SubTaskButton>;
+                            return <SubTaskButton name={task.title} changeHead={this.props.selectProject} percentage={task.progress} key={task._id} taskHead={task._id}></SubTaskButton>;
                         })}
                     </Col>
                 </Container>
