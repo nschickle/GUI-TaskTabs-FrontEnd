@@ -21,7 +21,7 @@ const styles = {
 };
 
 interface LandProjectColumnProps {
-    changeHead: (newHead: number) => any;
+    selectProject: (projectID: number) => any;
     showProjectPage: any;
 }
 
@@ -67,9 +67,8 @@ export class LandProjectColumn extends React.Component<LandProjectColumnProps, {
         );
     }
 
-
     public render() {
-        const { error, isLoaded, projects, showProjectPage } = this.state;
+        const { error, isLoaded, projects } = this.state;
 
         // TODO Style error and loading screens
         if (error) {
@@ -86,11 +85,12 @@ export class LandProjectColumn extends React.Component<LandProjectColumnProps, {
                     <Col style={styles.box} >
                         <ProjectButton />
                         {projects.map((task) => {
-                            return <SubTaskButton name={task.title} percentage={task.progress} key={task._id} changeHead={this.props.changeHead} taskHead={task._id} showProjectPage = {this.state.showProjectPage}></SubTaskButton>;
+                            return <SubTaskButton name={task.title} changeHead={this.props.selectProject} percentage={task.progress} key={task._id} taskHead={task._id} showProjectPage = {this.state.showProjectPage}></SubTaskButton>;
                         })}
                     </Col>
                 </Container>
             );
         }
     }
+
 }

@@ -28,11 +28,11 @@ interface IUser {
 }
 
 interface INavBarProps {
-    showProjectPage: any;
+    hideProjectPage: any;
 }
 
 interface NavBarState {
-    showProjectPage: any;
+    hideProjectPage: any;
 }
 
 export class NavBar extends React.Component<INavBarProps, NavBarState> {
@@ -43,11 +43,11 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
 
         this.owner = testOwner;
 
-        this.state = {showProjectPage: props.showProjectPage};
+        this.state = {hideProjectPage: props.hideProjectPage};
     }
 
     getProjectLanding = () => {
-        this.state.showProjectPage(false);
+        this.state.hideProjectPage();
     }
 
     public render() {

@@ -68,7 +68,6 @@ export class SubTaskButton extends React.Component<SubTaskButtonProps, SubTaskBu
 
     onButtonClick = () => {
         this.props.changeHead(this.props.taskHead);
-        this.state.showProjectPage(true);
     }
 
     render() {

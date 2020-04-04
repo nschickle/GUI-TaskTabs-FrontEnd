@@ -55,51 +55,12 @@ export class ProjectLanding extends React.Component<ProjLandProps,  { error: any
         this.owner = testOwner;
     }
 
-    componentDidMount() {
-
-      fetch(`${ApplicationConfig.api.staging.baseUrl}/api/projects`, {
-        method: 'get',
-      }).then(response => {
-
-        // pass the data as promise to next then block
-        return response.json();
-      }).then(data => {
-
-        const taskId = data[0]._id;
-        // make a 2nd request and return a promise
-        return fetch(`${ApplicationConfig.api.staging.baseUrl}/api/tasks/${taskId}`);
-      })
-      .then(response => {
-
-        return response.json();
-      })
-      .catch(error => {
-        this.setState({
-          isLoaded: true,
-          error: error,
-        });
-      }).then(res => {
-        this.setState({
-          isLoaded: true,
-          task: res,
-          head: res._id
-        })
-      })
+    selectProject = (projectID: number) => {
+        this.state.showProjectPage(projectID);
     }
 
-    public render() {
-        const { error, isLoaded, task, head, showProjectPage } = this.state;
+    render() {
         // TODO Style error and loading screens
-
-        if (error) {
-          return (
-            <>Error!</>
-          );
-        } else if (!isLoaded) {
-          return (
-            <>Loading...</>
-          );
-        }
 
         return(
             <Container fluid>
@@ -110,36 +71,9 @@ export class ProjectLanding extends React.Component<ProjLandProps,  { error: any
                     <p style={styles.label}>Welcome, {this.owner.name}. Here are your Projects!</p>
                 </Row>
                 <Row style={styles.projects} noGutters={true}>
-                    <LandProjectColumn changeHead={this.changeHead} showProjectPage = {this.state.showProjectPage}/>
+                    <LandProjectColumn selectProject={this.selectProject} showProjectPage = {this.state.showProjectPage}/>
                 </Row>
             </Container>
         );
-    }
-    private changeHead = (newHead: number) => {
-      const previousHead = this.state.head;
-      if (newHead !== previousHead) {
-        this.setState(() => {
-          return { head: newHead };
-        })
-        fetch(`${ApplicationConfig.api.staging.baseUrl}/api/tasks/${newHead}`)
-          .then(res => res.json())
-          .then(
-            (result) => {
-              this.setState({
-                isLoaded: true,
-                task: result,
-              });
-            },
-            // Note: it's important to handle errors here
-            // instead of a catch() block so that we don't swallow
-            // exceptions from actual bugs in components.
-            (error) => {
-              this.setState({
-                isLoaded: true,
-                error
-              });
-            }
-          );
-      }
     }
 };
