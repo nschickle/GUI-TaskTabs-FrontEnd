@@ -6,8 +6,6 @@ import Row from 'react-bootstrap/Row';
 import { NavBar } from './navBar';
 import { ProjectPage } from './projectPage';
 import { ProjectLanding } from './projLanding';
-import { SubTask } from './subtaskType';
-import ApplicationConfig from './applicationConfig';
 
 interface MainPageProps {
     projectPageUp: boolean;
@@ -15,18 +13,27 @@ interface MainPageProps {
 
 // TODO:
 // Make it so choosing a project on the landing changes it on project page
-export class MainPage extends React.Component<MainPageProps, { projectPageUp: any}>{
+export class MainPage extends React.Component<MainPageProps, { projectPageUp: boolean, projectID: number}>{
 
     constructor(props: MainPageProps) {
       super(props);
 
       this.state = {
-        projectPageUp: props.projectPageUp
+        projectPageUp: props.projectPageUp,
+        projectID: null
       };
     }
 
-    showProjectPage = (pageUp: boolean) => {
-        this.setState({projectPageUp: pageUp})
+    showProjectPage = (projectID: number) => {
+        this.setState({projectPageUp: true});
+        this.setState({projectID: projectID});
+    }
+
+
+    // Currently makes projectID null because it's state can't be guarentee
+    hideProjectPage = () => {
+        this.setState({projectPageUp: false});
+        this.setState({projectID: null});
     }
 
     render() {
@@ -35,14 +42,14 @@ export class MainPage extends React.Component<MainPageProps, { projectPageUp: an
         if(projectPageUp){
             showPage = <Container fluid>
                 <Row>
-                <NavBar showProjectPage = {this.showProjectPage}/>
+                <NavBar hideProjectPage = {this.hideProjectPage}/>
                 </Row>
-                <Row><ProjectPage showProjectPage = {this.showProjectPage}/></Row></Container>;
+                <Row><ProjectPage projectID={this.state.projectID}/></Row></Container>;
         }
         else{
             showPage = <Container fluid>
                 <Row>
-                <NavBar showProjectPage = {this.showProjectPage}/>
+                  <NavBar hideProjectPage = {this.hideProjectPage}/>
                 </Row>
                 <Row>
                 <ProjectLanding showProjectPage = {this.showProjectPage}/>

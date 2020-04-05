@@ -31,12 +31,12 @@ const testSharedWith: IUser[] = [
 ];
 
 interface ProjectPageProps {
-    showProjectPage: any;
+    projectID: number;
 }
 
 // ProjectPage contains the entire application past the Google oauth. This should include the left and right sidebars
 // task view, settings user info, etc.
-export class ProjectPage extends React.Component<ProjectPageProps, { error: any, isLoaded: boolean, task: SubTask, head: number, showProjectPage: any}>{
+export class ProjectPage extends React.Component<ProjectPageProps, { error: any, isLoaded: boolean, task: SubTask, head: number }>{
 
   constructor(props: ProjectPageProps) {
     super(props);
@@ -46,41 +46,31 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
       isLoaded: false,
       task: null,
       head: undefined,
-      showProjectPage: props.showProjectPage,
     };
   }
 
   componentDidMount() {
 
-    fetch(`${ApplicationConfig.api.staging.baseUrl}/api/projects`, {
-      method: 'get',
-    }).then(response => {
-
-      // pass the data as promise to next then block
-      return response.json();
-    }).then(data => {
-
-      const taskId = data[0]._id;
-      // make a 2nd request and return a promise
-      return fetch(`${ApplicationConfig.api.staging.baseUrl}/api/tasks/${taskId}`);
-    })
-    .then(response => {
-
-      return response.json();
-    })
-    .catch(error => {
-      this.setState({
-        isLoaded: true,
-        error: error,
-      });
-    }).then(res => {
-      this.setState({
-        isLoaded: true,
-        task: res,
-        head: res._id
-      })
-    })
-
+    fetch(`${ApplicationConfig.api.staging.baseUrl}/api/tasks/${this.props.projectID}`)
+        .then(res => res.json())
+        .then(
+          (result) => {
+            this.setState({
+              isLoaded: true,
+              task: result,
+              head: result._id
+            });
+          },
+          // Note: it's important to handle errors here
+          // instead of a catch() block so that we don't swallow
+          // exceptions from actual bugs in components.
+          (error) => {
+            this.setState({
+              isLoaded: true,
+              error
+            });
+          }
+        );
   }
 
 
@@ -89,7 +79,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
   // but should be replaced.
   public render() {
 
-    const { error, isLoaded, task, head, showProjectPage } = this.state;
+    const { error, isLoaded, task, head } = this.state;
     // TODO Style error and loading screens
 
     if (error) {
@@ -110,7 +100,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
       return (
         <Container fluid style={styles.box}>
           <Row noGutters={true}>
-            <Col sm="3"><ProjectColumn changeHead={this.changeHead} showProjectPage = {this.state.showProjectPage}/></Col>
+            <Col sm="3"><ProjectColumn changeHead={this.changeHead} /></Col>
             <Col sm="6"><TaskView
               name={task.title}
               completion={task.progress}
@@ -121,7 +111,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
               owner={testOwner}
               sharedUsers={testSharedWith}
             /></Col>
-            <Col sm="3"><SubTaskColumn head={head} changeHead={this.changeHead} showProjectPage = {this.state.showProjectPage}></SubTaskColumn></Col>
+            <Col sm="3"><SubTaskColumn head={head} changeHead={this.changeHead}></SubTaskColumn></Col>
           </Row>
         </Container>
       );

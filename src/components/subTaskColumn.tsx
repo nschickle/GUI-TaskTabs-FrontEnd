@@ -29,12 +29,11 @@ const styles = {
 interface SubTaskColumnProps {
     head: number;
     changeHead: (newHead: number) => any;
-    showProjectPage: any;
 }
 
 // This creates the entire right-hand column of project page. It handles the button that creates a new task,
 // and hands down a single element of a subtask array to create subtask buttons one by one.
-export class SubTaskColumn extends React.Component<SubTaskColumnProps, { error: any, isLoaded: boolean, subTasks: SubTask[], showProjectPage: any;}>{
+export class SubTaskColumn extends React.Component<SubTaskColumnProps, { error: any, isLoaded: boolean, subTasks: SubTask[]}>{
     head: number;
     constructor(props: SubTaskColumnProps) {
         super(props);
@@ -42,8 +41,7 @@ export class SubTaskColumn extends React.Component<SubTaskColumnProps, { error: 
         this.state = {
             error: null,
             isLoaded: false,
-            subTasks: [],
-            showProjectPage: props.showProjectPage
+            subTasks: []
         };
 
         this.head = this.props.head;
@@ -84,7 +82,7 @@ export class SubTaskColumn extends React.Component<SubTaskColumnProps, { error: 
     }
 
     render() {
-        const { error, isLoaded, subTasks, showProjectPage } = this.state;
+        const { error, isLoaded, subTasks } = this.state;
         // TODO Style error and loading screens
         if (error) {
             return (
@@ -103,7 +101,7 @@ export class SubTaskColumn extends React.Component<SubTaskColumnProps, { error: 
                         </Row>
                         <Row noGutters={true}>
                             {subTasks.map((task) => {
-                                return <SubTaskButton name={task.title} percentage={task.progress} key={task._id} changeHead={this.props.changeHead} taskHead={task._id} showProjectPage = {this.state.showProjectPage}></SubTaskButton>;
+                                return <SubTaskButton name={task.title} percentage={task.progress} key={task._id} changeHead={this.props.changeHead} taskHead={task._id} ></SubTaskButton>;
                             })}
                         </Row>
                     </Col>
