@@ -9,7 +9,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 const styles = {
     size: {
         fontSize: 32,
-        height: 55,
+        height: 75,
         borderColor: "gray",
         borderStyle: "solid"
     },
@@ -80,6 +80,16 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
                                     <Dropdown.Item> Log Out </Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
+                        </Nav>
+                        <Nav>
+                            <Container
+                                className="g-signin2" 
+                                data-onsuccess="onSignIn"
+                                data-height="48"
+                                data-width="162"
+                                data-borderStyle="none">
+                                Google
+                            </Container>
                         </Nav>
                     </Navbar.Collapse>
                 </Navbar>
