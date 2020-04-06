@@ -15,10 +15,8 @@ const styles = {
     },
     button: {
         fontSize: 24,
-        height: 48,
-        borderStyle: "none",
-        marginRight:10,
-        marginLeft: 10,
+        height: 50,
+        borderStyle: "none"
     }
 }
 
@@ -84,11 +82,14 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
                             </Dropdown>
                         </Nav>
                         <Nav>
-                            <Button
+                            <Container
                                 className="g-signin2" 
-                                data-onsuccess="onSignIn">
+                                data-onsuccess="onSignIn"
+                                data-height="48"
+                                data-width="162"
+                                data-borderStyle="none">
                                 Google
-                            </Button>
+                            </Container>
                         </Nav>
                     </Navbar.Collapse>
                 </Navbar>
