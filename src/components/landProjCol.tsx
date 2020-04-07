@@ -44,7 +44,7 @@ export class LandProjectColumn extends React.Component<LandProjectColumnProps, {
     // change, a componentDidUpdate() function will need to be added so that
     // the query can be re-run
     getProjects = () => {
-        fetch("https://tasktabs-backend.herokuapp.com/api/projects")
+        fetch(`${ApplicationConfig.api.staging.baseUrl}/api/projects`)
         .then(res => res.json())
         .then(
             (result) => {
@@ -81,7 +81,7 @@ export class LandProjectColumn extends React.Component<LandProjectColumnProps, {
             return (
                 <Container>
                     <Col style={styles.box} >
-                        <ProjectButton />
+                        <ProjectButton changeHead={this.props.selectProject}/>
                         {projects.map((task) => {
                             return <SubTaskButton name={task.title} changeHead={this.props.selectProject} percentage={task.progress} key={task._id} taskHead={task._id}></SubTaskButton>;
                         })}

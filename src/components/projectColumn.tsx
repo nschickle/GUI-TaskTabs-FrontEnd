@@ -6,6 +6,7 @@ import Col from 'react-bootstrap/Col';
 import { ProjectButton } from "./newProjectButton";
 import { SubTaskButton } from "./subTaskButton";
 import { SubTask } from "./subtaskType";
+import ApplicationConfig from './applicationConfig';
 
 const styles = {
     box: {
@@ -44,7 +45,7 @@ export class ProjectColumn extends React.Component<ProjectColumnProps, {error: a
     // change, a componentDidUpdate() function will need to be added so that
     // the query can be re-run
     getProjects = () => {
-        fetch("https://tasktabs-backend.herokuapp.com/api/projects")
+        fetch(`${ApplicationConfig.api.staging.baseUrl}/api/projects`)
         .then(res => res.json())
         .then(
             (result) => {
@@ -81,7 +82,7 @@ export class ProjectColumn extends React.Component<ProjectColumnProps, {error: a
             return (
                 <Container>
                     <Col style={styles.box} >
-                        <ProjectButton />
+                        <ProjectButton changeHead={this.props.changeHead}/>
                         {projects.map((task) => {
                             return <SubTaskButton name={task.title} percentage={task.progress} key={task._id} changeHead={this.props.changeHead} taskHead={task._id}></SubTaskButton>;
                         })}

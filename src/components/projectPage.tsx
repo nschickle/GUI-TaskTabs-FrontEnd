@@ -55,11 +55,13 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
         .then(res => res.json())
         .then(
           (result) => {
-            this.setState({
-              isLoaded: true,
-              task: result,
-              head: result._id
-            });
+            if(result) {
+              this.setState({
+                isLoaded: true,
+                task: result,
+                head: result._id
+              });
+            }
           },
           // Note: it's important to handle errors here
           // instead of a catch() block so that we don't swallow
@@ -117,6 +119,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
       );
     }
   }
+
   private changeHead = (newHead: number) => {
     const previousHead = this.state.head;
     if (newHead !== previousHead) {
