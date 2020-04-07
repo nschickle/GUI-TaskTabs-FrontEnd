@@ -47,6 +47,7 @@ export class ProjectColumn extends React.Component<ProjectColumnProps, {error: a
     componentDidUpdate() {
         if(this.props.head !== this.head) {
             this.head = this.props.head;
+            this.setState({isLoaded: false});
             this.getProjects();
         }
     }

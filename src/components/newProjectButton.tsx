@@ -26,7 +26,9 @@ export class ProjectButton extends React.Component<ProjectButtonProps> {
 
     createNewProject = () => {
 
-        const newProject = {title:"New project", status:"Active", progress:0};
+        // TODO 
+        // should be user from google oauth
+        const newProject = {owner: "littlebobbytables@xkcd.com", title:"New project", status:"Active", progress:0};
         fetch(`${ApplicationConfig.api.staging.baseUrl}/api/projects`,
         {
             method: 'POST',

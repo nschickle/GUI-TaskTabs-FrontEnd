@@ -27,7 +27,9 @@ export class NewSubTaskButton extends React.Component<NewSubTaskButtonProps> {
 
     createNewSubTask = () => {
 
-        const newSubTask = {parentId: this.props.head, title:"New task", status:"Active", progress:0};
+        // TODO 
+        // should be user from google oauth
+        const newSubTask = {owner: "littlebobbytables@xkcd.com", parentId: this.props.head, title:"New task", status:"Active", progress:0};
         fetch(`${ApplicationConfig.api.staging.baseUrl}/api/tasks`,
         {
             method: 'POST',
