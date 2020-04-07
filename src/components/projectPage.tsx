@@ -9,13 +9,14 @@ import { SubTaskColumn } from "./subTaskColumn";
 import { SubTask } from "./subtaskType";
 import { TaskView } from "./taskView";
 import ApplicationConfig from './applicationConfig';
+import { number } from "prop-types";
 
 const styles = {
   box: {
     paddingLeft: 0,
     paddingRight: 0,
     minWidth: 1300
-    }
+  }
 };
 
 interface IUser {
@@ -31,7 +32,7 @@ const testSharedWith: IUser[] = [
 ];
 
 interface ProjectPageProps {
-    projectID: number;
+  projectID: number;
 }
 
 // ProjectPage contains the entire application past the Google oauth. This should include the left and right sidebars
@@ -49,30 +50,47 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
     };
   }
 
-  componentDidMount() {
-
-    fetch(`${ApplicationConfig.api.staging.baseUrl}/api/tasks/${this.props.projectID}`)
-        .then(res => res.json())
-        .then(
-          (result) => {
-            if(result) {
-              this.setState({
-                isLoaded: true,
-                task: result,
-                head: result._id
-              });
-            }
-          },
-          // Note: it's important to handle errors here
-          // instead of a catch() block so that we don't swallow
-          // exceptions from actual bugs in components.
-          (error) => {
+  // This will attempt to fetch from the database a given number of times.
+  // This is needed because if the head was recently inserted, the fetch will
+  // likely return null as the database will not have caught up yet.
+  makeProjectQuery = (numTries: number) => {
+    if (numTries == 0) {
+      this.setState({
+        isLoaded: false,
+        error: true
+      });
+      
+    } else {
+      fetch(`${ApplicationConfig.api.staging.baseUrl}/api/tasks/${this.props.projectID}`)
+      .then(res => res.json())
+      .then(
+        (result) => {
+          if (result) {
             this.setState({
               isLoaded: true,
-              error
+              task: result,
+              head: result._id
             });
+          } else {
+            this.makeProjectQuery(numTries - 1)
           }
-        );
+        },
+        // Note: it's important to handle errors here
+        // instead of a catch() block so that we don't swallow
+        // exceptions from actual bugs in components.
+        (error) => {
+          this.setState({
+            isLoaded: true,
+            error
+          });
+        }
+      );
+    }
+  }
+
+  componentDidMount() {
+    // This will attempt to the make the Project Query 5 times before giving up.
+    this.makeProjectQuery(5);
   }
 
 
@@ -94,7 +112,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
       );
     } else {
       let deadline;
-      if(!!task.deadline) {
+      if (!!task.deadline) {
         deadline = new Date(task.deadline);
       } else {
         deadline = null;
