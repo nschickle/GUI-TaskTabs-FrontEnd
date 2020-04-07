@@ -21,11 +21,12 @@ const styles = {
 };
 
 interface ProjectColumnProps {
+    head: number;
     changeHead: (newHead: number) => any;
 }
 
 export class ProjectColumn extends React.Component<ProjectColumnProps, {error: any, isLoaded: boolean, projects: SubTask[] }> {
-
+    head: number;
     constructor(props: ProjectColumnProps) {
         super(props);
 
@@ -35,10 +36,19 @@ export class ProjectColumn extends React.Component<ProjectColumnProps, {error: a
             projects: [],
         };
 
+        this.head = this.props.head;
     }
 
     componentDidMount() {
+        this.head = this.props.head;
         this.getProjects();
+    }
+
+    componentDidUpdate() {
+        if(this.props.head !== this.head) {
+            this.head = this.props.head;
+            this.getProjects();
+        }
     }
 
     // If/when the project list needs to be updated to reflect a database
