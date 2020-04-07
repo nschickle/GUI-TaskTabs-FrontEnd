@@ -8,6 +8,7 @@ import Button from 'react-bootstrap/Button';
 import { SubTask } from "./subtaskType";
 import { SubTaskButton } from './subTaskButton';
 import ApplicationConfig from './applicationConfig';
+import { NewSubTaskButton } from "./newSubTaskButton";
 
 const styles = {
     button: {
@@ -97,7 +98,7 @@ export class SubTaskColumn extends React.Component<SubTaskColumnProps, { error: 
                 <Container>
                     <Col style={styles.box}>
                         <Row noGutters={true}>
-                            <Button style={styles.button} size="lg" variant="outline-primary"> + New Task </Button>
+                            <NewSubTaskButton head={this.props.head}changeHead={this.props.changeHead} />
                         </Row>
                         <Row noGutters={true}>
                             {subTasks.map((task) => {
