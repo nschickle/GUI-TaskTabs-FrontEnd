@@ -13,33 +13,34 @@ const styles = {
     }
 };
 
-interface ProjectButtonProps {
+interface NewSubTaskButtonProps {
+    head: number,
     changeHead: (newHead: number) => any;
 }
 
-export class ProjectButton extends React.Component<ProjectButtonProps> {
+export class NewSubTaskButton extends React.Component<NewSubTaskButtonProps> {
 
-    constructor(props: ProjectButtonProps) {
+    constructor(props: NewSubTaskButtonProps) {
         super(props);
 
     }
 
-    createNewProject = () => {
+    createNewSubTask = () => {
 
         // TODO 
         // should be user from google oauth
-        const newProject = {owner: "littlebobbytables@xkcd.com", title:"New project", status:"Active", progress:0};
-        fetch(`${ApplicationConfig.api.staging.baseUrl}/api/projects`,
+        const newSubTask = {owner: "littlebobbytables@xkcd.com", parentId: this.props.head, title:"New task", status:"Active", progress:0};
+        fetch(`${ApplicationConfig.api.staging.baseUrl}/api/tasks`,
         {
             method: 'POST',
             mode: 'cors',
             headers: {
                 'Content-Type': 'application/json'
               },
-            body: JSON.stringify(newProject)
+            body: JSON.stringify(newSubTask)
         }).then((response) => response.json())
             .then((data) => {
-                // This will refresh the page with the new project as the current head.
+                // This will refresh the page with the new task as the current head.
                 this.props.changeHead(data._id);
           })
           .catch((error) => {
@@ -51,7 +52,7 @@ export class ProjectButton extends React.Component<ProjectButtonProps> {
         return (
             <Container fluid>
                 <Row>
-                    <Button style={styles.button} size="lg" variant="outline-primary" onClick={this.createNewProject}> + New Project </Button>
+                    <Button style={styles.button} size="lg" variant="outline-primary" onClick={this.createNewSubTask}> + New Task </Button>
                 </Row>
             </Container>
         );

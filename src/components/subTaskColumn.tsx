@@ -3,11 +3,11 @@ import * as React from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
 
 import { SubTask } from "./subtaskType";
 import { SubTaskButton } from './subTaskButton';
 import ApplicationConfig from './applicationConfig';
+import { NewSubTaskButton } from "./newSubTaskButton";
 
 const styles = {
     button: {
@@ -33,7 +33,7 @@ interface SubTaskColumnProps {
 
 // This creates the entire right-hand column of project page. It handles the button that creates a new task,
 // and hands down a single element of a subtask array to create subtask buttons one by one.
-export class SubTaskColumn extends React.Component<SubTaskColumnProps, { error: any, isLoaded: boolean, subTasks: SubTask[]}>{
+export class SubTaskColumn extends React.Component<SubTaskColumnProps, { error: any, isLoaded: boolean, subTasks: SubTask[] }>{
     head: number;
     constructor(props: SubTaskColumnProps) {
         super(props);
@@ -49,36 +49,51 @@ export class SubTaskColumn extends React.Component<SubTaskColumnProps, { error: 
 
     componentDidMount() {
         this.head = this.props.head;
-        this.getSubtasks();
+        this.makeSubTaskQuery(5);
     }
 
     componentDidUpdate() {
-        if(this.props.head !== this.head) {
+        if (this.props.head !== this.head) {
             this.head = this.props.head;
-            this.getSubtasks();
+            this.setState({ isLoaded: false });
+            this.makeSubTaskQuery(5);
         }
     }
 
-    getSubtasks = () => {
-        fetch(`${ApplicationConfig.api.staging.baseUrl}/api/subtasks/${this.props.head}`)
-        .then(res => res.json())
-        .then(
-            (result) => {
-                this.setState({
-                    isLoaded: true,
-                    subTasks: result,
-                });
-            },
-            // Note: it's important to handle errors here
-            // instead of a catch() block so that we don't swallow
-            // exceptions from actual bugs in components.
-            (error) => {
-                this.setState({
-                    isLoaded: true,
-                    error
-                });
+    // This will attempt to fetch from the database a given number of times.
+    // This is needed because if the head was recently inserted, the fetch will
+    // likely return null as the database will not have caught up yet.
+    makeSubTaskQuery = (numTries: number) => {
+        if (numTries == 0) {
+            this.setState({
+                isLoaded: false,
+                error: true
+            });
+        } else {
+                fetch(`${ApplicationConfig.api.staging.baseUrl}/api/subtasks/${this.props.head}`)
+                .then(res => res.json())
+                .then(
+                    (result) => {
+                        if (result) {
+                            this.setState({
+                                isLoaded: true,
+                                subTasks: result,
+                            });
+                        } else {
+                            this.makeSubTaskQuery(numTries - 1);
+                        }
+                    },
+                    // Note: it's important to handle errors here
+                    // instead of a catch() block so that we don't swallow
+                    // exceptions from actual bugs in components.
+                    (error) => {
+                        this.setState({
+                            isLoaded: true,
+                            error
+                        });
+                    }
+                );
             }
-        );
     }
 
     render() {
@@ -97,7 +112,7 @@ export class SubTaskColumn extends React.Component<SubTaskColumnProps, { error: 
                 <Container>
                     <Col style={styles.box}>
                         <Row noGutters={true}>
-                            <Button style={styles.button} size="lg" variant="outline-primary"> + New Task </Button>
+                            <NewSubTaskButton head={this.props.head} changeHead={this.props.changeHead} />
                         </Row>
                         <Row noGutters={true}>
                             {subTasks.map((task) => {

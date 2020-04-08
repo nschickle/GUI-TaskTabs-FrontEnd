@@ -87,7 +87,7 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
                                 data-onsuccess="onSignIn"
                                 data-height="48"
                                 data-width="162"
-                                data-borderStyle="none">
+                                >
                                 Google
                             </Container>
                         </Nav>

@@ -6,6 +6,7 @@ import Col from 'react-bootstrap/Col';
 import { ProjectButton } from "./newProjectButton";
 import { SubTaskButton } from "./subTaskButton";
 import { SubTask } from "./subtaskType";
+import ApplicationConfig from './applicationConfig';
 
 const styles = {
     box: {
@@ -20,11 +21,12 @@ const styles = {
 };
 
 interface ProjectColumnProps {
+    head: number;
     changeHead: (newHead: number) => any;
 }
 
 export class ProjectColumn extends React.Component<ProjectColumnProps, {error: any, isLoaded: boolean, projects: SubTask[] }> {
-
+    head: number;
     constructor(props: ProjectColumnProps) {
         super(props);
 
@@ -34,17 +36,27 @@ export class ProjectColumn extends React.Component<ProjectColumnProps, {error: a
             projects: [],
         };
 
+        this.head = this.props.head;
     }
 
     componentDidMount() {
+        this.head = this.props.head;
         this.getProjects();
+    }
+
+    componentDidUpdate() {
+        if(this.props.head !== this.head) {
+            this.head = this.props.head;
+            this.setState({isLoaded: false});
+            this.getProjects();
+        }
     }
 
     // If/when the project list needs to be updated to reflect a database
     // change, a componentDidUpdate() function will need to be added so that
     // the query can be re-run
     getProjects = () => {
-        fetch("https://tasktabs-backend.herokuapp.com/api/projects")
+        fetch(`${ApplicationConfig.api.staging.baseUrl}/api/projects`)
         .then(res => res.json())
         .then(
             (result) => {
@@ -81,7 +93,7 @@ export class ProjectColumn extends React.Component<ProjectColumnProps, {error: a
             return (
                 <Container>
                     <Col style={styles.box} >
-                        <ProjectButton />
+                        <ProjectButton changeHead={this.props.changeHead}/>
                         {projects.map((task) => {
                             return <SubTaskButton name={task.title} percentage={task.progress} key={task._id} changeHead={this.props.changeHead} taskHead={task._id}></SubTaskButton>;
                         })}
