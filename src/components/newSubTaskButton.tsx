@@ -13,6 +13,17 @@ const styles = {
     }
 };
 
+interface NewTaskPost {
+    owner: string,
+    parentId: number,
+    title: string,
+    description: string,
+    notes: string,
+    assignedTo: number,
+    status: string,
+    progress: number
+}
+
 interface NewSubTaskButtonProps {
     head: number,
     changeHead: (newHead: number) => any;
@@ -29,7 +40,7 @@ export class NewSubTaskButton extends React.Component<NewSubTaskButtonProps> {
 
         // TODO 
         // should be user from google oauth
-        const newSubTask = {owner: "littlebobbytables@xkcd.com", parentId: this.props.head, title:"New task", status:"Active", progress:0};
+        const newSubTask:NewTaskPost = {owner: "littlebobbytables@xkcd.com", parentId: this.props.head, title:"New task", description:"", notes:"", assignedTo: null, status:"Active", progress:0};
         fetch(`${ApplicationConfig.api.staging.baseUrl}/api/tasks`,
         {
             method: 'POST',

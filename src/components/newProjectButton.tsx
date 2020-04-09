@@ -13,6 +13,17 @@ const styles = {
     }
 };
 
+interface NewProjectPost {
+    owner: string,
+    parentId: number,
+    title: string,
+    description: string,
+    notes: string,
+    assignedTo: number,
+    status: string,
+    progress: number
+}
+
 interface ProjectButtonProps {
     changeHead: (newHead: number) => any;
 }
@@ -28,7 +39,7 @@ export class ProjectButton extends React.Component<ProjectButtonProps> {
 
         // TODO 
         // should be user from google oauth
-        const newProject = {owner: "littlebobbytables@xkcd.com", title:"New project", status:"Active", progress:0};
+        const newProject:NewProjectPost = {owner: "littlebobbytables@xkcd.com", parentId: null, title:"New project", description: "", notes: "", assignedTo: null, status:"Active", progress:0};
         fetch(`${ApplicationConfig.api.staging.baseUrl}/api/projects`,
         {
             method: 'POST',
