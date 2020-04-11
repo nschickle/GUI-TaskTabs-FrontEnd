@@ -22,6 +22,7 @@ interface StatusState {
 interface StatusDropdownProps {
     taskStatus: string;
     statusList: Options[];
+	handleChange: any;
 }
 
 export class StatusDropdown extends React.Component<StatusDropdownProps, StatusState> {
@@ -32,15 +33,16 @@ export class StatusDropdown extends React.Component<StatusDropdownProps, StatusS
         this.state = {taskStatus: props.taskStatus}
         this.options = props.statusList;
 
-        this.handleChange = this.handleChange.bind(this);
+        //this.handleChange = this.handleChange.bind(this);
     }
 
     // Handles when the state is changed
     // Currently only changes the status
     // Will need to add warnings and change parent and children states as nessisary
-    handleChange(e: React.ChangeEvent<HTMLSelectElement>) {
+	// MOVED TO TaskView.tsx TO ALLOW "PASSING UP" THE STATE
+    /*handleChange(e: React.ChangeEvent<HTMLSelectElement>) {
         this.setState({taskStatus: e.target.value});
-    }
+    }*/
 
     render() {
         const taskStatus = this.state.taskStatus;
@@ -59,7 +61,7 @@ export class StatusDropdown extends React.Component<StatusDropdownProps, StatusS
                     <Col sm="8">
                         <Form.Control
                             as="select"
-                            onChange={this.handleChange}
+                            onChange={this.props.handleChange}
                             defaultValue={taskStatus}
                             size="lg"
                             style={font}

@@ -97,7 +97,7 @@ interface TaskViewProps {
     description: string;
     dueDate: Date;
     status: string;
-    assignee: string;
+    assignee: number;
     owner: User;
     sharedUsers: User[];
 };
@@ -105,6 +105,7 @@ interface TaskViewProps {
 // TaskView is intended to be the center view for all tasks, substasks and project heads.
 export class TaskView extends React.Component<TaskViewProps>{
     name: string;
+	description: string;
     displayedName: string;
     today: Date;
     daysLeft: number;
@@ -117,12 +118,13 @@ export class TaskView extends React.Component<TaskViewProps>{
 	saveText: string;
 
 
-    state = { width: 0, height: 0, dueDate: this.props.dueDate };
+    state = { width: 0, height: 0, dueDate: this.props.dueDate, description: this.props.description, taskStatus: this.props.status, assignedState: this.props.assignee };
 
 
     constructor(props: TaskViewProps) {
         super(props);
         this.displayedName = this.name;
+		//this.description = this.props.description;
 
         this.today = new Date();
         this.displayedDaysLeft = "0 Days Left!";
@@ -138,7 +140,7 @@ export class TaskView extends React.Component<TaskViewProps>{
         this.owner = props.owner;
         this.sharedUsers = props.sharedUsers;
 
-        this.state = { width: 0, height: 0, dueDate: this.props.dueDate };
+        this.state = { width: 0, height: 0, dueDate: this.props.dueDate, description: this.props.description, taskStatus: this.props.status, assignedState: this.props.assignee };
     }
 
     componentDidUpdate(newProps: TaskViewProps) {
@@ -156,6 +158,23 @@ export class TaskView extends React.Component<TaskViewProps>{
         });
         this.calculateDaysLeft(date);
     };
+	
+	handleDescChange(event: any){
+		//this.description = event.currentTarget.value;
+		let fieldVal = event.target.value;
+		this.setState({
+			description: fieldVal
+		});
+		//this.state.description = fieldVal;
+	};
+	
+	handleStatusChange(e: React.ChangeEvent<HTMLSelectElement>) {
+        this.setState({taskStatus: e.target.value});
+    }
+	
+	handleAssignedChange(e: React.ChangeEvent<HTMLSelectElement>) {
+        this.setState({assignedState: e.target.value});
+    }
 
     // If the title is too long, we should shorten it to fit the space we have.
     displayName = () => {
@@ -208,10 +227,10 @@ export class TaskView extends React.Component<TaskViewProps>{
 	
 	// Update Subtask in the database based on information in the current task
 	updateTask = () => {
-
+		console.log(this.state.assignedState);
         // TODO 
         // should be user from google oauth
-        const updatedTask = {owner: this.owner, title: this.name, status: this.status, assignedTo: this.props.assignee, progress: this.props.completion, deadline: this.state.dueDate};
+        const updatedTask = {owner: this.owner, title: this.name, status: this.state.taskStatus, assignedTo: this.state.assignedState, progress: this.props.completion, deadline: this.state.dueDate, description: this.state.description};
         fetch(`${ApplicationConfig.api.staging.baseUrl}/api/tasks/${this.props.taskID}`,
         {
             method: 'PUT',
@@ -293,8 +312,8 @@ export class TaskView extends React.Component<TaskViewProps>{
                     <LabelText> {daysLeftString} </LabelText>
                 </Row>
                 <Row>
-                    <Col md="5"> <StatusDropdown taskStatus={this.status} statusList={this.statusOptions} /> </Col>
-                    <Col md="7"><AssignedDropdown assignedState={this.props.assignee} sharedUsers={this.sharedUsers} owner={this.owner} /> </Col>
+                    <Col md="5"> <StatusDropdown taskStatus={this.status} statusList={this.statusOptions} handleChange={this.handleStatusChange.bind(this)}/> </Col>
+                    <Col md="7"><AssignedDropdown assignedState={this.props.assignee} sharedUsers={this.sharedUsers} owner={this.owner} handleChange={this.handleAssignedChange.bind(this)}/> </Col>
                 </Row>
                 <Row noGutters={true}>
                     <Form style={styles.desc}>
@@ -306,7 +325,7 @@ export class TaskView extends React.Component<TaskViewProps>{
                                     rows="3"
                                     cols="55"
                                     defaultValue={description}
-                                    onChange={e => null}
+                                    onChange={this.handleDescChange.bind(this)}
                                     style={styles.desc}
                                 />
                             </Col>
