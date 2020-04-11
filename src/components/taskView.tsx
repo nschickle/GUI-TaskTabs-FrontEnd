@@ -230,7 +230,6 @@ export class TaskView extends React.Component<TaskViewProps>{
 	
 	// Update Subtask in the database based on information in the current task
 	updateTask = () => {
-		console.log("outline-primary");
         // TODO 
         // should be user from google oauth
         const updatedTask = {owner: this.owner, title: this.name, status: this.state.taskStatus, assignedTo: this.state.assignedState, progress: this.props.completion, deadline: this.state.dueDate, description: this.state.description};
