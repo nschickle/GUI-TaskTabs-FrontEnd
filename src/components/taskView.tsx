@@ -116,6 +116,7 @@ export class TaskView extends React.Component<TaskViewProps>{
     owner: User;
     sharedUsers: User[];
 	saveText: string;
+	changed = 0;
 
 
     state = { width: 0, height: 0, dueDate: this.props.dueDate, description: this.props.description, taskStatus: this.props.status, assignedState: this.props.assignee };
@@ -157,23 +158,25 @@ export class TaskView extends React.Component<TaskViewProps>{
             dueDate: date
         });
         this.calculateDaysLeft(date);
+		this.changed = 1;
     };
 	
 	handleDescChange(event: any){
-		//this.description = event.currentTarget.value;
 		let fieldVal = event.target.value;
 		this.setState({
 			description: fieldVal
 		});
-		//this.state.description = fieldVal;
+		this.changed = 1;
 	};
 	
 	handleStatusChange(e: React.ChangeEvent<HTMLSelectElement>) {
         this.setState({taskStatus: e.target.value});
+		this.changed = 1;
     }
 	
 	handleAssignedChange(e: React.ChangeEvent<HTMLSelectElement>) {
         this.setState({assignedState: e.target.value});
+		this.changed = 1;
     }
 
     // If the title is too long, we should shorten it to fit the space we have.
@@ -227,7 +230,7 @@ export class TaskView extends React.Component<TaskViewProps>{
 	
 	// Update Subtask in the database based on information in the current task
 	updateTask = () => {
-		console.log(this.state.assignedState);
+		console.log("outline-primary");
         // TODO 
         // should be user from google oauth
         const updatedTask = {owner: this.owner, title: this.name, status: this.state.taskStatus, assignedTo: this.state.assignedState, progress: this.props.completion, deadline: this.state.dueDate, description: this.state.description};
@@ -250,6 +253,7 @@ export class TaskView extends React.Component<TaskViewProps>{
 		//this.saveText = "Saved!";
 		//setTimeout(function(){ this.saveText = "Save" }, 3000);
 		alert("Saved!");
+		this.changed = 0;
     }
 	
     // TODO
@@ -274,6 +278,7 @@ export class TaskView extends React.Component<TaskViewProps>{
                             block
                             style={styles.saveButton}
 							onClick={this.updateTask}
+							disabled={!this.changed}
                         >
 						{this.saveText}
                         </Button>

@@ -32,8 +32,6 @@ export class StatusDropdown extends React.Component<StatusDropdownProps, StatusS
         super(props);
         this.state = {taskStatus: props.taskStatus}
         this.options = props.statusList;
-
-        //this.handleChange = this.handleChange.bind(this);
     }
 
     // Handles when the state is changed

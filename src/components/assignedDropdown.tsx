@@ -15,7 +15,7 @@ interface IUser {
 
 // Needed in order to do anything with changing the state
 interface IAssignedState {
-    assignedState: any;
+    assignedState: number;
 }
 
 interface IAssignedDropdownProps {
@@ -35,8 +35,6 @@ export class AssignedDropdown extends React.Component<IAssignedDropdownProps, IA
 
         this.options = props.sharedUsers;
         this.owner = props.owner;
-
-        //this.handleChange = this.handleChange.bind(this);
     }
 
     public render() {
