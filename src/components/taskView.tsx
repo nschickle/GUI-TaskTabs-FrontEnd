@@ -15,6 +15,7 @@ import { StatusDropdown } from './statusDropdown';
 import { AssignedDropdown } from './assignedDropdown';
 import { TaskTags } from './taskTags';
 import { ShareUsers } from './shareUsers';
+import ApplicationConfig from './applicationConfig';
 
 const styles = {
     font: {
@@ -90,6 +91,7 @@ interface User {
 };
 
 interface TaskViewProps {
+	taskID: number;
     name: string;
     completion: number;
     description: string;
@@ -112,6 +114,7 @@ export class TaskView extends React.Component<TaskViewProps>{
     assignedOptions: Options[];
     owner: User;
     sharedUsers: User[];
+	saveText: string;
 
 
     state = { width: 0, height: 0, dueDate: this.props.dueDate };
@@ -123,6 +126,7 @@ export class TaskView extends React.Component<TaskViewProps>{
 
         this.today = new Date();
         this.displayedDaysLeft = "0 Days Left!";
+		this.saveText = "Save";
 
         this.status = props.status;
         this.statusOptions = [
@@ -201,7 +205,34 @@ export class TaskView extends React.Component<TaskViewProps>{
             }
         }
     }
+	
+	// Update Subtask in the database based on information in the current task
+	updateTask = () => {
 
+        // TODO 
+        // should be user from google oauth
+        const updatedTask = {owner: this.owner, title: this.name, status: this.status, assignedTo: this.props.assignee, progress: this.props.completion, deadline: this.state.dueDate};
+        fetch(`${ApplicationConfig.api.staging.baseUrl}/api/tasks/${this.props.taskID}`,
+        {
+            method: 'PUT',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+              },
+            body: JSON.stringify(updatedTask)
+        }).then((response) => response.json())
+            .then((data) => {
+                // This will refresh the page with the new task as the current head.
+                //this.props.changeHead(data._id);
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
+		//this.saveText = "Saved!";
+		//setTimeout(function(){ this.saveText = "Save" }, 3000);
+		alert("Saved!");
+    }
+	
     // TODO
     // When the database is integrated, we need to implement the onChange here so that
     // the new text is saved in some way and inserted into the database.
@@ -223,8 +254,9 @@ export class TaskView extends React.Component<TaskViewProps>{
                             size='lg'
                             block
                             style={styles.saveButton}
+							onClick={this.updateTask}
                         >
-                            Save
+						{this.saveText}
                         </Button>
                     </Col>
                     <Col md="8"> <Title>{name}</Title> </Col>
