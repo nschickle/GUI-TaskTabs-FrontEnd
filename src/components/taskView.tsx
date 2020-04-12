@@ -22,18 +22,18 @@ const styles = {
     font: {
         fontSize: 32
     },
-	name: {
-		fontSize: 48,
+    name: {
+        fontSize: 48,
         marginTop: 10,
         marginBottom: 10,
         maxHeight: 150
-	},
+    },
     desc: {
         fontSize: 24,
         marginTop: 10,
         marginBottom: 10,
         maxHeight: 100,
-		minHeight: 100
+        minHeight: 100
     },
     container: {
         paddingLeft: 0,
@@ -99,7 +99,7 @@ interface User {
 };
 
 interface TaskViewProps {
-	taskID: number;
+    taskID: number;
     name: string;
     completion: number;
     description: string;
@@ -111,24 +111,24 @@ interface TaskViewProps {
 };
 
 interface TaskViewState {
-	width: number;
-	height: number;
-	dueDate: Date;
-	description: string;
-	taskStatus: string;
-	assignedState: number;
-	error: any;
-	isLoaded: boolean;
-	subTasks: SubTask[];
-	name: string;
-	completion: number;
-	changed: number;
+    width: number;
+    height: number;
+    dueDate: Date;
+    description: string;
+    taskStatus: string;
+    assignedState: number;
+    error: any;
+    isLoaded: boolean;
+    subTasks: SubTask[];
+    name: string;
+    completion: number;
+    hasChanged: boolean;
 };
 
 // TaskView is intended to be the center view for all tasks, substasks and project heads.
 export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
     name: string;
-	description: string;
+    description: string;
     displayedName: string;
     today: Date;
     daysLeft: number;
@@ -138,27 +138,19 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
     assignedOptions: Options[];
     owner: User;
     sharedUsers: User[];
-	saveText: string;
-	changed = 0;
-	error: any;
-	subTasks: SubTask[];
-	oldStatus: string;
-
-
-    /*state = { width: 0, height: 0, dueDate: this.props.dueDate, description: this.props.description, taskStatus: this.props.status, assignedState: this.props.assignee,
-			error: false,
-            isLoaded: false,
-            subTasks: [] };*/
-
+    saveText: string;
+    hasChanged = false;
+    error: any;
+    subTasks: SubTask[];
+    oldStatus: string;
 
     constructor(props: TaskViewProps) {
         super(props);
         this.displayedName = this.name;
-		//this.description = this.props.description;
 
         this.today = new Date();
         this.displayedDaysLeft = "0 Days Left!";
-		this.saveText = "Save";
+        this.saveText = "Save";
 
         this.status = props.status;
         this.statusOptions = [
@@ -170,69 +162,55 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
         this.owner = props.owner;
         this.sharedUsers = props.sharedUsers;
 
-        this.state = { width: 0, height: 0, dueDate: this.props.dueDate, description: this.props.description, taskStatus: this.props.status, assignedState: this.props.assignee,
-			error: null,
-            isLoaded: false,
-            subTasks: [],
-			name: this.props.name,
-			completion: this.props.completion,
-			changed: 0};
-			
-		this.makeSubTaskQuery(5);
+        this.state = { width: 0, height: 0, dueDate: this.props.dueDate, description: this.props.description, taskStatus: this.props.status, assignedState: this.props.assignee, error: null, isLoaded: false,
+            subTasks: [], name: this.props.name, completion: this.props.completion, hasChanged: false};
+            
+        this.makeSubTaskQuery(5);
     }
-	
+    
     componentDidUpdate(newProps: TaskViewProps) {
         const {name, description, dueDate, assignee, status, taskID, completion} = this.props;
         if (newProps.dueDate !== dueDate) {
             this.setState({dueDate: dueDate})
         }
-		if (newProps.name !== name) {
+        if (newProps.name !== name) {
             this.setState({name: name})
         }
-		if (newProps.description !== description) {
+        if (newProps.description !== description) {
             this.setState({description: description})
         }
-		if (newProps.assignee !== assignee) {
+        if (newProps.assignee !== assignee) {
             this.setState({assignedState: assignee})
         }
-		if (newProps.status !== status) {
+        if (newProps.status !== status) {
             this.setState({taskStatus: status})
         }
-		if (newProps.taskID !== taskID) {
+        if (newProps.taskID !== taskID) {
             this.makeSubTaskQuery(5);
         }
-		if (newProps.completion !== completion) {
+        if (newProps.completion !== completion) {
             this.setState({completion: completion})
         }
     }
-	
+    
     handleChange = (date: Date) => {
         this.setState({dueDate: date});
         this.calculateDaysLeft(date);
-		this.setState({changed: 1});
+        this.setState({hasChanged: true});
     };
-	
-	handleNameChange(event: any){
-		let fieldVal = event.target.value;
-		this.setState({name: fieldVal});
-		this.setState({changed: 1});
-	};
-	
-	handleDescChange(event: any){
-		let fieldVal = event.target.value;
-		this.setState({description: fieldVal});
-		this.setState({changed: 1});
-	};
-	
-	handleStatusChange(e: React.ChangeEvent<HTMLSelectElement>) {
-		this.oldStatus = this.state.taskStatus;
+    
+    // handleStatusChange and handleAssignedChange COULD be made arrow functions on their own,
+    // BUT they need to be passed as props to statusDropdown.tsx and assignedDropdown.tsx respectively in
+    // order to change both the value in their respective dropdowns AND in TaskView here
+    handleStatusChange(e: React.ChangeEvent<HTMLSelectElement>) {
+        this.oldStatus = this.state.taskStatus;
         this.setState({taskStatus: e.target.value});
-		this.setState({changed: 1});
+        this.setState({hasChanged: true});
     }
-	
-	handleAssignedChange(e: React.ChangeEvent<HTMLSelectElement>) {
+    
+    handleAssignedChange(e: React.ChangeEvent<HTMLSelectElement>) {
         this.setState({assignedState: Number(e.target.value)});
-		this.setState({changed: 1});
+        this.setState({hasChanged: true});
     }
 
     // If the title is too long, we should shorten it to fit the space we have.
@@ -283,8 +261,8 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
             }
         }
     }
-	
-	// This will attempt to fetch from the database a given number of times.
+    
+    // This will attempt to fetch from the database a given number of times.
     // This is needed because if the head was recently inserted, the fetch will
     // likely return null as the database will not have caught up yet.
     makeSubTaskQuery = (numTries: number) => {
@@ -319,24 +297,23 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                 );
             }
     }
-	
-	// Update Subtask in the database based on information in the current task
-	updateTask = () => {
-		if (this.state.taskStatus == "complete") {
-			if (this.state.subTasks.length > 0) {
-				let i = 0;
-				let valid = true;
-				for (i; i < this.state.subTasks.length; i++) {
-					if (this.state.subTasks[i].status != "complete") {
-						valid = false
-					}
-				}
-				if (!valid) {
-					alert("WARNING: Can not set status to complete while there are uncompleted subtasks! Reverting status to previous state and saving...");
-					this.setState({taskStatus: this.oldStatus});
-				}
-			}
-		}
+    
+    // Update Subtask in the database based on information in the current task
+    updateTask = () => {
+        if (this.state.taskStatus == "complete") {
+            if (this.state.subTasks.length > 0) {
+                let valid = true;
+                for (let i = 0; i < this.state.subTasks.length; i++) {
+                    if (this.state.subTasks[i].status != "complete") {
+                        valid = false;
+                    }
+                }
+                if (!valid) {
+                    alert("WARNING: Can not set status to complete while there are uncompleted subtasks! Reverting status to previous state and saving other changes...");
+                    this.setState({taskStatus: this.oldStatus});
+                }
+            }
+        }
         // TODO 
         // should be user from google oauth
         const updatedTask = {owner: this.owner, title: this.state.name, status: this.state.taskStatus, assignedTo: this.state.assignedState, progress: this.state.completion, deadline: this.state.dueDate, description: this.state.description};
@@ -350,21 +327,13 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
             body: JSON.stringify(updatedTask)
         }).then((response) => response.json())
             .then((data) => {
-                // This will refresh the page with the new task as the current head.
-                //this.props.changeHead(data._id);
           })
           .catch((error) => {
             console.error('Error:', error);
           });
-		//alert("Saved!");
-		//this.state.changed = 0;
-		this.setState({changed: 0});
+        this.setState({hasChanged: false});
     }
 	
-    // TODO
-    // When the database is integrated, we need to implement the onChange here so that
-    // the new text is saved in some way and inserted into the database.
-    // <DescText value={description} onChange={e => null} />
     render() {
         // We can calculate the date only if state is populated
         if(!!(this.state.dueDate)) {
@@ -382,17 +351,23 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                             size='lg'
                             block
                             style={styles.saveButton}
-							onClick={this.updateTask}
-							disabled={!this.state.changed}
-                        >
-						{this.saveText}
+                            onClick={this.updateTask}
+                            disabled={!this.state.hasChanged}
+                            > 
+                        {this.saveText}
                         </Button>
                     </Col>
-                    <Col md="8"> <Form.Control
-                                    onChange={this.handleNameChange.bind(this)}
-                                    style={styles.name}
-									value={this.state.name}
-                                /></Col>
+                    <Col md="8"> 
+                        <Form.Control
+                            onChange={(event: any) => {
+                                let fieldVal = event.target.value;
+                                this.setState({name: fieldVal});
+                                this.setState({hasChanged: true});
+                            }}
+                            style={styles.name}
+                            value={this.state.name}
+                            />
+                        </Col>
                     <Col md="2">
                         <Button
                             variant="outline-danger"
@@ -438,9 +413,13 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                                     as="textarea"
                                     rows="3"
                                     cols="55"
-                                    onChange={this.handleDescChange.bind(this)}
+                                    onChange={(event: any) => {
+                                            let fieldVal = event.target.value;
+                                            this.setState({description: fieldVal});
+                                            this.setState({hasChanged: true});
+                                    }}
                                     style={styles.desc}
-									value={this.state.description}
+                                    value={this.state.description}
                                 />
                             </Col>
                         </Form.Group>

@@ -22,7 +22,7 @@ interface IAssignedDropdownProps {
     assignedState: number;
     sharedUsers: IUser[];
     owner: IUser;
-	handleChange: any;
+    handleChange: any;
 }
 
 export class AssignedDropdown extends React.Component<IAssignedDropdownProps, IAssignedState> {
@@ -35,11 +35,9 @@ export class AssignedDropdown extends React.Component<IAssignedDropdownProps, IA
 
         this.options = props.sharedUsers;
         this.owner = props.owner;
-		
-		this.handleChange = this.handleChange.bind(this);
     }
-	
-	componentDidUpdate(newProps: IAssignedDropdownProps) {
+    
+    componentDidUpdate(newProps: IAssignedDropdownProps) {
         const {assignedState} = this.props;
         if (newProps.assignedState !== assignedState) {
             this.setState({
@@ -65,7 +63,10 @@ export class AssignedDropdown extends React.Component<IAssignedDropdownProps, IA
                     <Col sm="7">
                         <Form.Control
                             as="select"
-                            onChange={this.handleChange}
+                            onChange={(event: any) => {
+                                this.setState({assignedState: Number(event.target.value)});
+                                this.props.handleChange(event);
+                            }}
                             value={this.state.assignedState}
                             size="lg"
                             style={font}
@@ -77,12 +78,5 @@ export class AssignedDropdown extends React.Component<IAssignedDropdownProps, IA
                 </Form.Group>
             </Form>
         );
-    }
-
-    // Handles when state is changed
-	// MOVED TO TaskView.tsx TO ALLOW "PASSING UP" THE STATE
-    private handleChange(e: React.ChangeEvent<HTMLSelectElement>) {
-        this.setState({assignedState: Number(e.target.value)});
-		this.props.handleChange(e);
     }
 }
