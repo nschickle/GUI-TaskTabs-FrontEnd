@@ -32,15 +32,27 @@ export class StatusDropdown extends React.Component<StatusDropdownProps, StatusS
         super(props);
         this.state = {taskStatus: props.taskStatus}
         this.options = props.statusList;
+		
+		this.handleChange = this.handleChange.bind(this);
     }
 
     // Handles when the state is changed
     // Currently only changes the status
     // Will need to add warnings and change parent and children states as nessisary
 	// MOVED TO TaskView.tsx TO ALLOW "PASSING UP" THE STATE
-    /*handleChange(e: React.ChangeEvent<HTMLSelectElement>) {
+    handleChange(e: React.ChangeEvent<HTMLSelectElement>) {
         this.setState({taskStatus: e.target.value});
-    }*/
+		this.props.handleChange(e);
+    }
+	
+	componentDidUpdate(newProps: StatusDropdownProps) {
+        const {taskStatus} = this.props;
+        if (newProps.taskStatus !== taskStatus) {
+            this.setState({
+                taskStatus: taskStatus
+            })
+        }
+    }
 
     render() {
         const taskStatus = this.state.taskStatus;
@@ -59,8 +71,8 @@ export class StatusDropdown extends React.Component<StatusDropdownProps, StatusS
                     <Col sm="8">
                         <Form.Control
                             as="select"
-                            onChange={this.props.handleChange}
-                            defaultValue={taskStatus}
+                            onChange={this.handleChange}
+                            value={taskStatus}
                             size="lg"
                             style={font}
                         >

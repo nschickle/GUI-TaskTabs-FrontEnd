@@ -35,6 +35,17 @@ export class AssignedDropdown extends React.Component<IAssignedDropdownProps, IA
 
         this.options = props.sharedUsers;
         this.owner = props.owner;
+		
+		this.handleChange = this.handleChange.bind(this);
+    }
+	
+	componentDidUpdate(newProps: IAssignedDropdownProps) {
+        const {assignedState} = this.props;
+        if (newProps.assignedState !== assignedState) {
+            this.setState({
+                assignedState: assignedState
+            })
+        }
     }
 
     public render() {
@@ -54,8 +65,8 @@ export class AssignedDropdown extends React.Component<IAssignedDropdownProps, IA
                     <Col sm="7">
                         <Form.Control
                             as="select"
-                            onChange={this.props.handleChange}
-                            defaultValue={assignedState}
+                            onChange={this.handleChange}
+                            value={this.state.assignedState}
                             size="lg"
                             style={font}
                         >
@@ -70,7 +81,8 @@ export class AssignedDropdown extends React.Component<IAssignedDropdownProps, IA
 
     // Handles when state is changed
 	// MOVED TO TaskView.tsx TO ALLOW "PASSING UP" THE STATE
-    /*private handleChange(e: React.ChangeEvent<HTMLSelectElement>) {
-        this.setState({assignedState: e.target.value});
-    }*/
+    private handleChange(e: React.ChangeEvent<HTMLSelectElement>) {
+        this.setState({assignedState: Number(e.target.value)});
+		this.props.handleChange(e);
+    }
 }
