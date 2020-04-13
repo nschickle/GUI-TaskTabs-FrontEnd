@@ -125,12 +125,13 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
           <Row noGutters={true}>
             <Col sm="3"><ProjectColumn head={head} changeHead={this.changeHead} /></Col>
             <Col sm="6"><TaskView
-              name={task.title}
+              taskID={head}
+			  name={task.title}
               completion={task.progress}
               description={task.description}
               dueDate={deadline}
               status={task.status}
-              assignee={task.title}
+              assignee={task.assignedTo}
               owner={testOwner}
               sharedUsers={testSharedWith}
             /></Col>

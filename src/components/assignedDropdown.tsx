@@ -15,13 +15,14 @@ interface IUser {
 
 // Needed in order to do anything with changing the state
 interface IAssignedState {
-    assignedState: string;
+    assignedState: number;
 }
 
 interface IAssignedDropdownProps {
-    assignedState: string;
+    assignedState: number;
     sharedUsers: IUser[];
     owner: IUser;
+    handleChange: any;
 }
 
 export class AssignedDropdown extends React.Component<IAssignedDropdownProps, IAssignedState> {
@@ -34,8 +35,15 @@ export class AssignedDropdown extends React.Component<IAssignedDropdownProps, IA
 
         this.options = props.sharedUsers;
         this.owner = props.owner;
-
-        this.handleChange = this.handleChange.bind(this);
+    }
+    
+    componentDidUpdate(newProps: IAssignedDropdownProps) {
+        const {assignedState} = this.props;
+        if (newProps.assignedState !== assignedState) {
+            this.setState({
+                assignedState: assignedState
+            })
+        }
     }
 
     public render() {
@@ -55,8 +63,11 @@ export class AssignedDropdown extends React.Component<IAssignedDropdownProps, IA
                     <Col sm="7">
                         <Form.Control
                             as="select"
-                            onChange={this.handleChange}
-                            defaultValue={assignedState}
+                            onChange={(event: any) => {
+                                this.setState({assignedState: Number(event.target.value)});
+                                this.props.handleChange(event);
+                            }}
+                            value={this.state.assignedState}
                             size="lg"
                             style={font}
                         >
@@ -67,10 +78,5 @@ export class AssignedDropdown extends React.Component<IAssignedDropdownProps, IA
                 </Form.Group>
             </Form>
         );
-    }
-
-    // Handles when state is changed
-    private handleChange(e: React.ChangeEvent<HTMLSelectElement>) {
-        this.setState({assignedState: e.target.value});
     }
 }
