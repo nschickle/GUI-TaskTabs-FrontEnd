@@ -18,11 +18,16 @@ const styles = {
 		paddingRight: 0,
 		minWidth: 1300
 	},
-  button: {
+	button: {
 		height: 20,
 		fontSize: 16
 	},
 };
+
+const HistoryWrapper = styled.div`
+	display: flex;
+	flex-direction: row;
+`;
 
 const HistoryRow = styled.div`
 	padding: 4px;
@@ -150,14 +155,14 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 					{history.map((node, index) => {
 						if (index === history.length - 1) {
 							return (
-								<HistoryButton key={node.id} id={node.id} name={node.name} changeHead={this.changeHeadFromHistory} currentHead={head}/>
+								<HistoryButton key={node.id} id={node.id} name={node.name} changeHead={this.changeHeadFromHistory} currentHead={head} />
 							);
 						}
 						return (
-							<>
-								<HistoryButton key={node.id} id={node.id} name={node.name} changeHead={this.changeHeadFromHistory} currentHead={head}/>
+							<HistoryWrapper key={node.id}>
+								<HistoryButton id={node.id} name={node.name} changeHead={this.changeHeadFromHistory} currentHead={head} />
 								<HistorySpacer> -> </HistorySpacer>
-							</>
+							</HistoryWrapper>
 						);
 					})}
 				</Row>;
@@ -241,19 +246,29 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 						else if (!isNewHeadHistoryTail) {
 							let headDiscovered = false;
 							let history = this.state.history;
+							let isNewHeadInHistory = false;
 
-							// destory the end of the history until the head is discovered
-							while(!headDiscovered && history.length !== 0) {
-								if (history[history.length - 1].id !== previousHead) {
-									history.pop();
-								} else {
-									headDiscovered = true;
+							// Check if the history is still correct, even though a task button was clicked
+							for (let i = 0; i < history.length; i++) {
+								if (history[i].id === newHead) {
+									isNewHeadInHistory = true;
 								}
 							}
-							let taskHistoryNode: ProjectHistory;
-							taskHistoryNode = { id: result._id, name: result.title };
+							if (!isNewHeadInHistory) {
+								// destory the end of the history until the head is discovered
+								while (!headDiscovered && history.length !== 0) {
+									if (history[history.length - 1].id !== previousHead) {
+										history.pop();
+									} else {
+										headDiscovered = true;
+									}
+								}
+								let taskHistoryNode: ProjectHistory;
+								taskHistoryNode = { id: result._id, name: result.title };
 
-							history.push(taskHistoryNode);
+								history.push(taskHistoryNode);
+							}
+
 							this.setState({
 								isLoaded: true,
 								task: result,
