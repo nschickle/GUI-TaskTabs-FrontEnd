@@ -21,12 +21,13 @@ const styles = {
   button: {
 		height: 20,
 		fontSize: 16
-	}
+	},
 };
 
 const HistoryRow = styled.div`
 	padding: 4px;
 	padding-left: 32px;
+	width: 98%;
 `;
 
 const HistorySpacer = styled.div`
@@ -149,12 +150,12 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 					{history.map((node, index) => {
 						if (index === history.length - 1) {
 							return (
-								<HistoryButton key={node.id} id={node.id} name={node.name} changeHead={this.changeHeadFromHistory}/>
+								<HistoryButton key={node.id} id={node.id} name={node.name} changeHead={this.changeHeadFromHistory} currentHead={head}/>
 							);
 						}
 						return (
 							<>
-								<HistoryButton key={node.id} id={node.id} name={node.name} changeHead={this.changeHeadFromHistory}/>
+								<HistoryButton key={node.id} id={node.id} name={node.name} changeHead={this.changeHeadFromHistory} currentHead={head}/>
 								<HistorySpacer> -> </HistorySpacer>
 							</>
 						);
@@ -237,7 +238,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 						// This deletes the history after the previous head, and adds the new head to the end of the list.
 						// Reason being that if you have pre-existing history and you go back in history and click a task button that was
 						// not in the history previous, the entire history after the previous head must be erased.
-						else if (!isNewHeadHistoryTail){
+						else if (!isNewHeadHistoryTail) {
 							let headDiscovered = false;
 							let history = this.state.history;
 

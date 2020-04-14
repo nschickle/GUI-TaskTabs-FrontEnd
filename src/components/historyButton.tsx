@@ -12,14 +12,15 @@ const styles = {
 };
 
 interface ProjectHistory {
-	id: number,
-	name: string
+    id: number,
+    name: string
 };
 
 interface HistoryButtonProps {
     id: number,
     name: string
     changeHead: (newHead: number) => any;
+    currentHead: number;
 }
 
 // This is a single SubTask button. They live in the right hand side of the project page.
@@ -39,9 +40,9 @@ export class HistoryButton extends React.Component<HistoryButtonProps>{
 
     render() {
         return (
-        <Button variant="info" onClick={this.onButtonClick}>
-            {this.props.name}
-        </Button>
+            <Button variant={this.props.id === this.props.currentHead ? "success" : "secondary"} onClick={this.onButtonClick}>
+                {this.props.name}
+            </Button>
         );
     }
 };
