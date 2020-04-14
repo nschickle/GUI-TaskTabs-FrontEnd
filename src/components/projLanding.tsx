@@ -1,12 +1,11 @@
 import * as React from "react";
-import styled from 'styled-components';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 
 import { SubTask } from "./subtaskType";
 import { LandProjectColumn } from "./landProjCol";
-import ApplicationConfig from './applicationConfig';
+import { UserInfo } from "./userInfo";
 
 const styles = {
     center: {
@@ -37,6 +36,7 @@ const testOwner: IUser = { id: 0, name: "Super Steve" };
 
 interface ProjLandProps {
     showProjectPage: (projectID: number) => any;
+    userInfo: UserInfo;
 }
 
 export class ProjectLanding extends React.Component<ProjLandProps,  { error: any, isLoaded: boolean, task: SubTask, head: number, showProjectPage: (projectID: number) => any}> {
@@ -70,7 +70,7 @@ export class ProjectLanding extends React.Component<ProjLandProps,  { error: any
                     <p style={styles.label}>Welcome, {this.owner.name}. Here are your Projects!</p>
                 </Row>
                 <Row style={styles.projects} noGutters={true}>
-                    <LandProjectColumn selectProject={this.selectProject} />
+                    <LandProjectColumn selectProject={this.selectProject} userInfo={this.props.userInfo}/>
                 </Row>
             </Container>
         );

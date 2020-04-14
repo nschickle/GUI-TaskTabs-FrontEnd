@@ -6,7 +6,8 @@ import Col from 'react-bootstrap/Col';
 import { ProjectButton } from "./newProjectButton";
 import { SubTaskButton } from "./subTaskButton";
 import { SubTask } from "./subtaskType";
-import ApplicationConfig from './applicationConfig';
+import { UserHeaderHttpRequest } from "./userHeaderHttpRequest";
+import { UserInfo } from "./userInfo";
 
 const styles = {
     box: {
@@ -22,6 +23,7 @@ const styles = {
 
 interface LandProjectColumnProps {
     selectProject: (projectID: number) => any;
+    userInfo: UserInfo;
 }
 
 export class LandProjectColumn extends React.Component<LandProjectColumnProps, {error: any, isLoaded: boolean, projects: SubTask[]}> {
@@ -44,7 +46,8 @@ export class LandProjectColumn extends React.Component<LandProjectColumnProps, {
     // change, a componentDidUpdate() function will need to be added so that
     // the query can be re-run
     getProjects = () => {
-        fetch(`${ApplicationConfig.api.staging.baseUrl}/api/projects`)
+        const request = new UserHeaderHttpRequest("/api/projects", this.props.userInfo);
+        fetch(request)
         .then(res => res.json())
         .then(
             (result) => {
@@ -81,7 +84,7 @@ export class LandProjectColumn extends React.Component<LandProjectColumnProps, {
             return (
                 <Container>
                     <Col style={styles.box} >
-                        <ProjectButton changeHead={this.props.selectProject}/>
+                        <ProjectButton changeHead={this.props.selectProject} userInfo={this.props.userInfo}/>
                         {projects.map((task) => {
                             return <SubTaskButton name={task.title} changeHead={this.props.selectProject} percentage={task.progress} key={task._id} taskHead={task._id}></SubTaskButton>;
                         })}

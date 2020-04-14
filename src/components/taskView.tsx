@@ -13,10 +13,10 @@ import Form from 'react-bootstrap/Form';
 import { TaskProgressBar } from './progressBar';
 import { StatusDropdown } from './statusDropdown';
 import { AssignedDropdown } from './assignedDropdown';
-import { TaskTags } from './taskTags';
 import { ShareUsers } from './shareUsers';
 import { SubTask } from "./subtaskType";
-import ApplicationConfig from './applicationConfig';
+import { UserHeaderHttpRequest } from './userHeaderHttpRequest';
+import { UserInfo } from './userInfo';
 
 const styles = {
     font: {
@@ -108,6 +108,7 @@ interface TaskViewProps {
     assignee: number;
     owner: User;
     sharedUsers: User[];
+    userInfo: UserInfo;
 };
 
 interface TaskViewState {
@@ -272,30 +273,31 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                 error: true
             });
         } else {
-                fetch(`${ApplicationConfig.api.staging.baseUrl}/api/subtasks/${this.props.taskID}`)
-                .then(res => res.json())
-                .then(
-                    (result) => {
-                        if (result) {
-                            this.setState({
-                                isLoaded: true,
-                                subTasks: result,
-                            });
-                        } else {
-                            this.makeSubTaskQuery(numTries - 1);
-                        }
-                    },
-                    // Note: it's important to handle errors here
-                    // instead of a catch() block so that we don't swallow
-                    // exceptions from actual bugs in components.
-                    (error) => {
+            const request = new UserHeaderHttpRequest(`/api/subtasks/${this.props.taskID}`, this.props.userInfo);
+            fetch(request)
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    if (result) {
                         this.setState({
                             isLoaded: true,
-                            error
+                            subTasks: result,
                         });
+                    } else {
+                        this.makeSubTaskQuery(numTries - 1);
                     }
-                );
-            }
+                },
+                // Note: it's important to handle errors here
+                // instead of a catch() block so that we don't swallow
+                // exceptions from actual bugs in components.
+                (error) => {
+                    this.setState({
+                        isLoaded: true,
+                        error
+                    });
+                }
+            );
+        }
     }
     
     // Update Subtask in the database based on information in the current task
@@ -317,7 +319,9 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
         // TODO 
         // should be user from google oauth
         const updatedTask = {owner: this.owner, title: this.state.name, status: this.state.taskStatus, assignedTo: this.state.assignedState, progress: this.state.completion, deadline: this.state.dueDate, description: this.state.description};
-        fetch(`${ApplicationConfig.api.staging.baseUrl}/api/tasks/${this.props.taskID}`,
+        
+        const request = new UserHeaderHttpRequest(`/api/tasks/${this.props.taskID}`, this.props.userInfo);
+        fetch(request,
         {
             method: 'PUT',
             mode: 'cors',

@@ -3,7 +3,8 @@ import * as React from "react";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
-import ApplicationConfig from './applicationConfig';
+import { UserInfo } from "./userInfo";
+import { UserHeaderHttpRequest } from "./userHeaderHttpRequest";
 
 const styles = {
     button: {
@@ -27,6 +28,7 @@ interface NewTaskPost {
 interface NewSubTaskButtonProps {
     head: number,
     changeHead: (newHead: number) => any;
+    userInfo: UserInfo;
 }
 
 export class NewSubTaskButton extends React.Component<NewSubTaskButtonProps> {
@@ -40,8 +42,10 @@ export class NewSubTaskButton extends React.Component<NewSubTaskButtonProps> {
 
         // TODO 
         // should be user from google oauth
-        const newSubTask:NewTaskPost = {owner: "littlebobbytables@xkcd.com", parentId: this.props.head, title:"New task", description:"", notes:"", assignedTo: null, status:"Active", progress:0};
-        fetch(`${ApplicationConfig.api.staging.baseUrl}/api/tasks`,
+        const newSubTask:NewTaskPost = {owner: this.props.userInfo.email, parentId: this.props.head, title:"New task", description:"", notes:"", assignedTo: null, status:"Active", progress:0};
+        
+        const request = new UserHeaderHttpRequest("/api/tasks", this.props.userInfo);
+        fetch(request,
         {
             method: 'POST',
             mode: 'cors',
