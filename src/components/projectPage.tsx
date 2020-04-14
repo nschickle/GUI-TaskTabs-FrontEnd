@@ -234,36 +234,36 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 							});
 
 						}
-						// if the caller is a task and not a project, append to the history.
+						// This deletes the history after the previous head, and adds the new head to the end of the list.
+						// Reason being that if you have pre-existing history and you go back in history and click a task button that was
+						// not in the history previous, the entire history after the previous head must be erased.
 						else if (!isNewHeadHistoryTail){
-							let taskHistoryNode: ProjectHistory;
-							taskHistoryNode = { id: result._id, name: result.title };
-
-							this.setState({
-								isLoaded: true,
-								task: result,
-								history: this.state.history.concat([taskHistoryNode])
-							});
-						}
-
-						// this deletes the history after the new head, used when clicking on a history button.
-						else {
 							let headDiscovered = false;
 							let history = this.state.history;
 
 							// destory the end of the history until the head is discovered
 							while(!headDiscovered && history.length !== 0) {
-								if (history[history.length - 1].id !== newHead) {
+								if (history[history.length - 1].id !== previousHead) {
 									history.pop();
 								} else {
 									headDiscovered = true;
 								}
 							}
+							let taskHistoryNode: ProjectHistory;
+							taskHistoryNode = { id: result._id, name: result.title };
 
+							history.push(taskHistoryNode);
 							this.setState({
 								isLoaded: true,
 								task: result,
 								history: history
+							});
+						}
+						// If the user clicked a history button, no history changes need to be made.
+						else {
+							this.setState({
+								isLoaded: true,
+								task: result,
 							});
 						}
 					},
