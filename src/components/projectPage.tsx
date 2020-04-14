@@ -1,4 +1,5 @@
 import * as React from "react";
+import styled from 'styled-components';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -9,15 +10,28 @@ import { SubTaskColumn } from "./subTaskColumn";
 import { SubTask } from "./subtaskType";
 import { TaskView } from "./taskView";
 import ApplicationConfig from './applicationConfig';
-import { number } from "prop-types";
+import { HistoryButton } from "./historyButton";
 
 const styles = {
 	box: {
 		paddingLeft: 0,
 		paddingRight: 0,
 		minWidth: 1300
+	},
+  button: {
+		height: 20,
+		fontSize: 16
 	}
 };
+
+const HistoryRow = styled.div`
+	padding: 4px;
+	padding-left: 32px;
+`;
+
+const HistorySpacer = styled.div`
+	padding: 4px;
+`;
 
 interface IUser {
 	id: number;
@@ -77,7 +91,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 
 								// add the project to the beginning of the history
 								let taskHistoryNode: ProjectHistory;
-								taskHistoryNode = {id: result._id, name: result.title };
+								taskHistoryNode = { id: result._id, name: result.title };
 
 								// state should be treated as if it were immutable.
 								// However, concat returns a new array.
@@ -117,7 +131,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 	// but should be replaced.
 	public render() {
 
-		const { error, isLoaded, task, head } = this.state;
+		const { error, isLoaded, task, head, history } = this.state;
 		// TODO Style error and loading screens
 
 		if (error) {
@@ -129,6 +143,25 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 				<>Loading...</>
 			);
 		} else {
+
+			let historyComponent =
+				<Row >
+					{history.map((node, index) => {
+						if (index === history.length - 1) {
+							return (
+								<HistoryButton key={node.id} id={node.id} name={node.name} changeHead={this.changeHeadFromHistory}/>
+							);
+						}
+						return (
+							<>
+								<HistoryButton key={node.id} id={node.id} name={node.name} changeHead={this.changeHeadFromHistory}/>
+								<HistorySpacer> -> </HistorySpacer>
+							</>
+						);
+					})}
+				</Row>;
+
+			// prevent date from being invalid, else everythign crashes
 			let deadline;
 			if (!!task.deadline) {
 				deadline = new Date(task.deadline);
@@ -137,6 +170,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 			}
 			return (
 				<Container fluid style={styles.box}>
+					<HistoryRow>{historyComponent}</HistoryRow>
 					<Row noGutters={true}>
 						<Col sm="3"><ProjectColumn head={head} changeHead={this.changeHeadFromProject} /></Col>
 						<Col sm="6"><TaskView
@@ -157,15 +191,19 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 		}
 	}
 
-	private changeHeadFromTask = (newHead: number) =>{
+	private changeHeadFromHistory = (newHead: number) => {
+		this.changeHead(newHead, false, true);
+	}
+
+	private changeHeadFromTask = (newHead: number) => {
 		this.changeHead(newHead, false);
 	}
 
-	private changeHeadFromProject = (newHead: number) =>{
+	private changeHeadFromProject = (newHead: number) => {
 		this.changeHead(newHead, true);
 	}
 
-	private changeHead = (newHead: number, isProject: boolean) => {
+	private changeHead = (newHead: number, isProject: boolean, isNewHeadHistoryTail?: boolean) => {
 		const previousHead = this.state.head;
 		if (newHead !== previousHead) {
 
@@ -184,7 +222,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 
 							// create new node
 							let taskHistoryNode: ProjectHistory;
-							taskHistoryNode = {id: result._id, name: result.title };
+							taskHistoryNode = { id: result._id, name: result.title };
 
 							newHistory.push(taskHistoryNode);
 
@@ -195,16 +233,37 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 								history: newHistory
 							});
 
-						} 
+						}
 						// if the caller is a task and not a project, append to the history.
-						else {
+						else if (!isNewHeadHistoryTail){
 							let taskHistoryNode: ProjectHistory;
-							taskHistoryNode = {id: result._id, name: result.title };
+							taskHistoryNode = { id: result._id, name: result.title };
 
 							this.setState({
 								isLoaded: true,
 								task: result,
 								history: this.state.history.concat([taskHistoryNode])
+							});
+						}
+
+						// this deletes the history after the new head, used when clicking on a history button.
+						else {
+							let headDiscovered = false;
+							let history = this.state.history;
+
+							// destory the end of the history until the head is discovered
+							while(!headDiscovered && history.length !== 0) {
+								if (history[history.length - 1].id !== newHead) {
+									history.pop();
+								} else {
+									headDiscovered = true;
+								}
+							}
+
+							this.setState({
+								isLoaded: true,
+								task: result,
+								history: history
 							});
 						}
 					},
