@@ -11,6 +11,7 @@ import { SubTask } from "./subtaskType";
 import { TaskView } from "./taskView";
 import ApplicationConfig from './applicationConfig';
 import { HistoryButton } from "./historyButton";
+import Breadcrumb from "react-bootstrap/Breadcrumb";
 
 const styles = {
 	box: {
@@ -24,19 +25,9 @@ const styles = {
 	},
 };
 
-const HistoryWrapper = styled.div`
-	display: flex;
-	flex-direction: row;
-`;
-
 const HistoryRow = styled.div`
 	padding: 4px;
-	padding-left: 32px;
-	width: 98%;
-`;
-
-const HistorySpacer = styled.div`
-	padding: 4px;
+	padding-left: 16px;
 `;
 
 interface IUser {
@@ -151,21 +142,13 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 		} else {
 
 			let historyComponent =
-				<Row >
-					{history.map((node, index) => {
-						if (index === history.length - 1) {
-							return (
-								<HistoryButton key={node.id} id={node.id} name={node.name} changeHead={this.changeHeadFromHistory} currentHead={head} />
-							);
-						}
+				<Breadcrumb>
+					{history.map(node => {
 						return (
-							<HistoryWrapper key={node.id}>
-								<HistoryButton id={node.id} name={node.name} changeHead={this.changeHeadFromHistory} currentHead={head} />
-								<HistorySpacer> -> </HistorySpacer>
-							</HistoryWrapper>
+								<HistoryButton key={node.id} id={node.id} name={node.name} changeHead={this.changeHeadFromHistory} currentHead={head} />
 						);
 					})}
-				</Row>;
+				</Breadcrumb>;
 
 			// prevent date from being invalid, else everythign crashes
 			let deadline;

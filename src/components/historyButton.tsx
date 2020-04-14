@@ -1,20 +1,6 @@
 import * as React from 'react';
 
-import Button from 'react-bootstrap/Button';
-
-const styles = {
-    button: {
-        height: 25,
-        fontSize: 16,
-        padding: 0,
-        margin: 0
-    }
-};
-
-interface ProjectHistory {
-    id: number,
-    name: string
-};
+import Breadcrumb from 'react-bootstrap/Breadcrumb';
 
 interface HistoryButtonProps {
     id: number,
@@ -39,10 +25,18 @@ export class HistoryButton extends React.Component<HistoryButtonProps>{
     }
 
     render() {
-        return (
-            <Button variant={this.props.id === this.props.currentHead ? "success" : "secondary"} onClick={this.onButtonClick}>
-                {this.props.name}
-            </Button>
-        );
+        if (this.props.id == this.props.currentHead) {
+            return (
+                <Breadcrumb.Item active>
+                    {this.props.name}
+                </Breadcrumb.Item>
+            );
+        } else {
+            return (
+                <Breadcrumb.Item onClick={this.onButtonClick}>
+                    {this.props.name}
+                </Breadcrumb.Item>
+            );
+        }
     }
 };
