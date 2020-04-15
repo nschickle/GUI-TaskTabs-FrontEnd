@@ -1,4 +1,4 @@
-export interface SubTask {
+export interface Task {
     _id: number;
     parentID: number;
     title: string;
@@ -11,7 +11,7 @@ export interface SubTask {
     assignee: string;
     owner: User;
     sharedWith: User[];
-    subtasks: SubTask[];
+    subtasks: Task[];
 };
 
 interface User {

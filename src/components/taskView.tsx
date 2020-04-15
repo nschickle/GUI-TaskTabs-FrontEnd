@@ -14,7 +14,7 @@ import { TaskProgressBar } from './progressBar';
 import { StatusDropdown } from './statusDropdown';
 import { AssignedDropdown } from './assignedDropdown';
 import { ShareUsers } from './shareUsers';
-import { SubTask } from "./subtaskType";
+import { Task } from "./taskType";
 import { UserHeaderHttpRequest } from './userHeaderHttpRequest';
 import { UserInfo } from './userInfo';
 
@@ -100,6 +100,8 @@ interface User {
 
 interface TaskViewProps {
     taskID: number;
+    parentId: number;
+    projectId: number;
     name: string;
     completion: number;
     description: string;
@@ -120,7 +122,7 @@ interface TaskViewState {
     assignedState: number;
     error: any;
     isLoaded: boolean;
-    subTasks: SubTask[];
+    subTasks: Task[];
     name: string;
     completion: number;
     hasChanged: boolean;
@@ -142,7 +144,7 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
     saveText: string;
     hasChanged = false;
     error: any;
-    subTasks: SubTask[];
+    subTasks: Task[];
     oldStatus: string;
 
     constructor(props: TaskViewProps) {
@@ -320,16 +322,13 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
         }
         // TODO 
         // should be user from google oauth
-        const updatedTask = { owner: this.owner, title: this.state.name, status: this.state.taskStatus, assignedTo: this.state.assignedState, progress: this.state.completion, deadline: this.state.dueDate, description: this.state.description };
+        const updatedTask = { owner: this.owner, parentId: this.props.parentId, projectId: this.props.projectId, title: this.state.name, status: this.state.taskStatus, assignedTo: this.state.assignedState, progress: this.state.completion, deadline: this.state.dueDate, description: this.state.description };
 
-        const request = new UserHeaderHttpRequest(`/api/tasks/${this.props.taskID}`, this.props.userInfo);
+        const request = new UserHeaderHttpRequest(`/api/tasks/${this.props.taskID}`, this.props.userInfo, { "Content-Type" : "application/json" });
         fetch(request,
             {
                 method: 'PUT',
                 mode: 'cors',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
                 body: JSON.stringify(updatedTask)
             }).then((response) => response.json())
             .then((data) => {

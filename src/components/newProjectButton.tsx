@@ -15,14 +15,15 @@ const styles = {
 };
 
 interface NewProjectPost {
-    owner: string,
-    parentId: number,
-    title: string,
-    description: string,
-    notes: string,
-    assignedTo: number,
-    status: string,
-    progress: number
+    owner: string;
+    collaborators: string[];
+    parentId: number;
+    title: string;
+    description: string;
+    notes: string;
+    assignedTo: number;
+    status: string;
+    progress: number;
 }
 
 interface ProjectButtonProps {
@@ -41,16 +42,13 @@ export class ProjectButton extends React.Component<ProjectButtonProps> {
 
         // TODO 
         // should be user from google oauth
-        const newProject: NewProjectPost = { owner: this.props.userInfo.email, parentId: null, title: "New project", description: "", notes: "", assignedTo: null, status: "Active", progress: 0 };
+        const newProject: NewProjectPost = { owner: this.props.userInfo.email, collaborators: [ this.props.userInfo.email ], parentId: null, title: "New project", description: "", notes: "", assignedTo: null, status: "Active", progress: 0 };
 
-        const request = new UserHeaderHttpRequest("/api/projects", this.props.userInfo);
+        const request = new UserHeaderHttpRequest("/api/projects", this.props.userInfo, { 'Content-Type': 'application/json' });
         fetch(request,
             {
                 method: 'POST',
                 mode: 'cors',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
                 body: JSON.stringify(newProject)
             }).then((response) => response.json())
             .then((data) => {

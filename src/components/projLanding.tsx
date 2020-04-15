@@ -3,7 +3,7 @@ import * as React from "react";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 
-import { SubTask } from "./subtaskType";
+import { Task } from "./taskType";
 import { LandProjectColumn } from "./landProjCol";
 import { UserInfo } from "./userInfo";
 
@@ -39,7 +39,7 @@ interface ProjLandProps {
     userInfo: UserInfo;
 }
 
-export class ProjectLanding extends React.Component<ProjLandProps, { error: any, isLoaded: boolean, task: SubTask, head: number, showProjectPage: (projectID: number) => any }> {
+export class ProjectLanding extends React.Component<ProjLandProps, { error: any, isLoaded: boolean, task: Task, head: number, showProjectPage: (projectID: number) => any }> {
     owner: IUser;
 
     constructor(props: ProjLandProps) {

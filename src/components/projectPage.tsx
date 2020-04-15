@@ -7,7 +7,7 @@ import Col from 'react-bootstrap/Col';
 
 import { ProjectColumn } from "./projectColumn";
 import { SubTaskColumn } from "./subTaskColumn";
-import { SubTask } from "./subtaskType";
+import { Task } from "./taskType";
 import { TaskView } from "./taskView";
 import { HistoryButton } from "./historyButton";
 import Breadcrumb from "react-bootstrap/Breadcrumb";
@@ -55,7 +55,7 @@ interface ProjectPageProps {
 
 // ProjectPage contains the entire application past the Google oauth. This should include the left and right sidebars
 // task view, settings user info, etc.
-export class ProjectPage extends React.Component<ProjectPageProps, { error: any, isLoaded: boolean, task: SubTask, head: number, history: ProjectHistory[] }>{
+export class ProjectPage extends React.Component<ProjectPageProps, { error: any, isLoaded: boolean, task: Task, head: number, history: ProjectHistory[] }>{
 
 	constructor(props: ProjectPageProps) {
 		super(props);
@@ -167,6 +167,8 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 						<Col sm="3"><ProjectColumn head={head} changeHead={this.changeHeadFromProject} userInfo={this.props.userInfo} /></Col>
 						<Col sm="6"><TaskView
 							taskID={head}
+							parentId={task.parentID}
+							projectId={this.props.projectID}
 							name={task.title}
 							completion={task.progress}
 							description={task.description}
@@ -177,7 +179,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 							sharedUsers={testSharedWith}
 							userInfo={this.props.userInfo}
 						/></Col>
-						<Col sm="3"><SubTaskColumn head={head} changeHead={this.changeHeadFromTask} userInfo={this.props.userInfo}></SubTaskColumn></Col>
+						<Col sm="3"><SubTaskColumn head={head} changeHead={this.changeHeadFromTask} userInfo={this.props.userInfo} projectId={this.props.projectID}></SubTaskColumn></Col>
 					</Row>
 				</Container>
 			);
