@@ -30,12 +30,12 @@ export class StatusDropdown extends React.Component<StatusDropdownProps, StatusS
 
     constructor(props: StatusDropdownProps) {
         super(props);
-        this.state = {taskStatus: props.taskStatus}
+        this.state = { taskStatus: props.taskStatus }
         this.options = props.statusList;
     }
-    
+
     componentDidUpdate(newProps: StatusDropdownProps) {
-        const {taskStatus} = this.props;
+        const { taskStatus } = this.props;
         if (newProps.taskStatus !== taskStatus) {
             this.setState({
                 taskStatus: taskStatus
@@ -50,10 +50,10 @@ export class StatusDropdown extends React.Component<StatusDropdownProps, StatusS
         const arrayOp = this.options.map((item, i) => {
             return (
                 <option key={item.id} value={item.value}>{item.label}</option>
-                )
+            )
         });
 
-        return(
+        return (
             <Form style={font}>
                 <Form.Group as={Row} controlId="statusDropdown">
                     <Form.Label column sm="4">Status:</Form.Label>
@@ -61,7 +61,7 @@ export class StatusDropdown extends React.Component<StatusDropdownProps, StatusS
                         <Form.Control
                             as="select"
                             onChange={(event: any) => {
-                                this.setState({taskStatus: event.target.value});
+                                this.setState({ taskStatus: event.target.value });
                                 this.props.handleChange(event);
                             }}
                             value={taskStatus}

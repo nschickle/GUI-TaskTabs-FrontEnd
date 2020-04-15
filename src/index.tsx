@@ -8,6 +8,6 @@ import { MainPage } from "./components/mainPage";
 
 
 ReactDOM.render(
-    <MainPage  projectPageUp={false}/>,
+    <MainPage projectPageUp={false} />,
     document.getElementById("mainpage")
 );

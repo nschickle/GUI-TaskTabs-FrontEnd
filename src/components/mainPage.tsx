@@ -14,48 +14,48 @@ interface MainPageProps {
 
 // TODO:
 // Make it so choosing a project on the landing changes it on project page
-export class MainPage extends React.Component<MainPageProps, { projectPageUp: boolean, projectID: number}>{
+export class MainPage extends React.Component<MainPageProps, { projectPageUp: boolean, projectID: number }>{
 
     private userInfo = new UserInfo("test@test.com", "test");
 
     constructor(props: MainPageProps) {
-      super(props);
+        super(props);
 
-      this.state = {
-        projectPageUp: props.projectPageUp,
-        projectID: null
-      };
+        this.state = {
+            projectPageUp: props.projectPageUp,
+            projectID: null
+        };
     }
 
     showProjectPage = (projectID: number) => {
-        this.setState({projectPageUp: true});
-        this.setState({projectID: projectID});
+        this.setState({ projectPageUp: true });
+        this.setState({ projectID: projectID });
     }
 
 
     // Currently makes projectID null because it's state can't be guarentee
     hideProjectPage = () => {
-        this.setState({projectPageUp: false});
-        this.setState({projectID: null});
+        this.setState({ projectPageUp: false });
+        this.setState({ projectID: null });
     }
 
     render() {
         const { projectPageUp } = this.state;
         let showPage;
-        if(projectPageUp){
+        if (projectPageUp) {
             showPage = <Container fluid>
                 <Row>
-                <NavBar hideProjectPage = {this.hideProjectPage}/>
+                    <NavBar hideProjectPage={this.hideProjectPage} />
                 </Row>
-                <Row><ProjectPage projectID={this.state.projectID} userInfo={this.userInfo}/></Row></Container>;
+                <Row><ProjectPage projectID={this.state.projectID} userInfo={this.userInfo} /></Row></Container>;
         }
-        else{
+        else {
             showPage = <Container fluid>
                 <Row>
-                  <NavBar hideProjectPage = {this.hideProjectPage}/>
+                    <NavBar hideProjectPage={this.hideProjectPage} />
                 </Row>
                 <Row>
-                <ProjectLanding showProjectPage = {this.showProjectPage} userInfo={this.userInfo}/>
+                    <ProjectLanding showProjectPage={this.showProjectPage} userInfo={this.userInfo} />
                 </Row></Container>;
         }
 

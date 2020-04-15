@@ -49,8 +49,8 @@ interface ProjectHistory {
 };
 
 interface ProjectPageProps {
-  projectID: number;
-  userInfo: UserInfo;
+	projectID: number;
+	userInfo: UserInfo;
 }
 
 // ProjectPage contains the entire application past the Google oauth. This should include the left and right sidebars
@@ -82,7 +82,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 			clearTimeout(timeout);
 		} else {
 			timeout = setTimeout(() => {
-        const request = new UserHeaderHttpRequest(`/api/tasks/${this.props.projectID}`, this.props.userInfo);
+				const request = new UserHeaderHttpRequest(`/api/tasks/${this.props.projectID}`, this.props.userInfo);
 				fetch(request)
 					.then(res => res.json())
 					.then(
@@ -148,7 +148,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 				<Breadcrumb>
 					{history.map(node => {
 						return (
-								<HistoryButton key={node.id} id={node.id} name={node.name} changeHead={this.changeHeadFromHistory} currentHead={head} />
+							<HistoryButton key={node.id} id={node.id} name={node.name} changeHead={this.changeHeadFromHistory} currentHead={head} />
 						);
 					})}
 				</Breadcrumb>;
@@ -164,7 +164,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 				<Container fluid style={styles.box}>
 					<HistoryRow>{historyComponent}</HistoryRow>
 					<Row noGutters={true}>
-						<Col sm="3"><ProjectColumn head={head} changeHead={this.changeHeadFromProject}  userInfo={this.props.userInfo}/></Col>
+						<Col sm="3"><ProjectColumn head={head} changeHead={this.changeHeadFromProject} userInfo={this.props.userInfo} /></Col>
 						<Col sm="6"><TaskView
 							taskID={head}
 							name={task.title}
@@ -174,8 +174,8 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 							status={task.status}
 							assignee={task.assignedTo}
 							owner={testOwner}
-              sharedUsers={testSharedWith}
-              userInfo={this.props.userInfo}
+							sharedUsers={testSharedWith}
+							userInfo={this.props.userInfo}
 						/></Col>
 						<Col sm="3"><SubTaskColumn head={head} changeHead={this.changeHeadFromTask} userInfo={this.props.userInfo}></SubTaskColumn></Col>
 					</Row>
@@ -204,7 +204,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 				return { head: newHead };
 			})
 
-      const request = new UserHeaderHttpRequest(`/api/tasks/${newHead}`, this.props.userInfo);
+			const request = new UserHeaderHttpRequest(`/api/tasks/${newHead}`, this.props.userInfo);
 			fetch(request)
 				.then(res => res.json())
 				.then(

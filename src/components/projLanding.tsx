@@ -21,15 +21,15 @@ const styles = {
         marginBottom: 15
     },
     projects: {
-        width: window.innerWidth/3,
+        width: window.innerWidth / 3,
         margin: "auto",
         padding: 0
     }
 };
 
 interface IUser {
-  id: number;
-  name: string;
+    id: number;
+    name: string;
 }
 
 const testOwner: IUser = { id: 0, name: "Super Steve" };
@@ -39,18 +39,18 @@ interface ProjLandProps {
     userInfo: UserInfo;
 }
 
-export class ProjectLanding extends React.Component<ProjLandProps,  { error: any, isLoaded: boolean, task: SubTask, head: number, showProjectPage: (projectID: number) => any}> {
+export class ProjectLanding extends React.Component<ProjLandProps, { error: any, isLoaded: boolean, task: SubTask, head: number, showProjectPage: (projectID: number) => any }> {
     owner: IUser;
 
     constructor(props: ProjLandProps) {
         super(props);
 
         this.state = {
-          error: null,
-          isLoaded: false,
-          task: null,
-          head: undefined,
-          showProjectPage: props.showProjectPage,
+            error: null,
+            isLoaded: false,
+            task: null,
+            head: undefined,
+            showProjectPage: props.showProjectPage,
         };
         this.owner = testOwner;
     }
@@ -61,7 +61,7 @@ export class ProjectLanding extends React.Component<ProjLandProps,  { error: any
 
     render() {
 
-        return(
+        return (
             <Container fluid>
                 <Row style={styles.center}>
                     <h1 style={styles.title}>TaskTabs</h1>
@@ -70,7 +70,7 @@ export class ProjectLanding extends React.Component<ProjLandProps,  { error: any
                     <p style={styles.label}>Welcome, {this.owner.name}. Here are your Projects!</p>
                 </Row>
                 <Row style={styles.projects} noGutters={true}>
-                    <LandProjectColumn selectProject={this.selectProject} userInfo={this.props.userInfo}/>
+                    <LandProjectColumn selectProject={this.selectProject} userInfo={this.props.userInfo} />
                 </Row>
             </Container>
         );
