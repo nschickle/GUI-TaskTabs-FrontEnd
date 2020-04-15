@@ -14,26 +14,28 @@ const styles = {
     }
 };
 
-interface NewTaskPost {
-    owner: string,
-    parentId: number,
-    title: string,
-    description: string,
-    notes: string,
-    assignedTo: number,
-    status: string,
-    progress: number
+interface INewTaskPost {
+    owner: string;
+    parentId: number;
+    projectId: number;
+    title: string;
+    description: string;
+    notes: string;
+    assignedTo: number;
+    status: string;
+    progress: number;
 }
 
-interface NewSubTaskButtonProps {
-    head: number,
+interface INewSubTaskButtonProps {
+    head: number;
     changeHead: (newHead: number) => any;
+    projectId: number;
     userInfo: UserInfo;
 }
 
-export class NewSubTaskButton extends React.Component<NewSubTaskButtonProps> {
+export class NewSubTaskButton extends React.Component<INewSubTaskButtonProps> {
 
-    constructor(props: NewSubTaskButtonProps) {
+    constructor(props: INewSubTaskButtonProps) {
         super(props);
 
     }
@@ -42,16 +44,13 @@ export class NewSubTaskButton extends React.Component<NewSubTaskButtonProps> {
 
         // TODO 
         // should be user from google oauth
-        const newSubTask: NewTaskPost = { owner: this.props.userInfo.email, parentId: this.props.head, title: "New task", description: "", notes: "", assignedTo: null, status: "Active", progress: 0 };
+        const newSubTask: INewTaskPost = { owner: this.props.userInfo.email, parentId: this.props.head, projectId: this.props.projectId, title: "New task", description: "", notes: "", assignedTo: null, status: "Active", progress: 0 };
 
-        const request = new UserHeaderHttpRequest("/api/tasks", this.props.userInfo);
+        const request = new UserHeaderHttpRequest("/api/tasks", this.props.userInfo,  { 'Content-Type': 'application/json' });
         fetch(request,
             {
                 method: 'POST',
                 mode: 'cors',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
                 body: JSON.stringify(newSubTask)
             }).then((response) => response.json())
             .then((data) => {

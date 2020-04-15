@@ -4,7 +4,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-import { SubTask } from "./subtaskType";
+import { Task } from "./taskType";
 import { SubTaskButton } from './subTaskButton';
 import { NewSubTaskButton } from "./newSubTaskButton";
 import { UserHeaderHttpRequest } from './userHeaderHttpRequest';
@@ -30,12 +30,13 @@ const styles = {
 interface SubTaskColumnProps {
     head: number;
     changeHead: (newHead: number) => any;
+    projectId: number;
     userInfo: UserInfo;
 }
 
 // This creates the entire right-hand column of project page. It handles the button that creates a new task,
 // and hands down a single element of a subtask array to create subtask buttons one by one.
-export class SubTaskColumn extends React.Component<SubTaskColumnProps, { error: any, isLoaded: boolean, subTasks: SubTask[] }>{
+export class SubTaskColumn extends React.Component<SubTaskColumnProps, { error: any, isLoaded: boolean, subTasks: Task[] }>{
     head: number;
     constructor(props: SubTaskColumnProps) {
         super(props);
@@ -115,7 +116,7 @@ export class SubTaskColumn extends React.Component<SubTaskColumnProps, { error: 
                 <Container>
                     <Col style={styles.box}>
                         <Row noGutters={true}>
-                            <NewSubTaskButton head={this.props.head} changeHead={this.props.changeHead} userInfo={this.props.userInfo} />
+                            <NewSubTaskButton head={this.props.head} changeHead={this.props.changeHead} userInfo={this.props.userInfo} projectId={this.props.projectId}/>
                         </Row>
                         <Row noGutters={true}>
                             {subTasks.map((task) => {

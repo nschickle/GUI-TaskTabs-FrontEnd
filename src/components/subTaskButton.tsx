@@ -6,7 +6,6 @@ import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 
 import { TaskProgressBar } from './progressBar';
-import { SubTask } from './subtaskType';
 
 const styles = {
     button: {

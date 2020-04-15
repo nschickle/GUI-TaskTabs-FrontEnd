@@ -5,7 +5,7 @@ import Col from 'react-bootstrap/Col';
 
 import { ProjectButton } from "./newProjectButton";
 import { SubTaskButton } from "./subTaskButton";
-import { SubTask } from "./subtaskType";
+import { Task } from "./taskType";
 import { UserInfo } from "./userInfo";
 import { UserHeaderHttpRequest } from "./userHeaderHttpRequest";
 
@@ -27,7 +27,7 @@ interface ProjectColumnProps {
     userInfo: UserInfo;
 }
 
-export class ProjectColumn extends React.Component<ProjectColumnProps, { error: any, isLoaded: boolean, projects: SubTask[] }> {
+export class ProjectColumn extends React.Component<ProjectColumnProps, { error: any, isLoaded: boolean, projects: Task[] }> {
     head: number;
     constructor(props: ProjectColumnProps) {
         super(props);

@@ -3,13 +3,17 @@ import ApplicationConfig from "./applicationConfig";
 
 export class UserHeaderHttpRequest extends Request {
 
-    constructor(endpoint: string, userInfo: UserInfo, options: RequestInit = {}) {
+    constructor(endpoint: string, userInfo: UserInfo, additionalHeaders: any = { }) {
         let headers = new Headers();
         headers.append("user-email", userInfo.email);
         headers.append("user-name", userInfo.name);
 
-        options.headers = headers;
+        const keys = Object.keys(additionalHeaders);
+        
+        for (const header of keys) {
+            headers.append(header, additionalHeaders[header])
+        }
 
-        super(`${ApplicationConfig.api.staging.baseUrl}${endpoint}`, options);
+        super(`${ApplicationConfig.api.staging.baseUrl}${endpoint}`, { headers });
     }
 }
