@@ -3,7 +3,8 @@ import * as React from "react";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
-import ApplicationConfig from './applicationConfig';
+import { UserInfo } from "./userInfo";
+import { UserHeaderHttpRequest } from "./userHeaderHttpRequest";
 
 const styles = {
     button: {
@@ -26,6 +27,7 @@ interface NewProjectPost {
 
 interface ProjectButtonProps {
     changeHead: (newHead: number) => any;
+    userInfo: UserInfo;
 }
 
 export class ProjectButton extends React.Component<ProjectButtonProps> {
@@ -39,8 +41,10 @@ export class ProjectButton extends React.Component<ProjectButtonProps> {
 
         // TODO 
         // should be user from google oauth
-        const newProject:NewProjectPost = {owner: "littlebobbytables@xkcd.com", parentId: null, title:"New project", description: "", notes: "", assignedTo: null, status:"Active", progress:0};
-        fetch(`${ApplicationConfig.api.staging.baseUrl}/api/projects`,
+        const newProject:NewProjectPost = {owner: this.props.userInfo.email, parentId: null, title:"New project", description: "", notes: "", assignedTo: null, status:"Active", progress:0};
+        
+        const request = new UserHeaderHttpRequest("/api/projects", this.props.userInfo);
+        fetch(request,
         {
             method: 'POST',
             mode: 'cors',

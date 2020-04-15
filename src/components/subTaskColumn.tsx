@@ -6,8 +6,9 @@ import Col from 'react-bootstrap/Col';
 
 import { SubTask } from "./subtaskType";
 import { SubTaskButton } from './subTaskButton';
-import ApplicationConfig from './applicationConfig';
 import { NewSubTaskButton } from "./newSubTaskButton";
+import { UserHeaderHttpRequest } from './userHeaderHttpRequest';
+import { UserInfo } from './userInfo';
 
 const styles = {
     button: {
@@ -29,6 +30,7 @@ const styles = {
 interface SubTaskColumnProps {
     head: number;
     changeHead: (newHead: number) => any;
+    userInfo: UserInfo;
 }
 
 // This creates the entire right-hand column of project page. It handles the button that creates a new task,
@@ -70,30 +72,31 @@ export class SubTaskColumn extends React.Component<SubTaskColumnProps, { error: 
                 error: true
             });
         } else {
-                fetch(`${ApplicationConfig.api.staging.baseUrl}/api/subtasks/${this.props.head}`)
-                .then(res => res.json())
-                .then(
-                    (result) => {
-                        if (result) {
-                            this.setState({
-                                isLoaded: true,
-                                subTasks: result,
-                            });
-                        } else {
-                            this.makeSubTaskQuery(numTries - 1);
-                        }
-                    },
-                    // Note: it's important to handle errors here
-                    // instead of a catch() block so that we don't swallow
-                    // exceptions from actual bugs in components.
-                    (error) => {
+            const request = new UserHeaderHttpRequest(`/api/subtasks/${this.props.head}`, this.props.userInfo);
+            fetch(request)
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    if (result) {
                         this.setState({
                             isLoaded: true,
-                            error
+                            subTasks: result,
                         });
+                    } else {
+                        this.makeSubTaskQuery(numTries - 1);
                     }
-                );
-            }
+                },
+                // Note: it's important to handle errors here
+                // instead of a catch() block so that we don't swallow
+                // exceptions from actual bugs in components.
+                (error) => {
+                    this.setState({
+                        isLoaded: true,
+                        error
+                    });
+                }
+            );
+        }
     }
 
     render() {
@@ -112,7 +115,7 @@ export class SubTaskColumn extends React.Component<SubTaskColumnProps, { error: 
                 <Container>
                     <Col style={styles.box}>
                         <Row noGutters={true}>
-                            <NewSubTaskButton head={this.props.head} changeHead={this.props.changeHead} />
+                            <NewSubTaskButton head={this.props.head} changeHead={this.props.changeHead} userInfo={this.props.userInfo}/>
                         </Row>
                         <Row noGutters={true}>
                             {subTasks.map((task) => {

@@ -6,6 +6,7 @@ import Row from 'react-bootstrap/Row';
 import { NavBar } from './navBar';
 import { ProjectPage } from './projectPage';
 import { ProjectLanding } from './projLanding';
+import { UserInfo } from "./userInfo";
 
 interface MainPageProps {
     projectPageUp: boolean;
@@ -14,6 +15,8 @@ interface MainPageProps {
 // TODO:
 // Make it so choosing a project on the landing changes it on project page
 export class MainPage extends React.Component<MainPageProps, { projectPageUp: boolean, projectID: number}>{
+
+    private userInfo = new UserInfo("test@test.com", "test");
 
     constructor(props: MainPageProps) {
       super(props);
@@ -44,7 +47,7 @@ export class MainPage extends React.Component<MainPageProps, { projectPageUp: bo
                 <Row>
                 <NavBar hideProjectPage = {this.hideProjectPage}/>
                 </Row>
-                <Row><ProjectPage projectID={this.state.projectID}/></Row></Container>;
+                <Row><ProjectPage projectID={this.state.projectID} userInfo={this.userInfo}/></Row></Container>;
         }
         else{
             showPage = <Container fluid>
@@ -52,7 +55,7 @@ export class MainPage extends React.Component<MainPageProps, { projectPageUp: bo
                   <NavBar hideProjectPage = {this.hideProjectPage}/>
                 </Row>
                 <Row>
-                <ProjectLanding showProjectPage = {this.showProjectPage}/>
+                <ProjectLanding showProjectPage = {this.showProjectPage} userInfo={this.userInfo}/>
                 </Row></Container>;
         }
 
