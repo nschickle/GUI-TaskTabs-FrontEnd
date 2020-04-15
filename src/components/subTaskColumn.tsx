@@ -74,28 +74,28 @@ export class SubTaskColumn extends React.Component<SubTaskColumnProps, { error: 
         } else {
             const request = new UserHeaderHttpRequest(`/api/subtasks/${this.props.head}`, this.props.userInfo);
             fetch(request)
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    if (result) {
+                .then(res => res.json())
+                .then(
+                    (result) => {
+                        if (result) {
+                            this.setState({
+                                isLoaded: true,
+                                subTasks: result,
+                            });
+                        } else {
+                            this.makeSubTaskQuery(numTries - 1);
+                        }
+                    },
+                    // Note: it's important to handle errors here
+                    // instead of a catch() block so that we don't swallow
+                    // exceptions from actual bugs in components.
+                    (error) => {
                         this.setState({
                             isLoaded: true,
-                            subTasks: result,
+                            error
                         });
-                    } else {
-                        this.makeSubTaskQuery(numTries - 1);
                     }
-                },
-                // Note: it's important to handle errors here
-                // instead of a catch() block so that we don't swallow
-                // exceptions from actual bugs in components.
-                (error) => {
-                    this.setState({
-                        isLoaded: true,
-                        error
-                    });
-                }
-            );
+                );
         }
     }
 
@@ -115,7 +115,7 @@ export class SubTaskColumn extends React.Component<SubTaskColumnProps, { error: 
                 <Container>
                     <Col style={styles.box}>
                         <Row noGutters={true}>
-                            <NewSubTaskButton head={this.props.head} changeHead={this.props.changeHead} userInfo={this.props.userInfo}/>
+                            <NewSubTaskButton head={this.props.head} changeHead={this.props.changeHead} userInfo={this.props.userInfo} />
                         </Row>
                         <Row noGutters={true}>
                             {subTasks.map((task) => {

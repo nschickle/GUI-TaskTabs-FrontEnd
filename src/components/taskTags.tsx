@@ -31,14 +31,13 @@ export class TaskTags extends React.Component<TaskTagsProps> {
     }
 
     render() {
-        const tagArray = this.tags.map((item , i) =>
-        {
+        const tagArray = this.tags.map((item, i) => {
             return (
                 <Button key={item.id} variant="outline-secondary" style={styles.tagText}> {item.tag}</Button>
             )
         });
 
-        return(
+        return (
             <ButtonGroup style={styles.tagBox}>
                 {tagArray}
                 <Button variant="outline-secondary" style={styles.tagText}> + </Button>

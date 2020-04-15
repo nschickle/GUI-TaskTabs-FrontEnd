@@ -41,25 +41,25 @@ export class ProjectButton extends React.Component<ProjectButtonProps> {
 
         // TODO 
         // should be user from google oauth
-        const newProject:NewProjectPost = {owner: this.props.userInfo.email, parentId: null, title:"New project", description: "", notes: "", assignedTo: null, status:"Active", progress:0};
-        
+        const newProject: NewProjectPost = { owner: this.props.userInfo.email, parentId: null, title: "New project", description: "", notes: "", assignedTo: null, status: "Active", progress: 0 };
+
         const request = new UserHeaderHttpRequest("/api/projects", this.props.userInfo);
         fetch(request,
-        {
-            method: 'POST',
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json'
-              },
-            body: JSON.stringify(newProject)
-        }).then((response) => response.json())
+            {
+                method: 'POST',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newProject)
+            }).then((response) => response.json())
             .then((data) => {
                 // This will refresh the page with the new project as the current head.
                 this.props.changeHead(data._id);
-          })
-          .catch((error) => {
-            console.error('Error:', error);
-          });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
     }
 
     public render() {

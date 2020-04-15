@@ -31,14 +31,14 @@ export class AssignedDropdown extends React.Component<IAssignedDropdownProps, IA
 
     constructor(props: IAssignedDropdownProps) {
         super(props);
-        this.state = {assignedState: props.assignedState};
+        this.state = { assignedState: props.assignedState };
 
         this.options = props.sharedUsers;
         this.owner = props.owner;
     }
-    
+
     componentDidUpdate(newProps: IAssignedDropdownProps) {
-        const {assignedState} = this.props;
+        const { assignedState } = this.props;
         if (newProps.assignedState !== assignedState) {
             this.setState({
                 assignedState: assignedState
@@ -53,10 +53,10 @@ export class AssignedDropdown extends React.Component<IAssignedDropdownProps, IA
         const arrayOp = this.options.map((item) => {
             return (
                 <option key={item.id} value={item.id}>{item.name}</option>
-                );
+            );
         });
 
-        return(
+        return (
             <Form>
                 <Form.Group as={Row} controlId="assigneeDropdown">
                     <Form.Label column sm="5" style={font}>Assigned To:</Form.Label>
@@ -64,7 +64,7 @@ export class AssignedDropdown extends React.Component<IAssignedDropdownProps, IA
                         <Form.Control
                             as="select"
                             onChange={(event: any) => {
-                                this.setState({assignedState: Number(event.target.value)});
+                                this.setState({ assignedState: Number(event.target.value) });
                                 this.props.handleChange(event);
                             }}
                             value={this.state.assignedState}

@@ -16,7 +16,7 @@ const styles = {
         margin: 0,
         borderStyle: "solid",
         borderColor: "gray",
-        height: window.innerHeight-350,
+        height: window.innerHeight - 350,
         minWidth: 250
     }
 };
@@ -26,7 +26,7 @@ interface LandProjectColumnProps {
     userInfo: UserInfo;
 }
 
-export class LandProjectColumn extends React.Component<LandProjectColumnProps, {error: any, isLoaded: boolean, projects: SubTask[]}> {
+export class LandProjectColumn extends React.Component<LandProjectColumnProps, { error: any, isLoaded: boolean, projects: SubTask[] }> {
 
     constructor(props: LandProjectColumnProps) {
         super(props);
@@ -48,24 +48,24 @@ export class LandProjectColumn extends React.Component<LandProjectColumnProps, {
     getProjects = () => {
         const request = new UserHeaderHttpRequest("/api/projects", this.props.userInfo);
         fetch(request)
-        .then(res => res.json())
-        .then(
-            (result) => {
-                this.setState({
-                    isLoaded: true,
-                    projects: result,
-                });
-            },
-            // Note: it's important to handle errors here
-            // instead of a catch() block so that we don't swallow
-            // exceptions from actual bugs in components.
-            (error) => {
-                this.setState({
-                    isLoaded: true,
-                    error
-                });
-            }
-        );
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    this.setState({
+                        isLoaded: true,
+                        projects: result,
+                    });
+                },
+                // Note: it's important to handle errors here
+                // instead of a catch() block so that we don't swallow
+                // exceptions from actual bugs in components.
+                (error) => {
+                    this.setState({
+                        isLoaded: true,
+                        error
+                    });
+                }
+            );
     }
 
     public render() {
@@ -84,7 +84,7 @@ export class LandProjectColumn extends React.Component<LandProjectColumnProps, {
             return (
                 <Container>
                     <Col style={styles.box} >
-                        <ProjectButton changeHead={this.props.selectProject} userInfo={this.props.userInfo}/>
+                        <ProjectButton changeHead={this.props.selectProject} userInfo={this.props.userInfo} />
                         {projects.map((task) => {
                             return <SubTaskButton name={task.title} changeHead={this.props.selectProject} percentage={task.progress} key={task._id} taskHead={task._id}></SubTaskButton>;
                         })}

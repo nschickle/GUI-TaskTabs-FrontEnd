@@ -23,8 +23,8 @@ const styles = {
 const testOwner: IUser = { id: 0, name: "Super Steve" };
 
 interface IUser {
-  id: number;
-  name: string;
+    id: number;
+    name: string;
 }
 
 interface INavBarProps {
@@ -43,7 +43,7 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
 
         this.owner = testOwner;
 
-        this.state = {hideProjectPage: props.hideProjectPage};
+        this.state = { hideProjectPage: props.hideProjectPage };
     }
 
     getProjectLanding = () => {
@@ -51,7 +51,7 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
     }
 
     public render() {
-        return(
+        return (
             <Container fluid>
                 <Navbar bg="light" variant="light" style={styles.size}>
                     <Navbar.Brand>TaskTabs</Navbar.Brand>
@@ -83,11 +83,11 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
                         </Nav>
                         <Nav>
                             <Container
-                                className="g-signin2" 
+                                className="g-signin2"
                                 data-onsuccess="onSignIn"
                                 data-height="48"
                                 data-width="162"
-                                >
+                            >
                                 Google
                             </Container>
                         </Nav>

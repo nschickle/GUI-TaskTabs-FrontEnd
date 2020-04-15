@@ -27,7 +27,7 @@ interface ProjectColumnProps {
     userInfo: UserInfo;
 }
 
-export class ProjectColumn extends React.Component<ProjectColumnProps, {error: any, isLoaded: boolean, projects: SubTask[] }> {
+export class ProjectColumn extends React.Component<ProjectColumnProps, { error: any, isLoaded: boolean, projects: SubTask[] }> {
     head: number;
     constructor(props: ProjectColumnProps) {
         super(props);
@@ -47,9 +47,9 @@ export class ProjectColumn extends React.Component<ProjectColumnProps, {error: a
     }
 
     componentDidUpdate() {
-        if(this.props.head !== this.head) {
+        if (this.props.head !== this.head) {
             this.head = this.props.head;
-            this.setState({isLoaded: false});
+            this.setState({ isLoaded: false });
             this.getProjects();
         }
     }
@@ -60,24 +60,24 @@ export class ProjectColumn extends React.Component<ProjectColumnProps, {error: a
     getProjects = () => {
         const request = new UserHeaderHttpRequest("/api/projects", this.props.userInfo);
         fetch(request)
-        .then(res => res.json())
-        .then(
-            (result) => {
-                this.setState({
-                    isLoaded: true,
-                    projects: result,
-                });
-            },
-            // Note: it's important to handle errors here
-            // instead of a catch() block so that we don't swallow
-            // exceptions from actual bugs in components.
-            (error) => {
-                this.setState({
-                    isLoaded: true,
-                    error
-                });
-            }
-        );
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    this.setState({
+                        isLoaded: true,
+                        projects: result,
+                    });
+                },
+                // Note: it's important to handle errors here
+                // instead of a catch() block so that we don't swallow
+                // exceptions from actual bugs in components.
+                (error) => {
+                    this.setState({
+                        isLoaded: true,
+                        error
+                    });
+                }
+            );
     }
 
     public render() {
@@ -96,7 +96,7 @@ export class ProjectColumn extends React.Component<ProjectColumnProps, {error: a
             return (
                 <Container>
                     <Col style={styles.box} >
-                        <ProjectButton changeHead={this.props.changeHead} userInfo={this.props.userInfo}/>
+                        <ProjectButton changeHead={this.props.changeHead} userInfo={this.props.userInfo} />
                         {projects.map((task) => {
                             return <SubTaskButton name={task.title} percentage={task.progress} key={task._id} changeHead={this.props.changeHead} taskHead={task._id}></SubTaskButton>;
                         })}
