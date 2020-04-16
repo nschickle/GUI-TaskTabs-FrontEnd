@@ -4,18 +4,127 @@ import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Button from 'react-bootstrap/Button';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Dropdown from 'react-bootstrap/Dropdown';
+import Form from 'react-bootstrap/Form';
 
-const styles = {
+const font16 = {
     size: {
-        fontSize: 32,
+        fontSize: 16,
+        height: 60,
+        borderColor: "gray",
+        borderStyle: "solid",
+        borderRadius: 10,
+        borderTop: "none"
+    },
+    button: {
+        fontSize: 16,
+        height: 50,
+        borderStyle: "none"
+    },
+    dropdown: {
+        fontSize: 16,
+        borderStyle: "none"
+    },
+    accountDrop: {
+        fontSize: 16,
+        width: 175,
+        margin: "auto"
+    },
+    fontSize: {
+        fontSize: 16
+    },
+};
+
+const font24 = {
+    size: {
+        fontSize: 24,
         height: 75,
         borderColor: "gray",
-        borderStyle: "solid"
+        borderStyle: "solid",
+        borderRadius: 10,
+        borderTop: "none"
     },
     button: {
         fontSize: 24,
         height: 50,
+        borderStyle: "none"
+    },
+    dropdown: {
+        fontSize: 24,
+        borderStyle: "none"
+    },
+    accountDrop: {
+        fontSize: 24,
+        width: 240,
+        margin: "auto"
+    },
+    fontSize: {
+        fontSize: 24,
+        width: 75
+    },
+};
+
+const font32 = {
+    size: {
+        fontSize: 32,
+        height: 75,
+        borderColor: "gray",
+        borderStyle: "solid",
+        borderRadius: 10,
+        borderTop: "none"
+    },
+    button: {
+        fontSize: 32,
+        height: 60,
+        borderStyle: "none"
+    },
+    dropdown: {
+        fontSize: 32,
+        borderStyle: "none"
+    },
+    accountDrop: {
+        fontSize: 32,
+        width: 315,
+        margin: "auto"
+    },
+    fontSize: {
+        fontSize: 32,
+        width: 75
+    },
+};
+
+const font40 = {
+    size: {
+        fontSize: 36,
+        height: 80,
+        borderColor: "gray",
+        borderStyle: "solid",
+        borderRadius: 10,
+        borderTop: "none"
+    },
+    button: {
+        fontSize: 36,
+        height: 80,
+        borderStyle: "none"
+    },
+    dropdown: {
+        fontSize: 36,
+        borderStyle: "none"
+    },
+    accountDrop: {
+        fontSize: 36,
+        width: 375,
+        margin: "auto"
+    },
+    fontSize: {
+        fontSize: 36,
+        width: 75
+    },
+}
+
+const styles = {
+    gButton: {
         borderStyle: "none"
     }
 }
@@ -29,10 +138,32 @@ interface IUser {
 
 interface INavBarProps {
     hideProjectPage: any;
+    changeToDarkTheme: any;
+    changeToLightTheme: any;
+    changeToCourier: any;
+    changeToVerdana: any;
+    font: string;
+    theme: string;
+    changeToSize16: any;
+    changeToSize24: any;
+    changeToSize32: any;
+    changeToSize40: any;
+    fontSize: number;
 }
 
 interface NavBarState {
     hideProjectPage: any;
+    changeToDarkTheme: any;
+    changeToLightTheme: any;
+    changeToCourier: any;
+    changeToVerdana: any;
+    font: string;
+    theme: string;
+    changeToSize16: any;
+    changeToSize24: any;
+    changeToSize32: any;
+    changeToSize40: any;
+    fontSize: number;
 }
 
 export class NavBar extends React.Component<INavBarProps, NavBarState> {
@@ -43,57 +174,911 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
 
         this.owner = testOwner;
 
-        this.state = { hideProjectPage: props.hideProjectPage };
+        this.state = {
+            hideProjectPage: props.hideProjectPage,
+            changeToDarkTheme: props.changeToDarkTheme,
+            changeToLightTheme: props.changeToLightTheme,
+            theme: props.theme,
+            changeToCourier: props.changeToCourier,
+            changeToVerdana: props.changeToVerdana,
+            font: props.font,
+            changeToSize16: props.changeToSize16,
+            changeToSize24: props.changeToSize24,
+            changeToSize32: props.changeToSize32,
+            changeToSize40: props.changeToSize40,
+            fontSize: props.fontSize
+            };
     }
 
     getProjectLanding = () => {
         this.state.hideProjectPage();
     }
 
+    checkTheme = () => {
+        if(this.state.theme == "dark"){
+            this.state.changeToLightTheme();
+            this.setState({theme: "light"});
+        } else {
+            this.state.changeToDarkTheme();
+            this.setState({theme: "dark"});
+        }
+    }
+
+    checkFont = () => {
+        if(this.state.font == "verdana"){
+            this.state.changeToCourier();
+            this.setState({font: "courier"});
+        } else {
+            this.state.changeToVerdana();
+            this.setState({font: "verdana"});
+        }
+    }
+
+    change16 = () => {
+        this.state.changeToSize16();
+        this.setState({fontSize: 16});
+    }
+
+    change24 = () => {
+        this.state.changeToSize24();
+        this.setState({fontSize: 24});
+    }
+
+    change32 = () => {
+        this.state.changeToSize32();
+        this.setState({fontSize: 32});
+    }
+
+    change40 = () => {
+        this.state.changeToSize40();
+        this.setState({fontSize: 40});
+    }
+
     public render() {
-        return (
-            <Container fluid>
-                <Navbar bg="light" variant="light" style={styles.size}>
-                    <Navbar.Brand>TaskTabs</Navbar.Brand>
-                    <Navbar.Toggle />
-                    <Navbar.Collapse>
-                        <Nav>
-                            <Button
-                                onClick={this.getProjectLanding}
-                                variant="outline-secondary"
-                                style={styles.button}>
-                                Home</Button>
-                        </Nav>
-                    </Navbar.Collapse>
-                    <Navbar.Collapse className="justify-content-end">
-                        <Nav>
-                            <Dropdown>
-                                <Dropdown.Toggle
-                                    variant="outline-secondary"
-                                    style={styles.button}
-                                    id="accountDropdown">
-                                    {this.owner.name}
-                                </Dropdown.Toggle>
-                                <Dropdown.Menu>
-                                    <Dropdown.Item> Account </Dropdown.Item>
-                                    <Dropdown.Item> Settings </Dropdown.Item>
-                                    <Dropdown.Item> Log Out </Dropdown.Item>
-                                </Dropdown.Menu>
-                            </Dropdown>
-                        </Nav>
-                        <Nav>
-                            <Container
-                                className="g-signin2"
-                                data-onsuccess="onSignIn"
-                                data-height="48"
-                                data-width="162"
-                            >
-                                Google
-                            </Container>
-                        </Nav>
-                    </Navbar.Collapse>
-                </Navbar>
-            </Container>
+        let navBar;
+        const theme = this.state.theme;
+        const font = this.state.font;
+        const fontSize = this.state.fontSize;
+
+        if (this.state.fontSize === 16) {
+            if (this.state.theme === "light") {
+                navBar = <Container fluid>
+                    <Navbar bg="light" variant="light" style={font16.size}>
+                        <Navbar.Brand>TaskTabs</Navbar.Brand>
+                        <Navbar.Toggle />
+                        <Navbar.Collapse>
+                            <Nav>
+                                <Button
+                                    onClick={this.getProjectLanding}
+                                    variant="outline-dark"
+                                    style={font16.button}>
+                                    Home</Button>
+                            </Nav>
+                        </Navbar.Collapse>
+                        <Navbar.Collapse className="justify-content-end">
+                            <Nav>
+                                <Dropdown>
+                                    <Dropdown.Toggle
+                                        variant="outline-dark"
+                                        style={font16.button}
+                                        id="accountDropdown">
+                                        {this.owner.name}
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu
+                                        style={font16.accountDrop}>
+                                        <Button
+                                            variant="outline-dark"
+                                            style={font16.dropdown}>
+                                            Account
+                                        </Button>
+                                        <Button
+                                            variant = "outline-dark"
+                                            style={font16.dropdown}
+                                            onClick = {this.checkTheme}>
+                                            Theme: {theme}
+                                        </Button>
+                                        <Button
+                                            variant = "outline-dark"
+                                            style={font16.dropdown}
+                                            onClick = {this.checkFont}>
+                                            Font: {font}
+                                        </Button>
+                                        <Dropdown as={ButtonGroup} drop = "right">
+                                            <Button
+                                                variant="outline-dark"
+                                                style={font16.dropdown}>
+                                                Font Size: {fontSize}
+                                            </Button>
+                                            <Dropdown.Toggle
+                                                split
+                                                variant="outline-dark"
+                                                id="dropdown-split-basic"
+                                                style={font16.dropdown}/>
+                                            <Dropdown.Menu style={font16.fontSize}>
+                                                <Button
+                                                    variant="outline-dark"
+                                                    style={font16.dropdown}
+                                                    onClick = {this.change16}>
+                                                    16
+                                                </Button>
+                                                <Button
+                                                    variant="outline-dark"
+                                                    style={font16.dropdown}
+                                                    onClick = {this.change24}>
+                                                    24
+                                                </Button>
+                                                <Button
+                                                    variant="outline-dark"
+                                                    style={font16.dropdown}
+                                                    onClick = {this.change32}>
+                                                    32
+                                                </Button>
+                                                <Button
+                                                    variant="outline-dark"
+                                                    style={font16.dropdown}
+                                                    onClick = {this.change40}>
+                                                    40
+                                                </Button>
+                                            </Dropdown.Menu>
+                                        </Dropdown>
+                                        <Button
+                                            variant="outline-dark"
+                                            style={font16.dropdown}>
+                                            Log Out
+                                        </Button>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            </Nav>
+                            <Nav>
+                                <Button
+                                    className="g-signin2"
+                                    data-onsuccess="onSignIn"
+                                    data-height="48"
+                                    data-width="162"
+                                    data-borderStyle="none"
+                                    variant="outline-dark"
+                                    style = {styles.gButton}>
+                                    Google
+                                </Button>
+                            </Nav>
+                        </Navbar.Collapse>
+                    </Navbar>
+                </Container>;
+            } else {
+                navBar = <Container fluid>
+                    <Navbar bg="dark" variant="dark" style={font16.size}>
+                        <Navbar.Brand>TaskTabs</Navbar.Brand>
+                        <Navbar.Toggle />
+                        <Navbar.Collapse>
+                            <Nav>
+                                <Button
+                                    onClick={this.getProjectLanding}
+                                    variant="outline-light"
+                                    style={font16.button}>
+                                    Home</Button>
+                            </Nav>
+                        </Navbar.Collapse>
+                        <Navbar.Collapse className="justify-content-end">
+                            <Nav>
+                                <Dropdown>
+                                    <Dropdown.Toggle
+                                        variant="outline-light"
+                                        style={font16.button}
+                                        id="accountDropdown">
+                                        {this.owner.name}
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu
+                                        style={font16.accountDrop}>
+                                        <Button
+                                            variant="outline-dark"
+                                            style={font16.dropdown}>
+                                            Account
+                                        </Button>
+                                        <Button
+                                            variant = "outline-dark"
+                                            style={font16.dropdown}
+                                            onClick = {this.checkTheme}>
+                                            Theme: {theme}
+                                        </Button>
+                                        <Button
+                                            variant = "outline-dark"
+                                            style={font16.dropdown}
+                                            onClick = {this.checkFont}>
+                                            Font: {font}
+                                        </Button>
+                                        <Dropdown as={ButtonGroup} drop = "right">
+                                            <Button
+                                                variant="outline-dark"
+                                                style={font16.dropdown}>
+                                                Font Size: {fontSize}
+                                            </Button>
+                                            <Dropdown.Toggle
+                                                split
+                                                variant="outline-dark"
+                                                id="dropdown-split-basic"
+                                                style={font16.dropdown}/>
+                                            <Dropdown.Menu style={font16.fontSize}>
+                                                <Button
+                                                    variant="outline-dark"
+                                                    style={font16.dropdown}
+                                                    onClick = {this.change16}>
+                                                    16
+                                                </Button>
+                                                <Button
+                                                    variant="outline-dark"
+                                                    style={font16.dropdown}
+                                                    onClick = {this.change24}>
+                                                    24
+                                                </Button>
+                                                <Button
+                                                    variant="outline-dark"
+                                                    style={font16.dropdown}
+                                                    onClick = {this.change32}>
+                                                    32
+                                                </Button>
+                                                <Button
+                                                    variant="outline-dark"
+                                                    style={font16.dropdown}
+                                                    onClick = {this.change40}>
+                                                    40
+                                                </Button>
+                                            </Dropdown.Menu>
+                                        </Dropdown>
+                                        <Button
+                                            variant="outline-dark"
+                                            style={font16.dropdown}>
+                                            Log Out
+                                        </Button>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            </Nav>
+                            <Nav>
+                                <Button
+                                    className="g-signin2"
+                                    data-onsuccess="onSignIn"
+                                    data-height="48"
+                                    data-width="162"
+                                    data-borderStyle="none"
+                                    variant="outline-light"
+                                    style = {styles.gButton}>
+                                    Google
+                                </Button>
+                            </Nav>
+                        </Navbar.Collapse>
+                    </Navbar>
+                </Container>;
+            }
+
+        } else if (this.state.fontSize === 24) {
+            if (this.state.theme === "light") {
+                navBar = <Container fluid>
+                    <Navbar bg="light" variant="light" style={font24.size}>
+                        <Navbar.Brand>TaskTabs</Navbar.Brand>
+                        <Navbar.Toggle />
+                        <Navbar.Collapse>
+                            <Nav>
+                                <Button
+                                    onClick={this.getProjectLanding}
+                                    variant="outline-dark"
+                                    style={font24.button}>
+                                    Home</Button>
+                            </Nav>
+                        </Navbar.Collapse>
+                        <Navbar.Collapse className="justify-content-end">
+                            <Nav>
+                                <Dropdown>
+                                    <Dropdown.Toggle
+                                        variant="outline-dark"
+                                        style={font24.button}
+                                        id="accountDropdown">
+                                        {this.owner.name}
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu
+                                        style={font24.accountDrop}>
+                                        <Button
+                                            variant="outline-dark"
+                                            style={font24.dropdown}>
+                                            Account
+                                        </Button>
+                                        <Button
+                                            variant = "outline-dark"
+                                            style={font24.dropdown}
+                                            onClick = {this.checkTheme}>
+                                            Theme: {theme}
+                                        </Button>
+                                        <Button
+                                            variant = "outline-dark"
+                                            style={font24.dropdown}
+                                            onClick = {this.checkFont}>
+                                            Font: {font}
+                                        </Button>
+                                        <Dropdown as={ButtonGroup} drop = "right">
+                                            <Button
+                                                variant="outline-dark"
+                                                style={font24.dropdown}>
+                                                Font Size: {fontSize}
+                                            </Button>
+                                            <Dropdown.Toggle
+                                                split
+                                                variant="outline-dark"
+                                                id="dropdown-split-basic"
+                                                style={font24.dropdown}/>
+                                            <Dropdown.Menu style={font24.fontSize}>
+                                                <Button
+                                                    variant="outline-dark"
+                                                    style={font24.dropdown}
+                                                    onClick = {this.change16}>
+                                                    16
+                                                </Button>
+                                                <Button
+                                                    variant="outline-dark"
+                                                    style={font24.dropdown}
+                                                    onClick = {this.change24}>
+                                                    24
+                                                </Button>
+                                                <Button
+                                                    variant="outline-dark"
+                                                    style={font24.dropdown}
+                                                    onClick = {this.change32}>
+                                                    32
+                                                </Button>
+                                                <Button
+                                                    variant="outline-dark"
+                                                    style={font24.dropdown}
+                                                    onClick = {this.change40}>
+                                                    40
+                                                </Button>
+                                            </Dropdown.Menu>
+                                        </Dropdown>
+                                        <Button
+                                            variant="outline-dark"
+                                            style={font24.dropdown}>
+                                            Log Out
+                                        </Button>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            </Nav>
+                            <Nav>
+                                <Button
+                                    className="g-signin2"
+                                    data-onsuccess="onSignIn"
+                                    data-height="48"
+                                    data-width="162"
+                                    data-borderStyle="none"
+                                    variant="outline-dark"
+                                    style = {styles.gButton}>
+                                    Google
+                                </Button>
+                            </Nav>
+                        </Navbar.Collapse>
+                    </Navbar>
+                </Container>;
+            } else {
+                navBar = <Container fluid>
+                    <Navbar bg="dark" variant="dark" style={font24.size}>
+                        <Navbar.Brand>TaskTabs</Navbar.Brand>
+                        <Navbar.Toggle />
+                        <Navbar.Collapse>
+                            <Nav>
+                                <Button
+                                    onClick={this.getProjectLanding}
+                                    variant="outline-light"
+                                    style={font24.button}>
+                                    Home</Button>
+                            </Nav>
+                        </Navbar.Collapse>
+                        <Navbar.Collapse className="justify-content-end">
+                            <Nav>
+                                <Dropdown>
+                                    <Dropdown.Toggle
+                                        variant="outline-light"
+                                        style={font24.button}
+                                        id="accountDropdown">
+                                        {this.owner.name}
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu
+                                        style={font24.accountDrop}>
+                                        <Button
+                                            variant="outline-dark"
+                                            style={font24.dropdown}>
+                                            Account
+                                        </Button>
+                                        <Button
+                                            variant = "outline-dark"
+                                            style={font24.dropdown}
+                                            onClick = {this.checkTheme}>
+                                            Theme: {theme}
+                                        </Button>
+                                        <Button
+                                            variant = "outline-dark"
+                                            style={font24.dropdown}
+                                            onClick = {this.checkFont}>
+                                            Font: {font}
+                                        </Button>
+                                        <Dropdown as={ButtonGroup} drop = "right">
+                                            <Button
+                                                variant="outline-dark"
+                                                style={font24.dropdown}>
+                                                Font Size: {fontSize}
+                                            </Button>
+                                            <Dropdown.Toggle
+                                                split
+                                                variant="outline-dark"
+                                                id="dropdown-split-basic"
+                                                style={font24.dropdown}/>
+                                            <Dropdown.Menu style={font24.fontSize}>
+                                                <Button
+                                                    variant="outline-dark"
+                                                    style={font24.dropdown}
+                                                    onClick = {this.change16}>
+                                                    16
+                                                </Button>
+                                                <Button
+                                                    variant="outline-dark"
+                                                    style={font24.dropdown}
+                                                    onClick = {this.change24}>
+                                                    24
+                                                </Button>
+                                                <Button
+                                                    variant="outline-dark"
+                                                    style={font24.dropdown}
+                                                    onClick = {this.change32}>
+                                                    32
+                                                </Button>
+                                                <Button
+                                                    variant="outline-dark"
+                                                    style={font24.dropdown}
+                                                    onClick = {this.change40}>
+                                                    40
+                                                </Button>
+                                            </Dropdown.Menu>
+                                        </Dropdown>
+                                        <Button
+                                            variant="outline-dark"
+                                            style={font24.dropdown}>
+                                            Log Out
+                                        </Button>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            </Nav>
+                            <Nav>
+                                <Button
+                                    className="g-signin2"
+                                    data-onsuccess="onSignIn"
+                                    data-height="48"
+                                    data-width="162"
+                                    data-borderStyle="none"
+                                    variant="outline-light"
+                                    style = {styles.gButton}>
+                                    Google
+                                </Button>
+                            </Nav>
+                        </Navbar.Collapse>
+                    </Navbar>
+                </Container>;
+            }
+
+        } else if (this.state.fontSize === 32) {
+            if (this.state.theme === "light") {
+                navBar = <Container fluid>
+                    <Navbar bg="light" variant="light" style={font32.size}>
+                        <Navbar.Brand>TaskTabs</Navbar.Brand>
+                        <Navbar.Toggle />
+                        <Navbar.Collapse>
+                            <Nav>
+                                <Button
+                                    onClick={this.getProjectLanding}
+                                    variant="outline-dark"
+                                    style={font32.button}>
+                                    Home</Button>
+                            </Nav>
+                        </Navbar.Collapse>
+                        <Navbar.Collapse className="justify-content-end">
+                            <Nav>
+                                <Dropdown>
+                                    <Dropdown.Toggle
+                                        variant="outline-dark"
+                                        style={font32.button}
+                                        id="accountDropdown">
+                                        {this.owner.name}
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu
+                                        style={font32.accountDrop}>
+                                        <Button
+                                            variant="outline-dark"
+                                            style={font32.dropdown}>
+                                            Account
+                                        </Button>
+                                        <Button
+                                            variant = "outline-dark"
+                                            style={font32.dropdown}
+                                            onClick = {this.checkTheme}>
+                                            Theme: {theme}
+                                        </Button>
+                                        <Button
+                                            variant = "outline-dark"
+                                            style={font32.dropdown}
+                                            onClick = {this.checkFont}>
+                                            Font: {font}
+                                        </Button>
+                                        <Dropdown as={ButtonGroup} drop = "right">
+                                            <Button
+                                                variant="outline-dark"
+                                                style={font32.dropdown}>
+                                                Font Size: {fontSize}
+                                            </Button>
+                                            <Dropdown.Toggle
+                                                split
+                                                variant="outline-dark"
+                                                id="dropdown-split-basic"
+                                                style={font32.dropdown}/>
+                                            <Dropdown.Menu style={font32.fontSize}>
+                                                <Button
+                                                    variant="outline-dark"
+                                                    style={font32.dropdown}
+                                                    onClick = {this.change16}>
+                                                    16
+                                                </Button>
+                                                <Button
+                                                    variant="outline-dark"
+                                                    style={font32.dropdown}
+                                                    onClick = {this.change24}>
+                                                    24
+                                                </Button>
+                                                <Button
+                                                    variant="outline-dark"
+                                                    style={font32.dropdown}
+                                                    onClick = {this.change32}>
+                                                    32
+                                                </Button>
+                                                <Button
+                                                    variant="outline-dark"
+                                                    style={font32.dropdown}
+                                                    onClick = {this.change40}>
+                                                    40
+                                                </Button>
+                                            </Dropdown.Menu>
+                                        </Dropdown>
+                                        <Button
+                                            variant="outline-dark"
+                                            style={font32.dropdown}>
+                                            Log Out
+                                        </Button>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            </Nav>
+                            <Nav>
+                                <Button
+                                    className="g-signin2"
+                                    data-onsuccess="onSignIn"
+                                    data-height="48"
+                                    data-width="162"
+                                    data-borderStyle="none"
+                                    variant="outline-dark"
+                                    style = {styles.gButton}>
+                                    Google
+                                </Button>
+                            </Nav>
+                        </Navbar.Collapse>
+                    </Navbar>
+                </Container>;
+            } else {
+                navBar = <Container fluid>
+                    <Navbar bg="dark" variant="dark" style={font32.size}>
+                        <Navbar.Brand>TaskTabs</Navbar.Brand>
+                        <Navbar.Toggle />
+                        <Navbar.Collapse>
+                            <Nav>
+                                <Button
+                                    onClick={this.getProjectLanding}
+                                    variant="outline-light"
+                                    style={font32.button}>
+                                    Home</Button>
+                            </Nav>
+                        </Navbar.Collapse>
+                        <Navbar.Collapse className="justify-content-end">
+                            <Nav>
+                                <Dropdown>
+                                    <Dropdown.Toggle
+                                        variant="outline-light"
+                                        style={font32.button}
+                                        id="accountDropdown">
+                                        {this.owner.name}
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu
+                                        style={font32.accountDrop}>
+                                        <Button
+                                            variant="outline-dark"
+                                            style={font32.dropdown}>
+                                            Account
+                                        </Button>
+                                        <Button
+                                            variant = "outline-dark"
+                                            style={font32.dropdown}
+                                            onClick = {this.checkTheme}>
+                                            Theme: {theme}
+                                        </Button>
+                                        <Button
+                                            variant = "outline-dark"
+                                            style={font32.dropdown}
+                                            onClick = {this.checkFont}>
+                                            Font: {font}
+                                        </Button>
+                                        <Dropdown as={ButtonGroup} drop = "right">
+                                            <Button
+                                                variant="outline-dark"
+                                                style={font32.dropdown}>
+                                                Font Size: {fontSize}
+                                            </Button>
+                                            <Dropdown.Toggle
+                                                split
+                                                variant="outline-dark"
+                                                id="dropdown-split-basic"
+                                                style={font32.dropdown}/>
+                                            <Dropdown.Menu style={font32.fontSize}>
+                                                <Button
+                                                    variant="outline-dark"
+                                                    style={font32.dropdown}
+                                                    onClick = {this.change16}>
+                                                    16
+                                                </Button>
+                                                <Button
+                                                    variant="outline-dark"
+                                                    style={font32.dropdown}
+                                                    onClick = {this.change24}>
+                                                    24
+                                                </Button>
+                                                <Button
+                                                    variant="outline-dark"
+                                                    style={font32.dropdown}
+                                                    onClick = {this.change32}>
+                                                    32
+                                                </Button>
+                                                <Button
+                                                    variant="outline-dark"
+                                                    style={font32.dropdown}
+                                                    onClick = {this.change40}>
+                                                    40
+                                                </Button>
+                                            </Dropdown.Menu>
+                                        </Dropdown>
+                                        <Button
+                                            variant="outline-dark"
+                                            style={font32.dropdown}>
+                                            Log Out
+                                        </Button>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            </Nav>
+                            <Nav>
+                                <Button
+                                    className="g-signin2"
+                                    data-onsuccess="onSignIn"
+                                    data-height="48"
+                                    data-width="162"
+                                    data-borderStyle="none"
+                                    variant="outline-light"
+                                    style = {styles.gButton}>
+                                    Google
+                                </Button>
+                            </Nav>
+                        </Navbar.Collapse>
+                    </Navbar>
+                </Container>;
+            }
+
+        } else {
+            if (this.state.theme === "light") {
+                navBar = <Container fluid>
+                    <Navbar bg="light" variant="light" style={font40.size}>
+                        <Navbar.Brand>TaskTabs</Navbar.Brand>
+                        <Navbar.Toggle />
+                        <Navbar.Collapse>
+                            <Nav>
+                                <Button
+                                    onClick={this.getProjectLanding}
+                                    variant="outline-dark"
+                                    style={font40.button}>
+                                    Home</Button>
+                            </Nav>
+                        </Navbar.Collapse>
+                        <Navbar.Collapse className="justify-content-end">
+                            <Nav>
+                                <Dropdown>
+                                    <Dropdown.Toggle
+                                        variant="outline-dark"
+                                        style={font40.button}
+                                        id="accountDropdown">
+                                        {this.owner.name}
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu
+                                        style={font40.accountDrop}>
+                                        <Button
+                                            variant="outline-dark"
+                                            style={font40.dropdown}>
+                                            Account
+                                        </Button>
+                                        <Button
+                                            variant = "outline-dark"
+                                            style={font40.dropdown}
+                                            onClick = {this.checkTheme}>
+                                            Theme: {theme}
+                                        </Button>
+                                        <Button
+                                            variant = "outline-dark"
+                                            style={font40.dropdown}
+                                            onClick = {this.checkFont}>
+                                            Font: {font}
+                                        </Button>
+                                        <Dropdown as={ButtonGroup} drop = "right">
+                                            <Button
+                                                variant="outline-dark"
+                                                style={font40.dropdown}>
+                                                Font Size: {fontSize}
+                                            </Button>
+                                            <Dropdown.Toggle
+                                                split
+                                                variant="outline-dark"
+                                                id="dropdown-split-basic"
+                                                style={font40.dropdown}/>
+                                            <Dropdown.Menu style={font40.fontSize}>
+                                                <Button
+                                                    variant="outline-dark"
+                                                    style={font40.dropdown}
+                                                    onClick = {this.change16}>
+                                                    16
+                                                </Button>
+                                                <Button
+                                                    variant="outline-dark"
+                                                    style={font40.dropdown}
+                                                    onClick = {this.change24}>
+                                                    24
+                                                </Button>
+                                                <Button
+                                                    variant="outline-dark"
+                                                    style={font40.dropdown}
+                                                    onClick = {this.change32}>
+                                                    32
+                                                </Button>
+                                                <Button
+                                                    variant="outline-dark"
+                                                    style={font40.dropdown}
+                                                    onClick = {this.change40}>
+                                                    40
+                                                </Button>
+                                            </Dropdown.Menu>
+                                        </Dropdown>
+                                        <Button
+                                            variant="outline-dark"
+                                            style={font40.dropdown}>
+                                            Log Out
+                                        </Button>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            </Nav>
+                            <Nav>
+                                <Button
+                                    className="g-signin2"
+                                    data-onsuccess="onSignIn"
+                                    data-height="48"
+                                    data-width="162"
+                                    data-borderStyle="none"
+                                    variant="outline-dark"
+                                    style = {styles.gButton}>
+                                    Google
+                                </Button>
+                            </Nav>
+                        </Navbar.Collapse>
+                    </Navbar>
+                </Container>;
+            } else {
+                navBar = <Container fluid>
+                    <Navbar bg="dark" variant="dark" style={font40.size}>
+                        <Navbar.Brand>TaskTabs</Navbar.Brand>
+                        <Navbar.Toggle />
+                        <Navbar.Collapse>
+                            <Nav>
+                                <Button
+                                    onClick={this.getProjectLanding}
+                                    variant="outline-light"
+                                    style={font40.button}>
+                                    Home</Button>
+                            </Nav>
+                        </Navbar.Collapse>
+                        <Navbar.Collapse className="justify-content-end">
+                            <Nav>
+                                <Dropdown>
+                                    <Dropdown.Toggle
+                                        variant="outline-light"
+                                        style={font40.button}
+                                        id="accountDropdown">
+                                        {this.owner.name}
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu
+                                        style={font40.accountDrop}>
+                                        <Button
+                                            variant="outline-dark"
+                                            style={font40.dropdown}>
+                                            Account
+                                        </Button>
+                                        <Button
+                                            variant = "outline-dark"
+                                            style={font40.dropdown}
+                                            onClick = {this.checkTheme}>
+                                            Theme: {theme}
+                                        </Button>
+                                        <Button
+                                            variant = "outline-dark"
+                                            style={font40.dropdown}
+                                            onClick = {this.checkFont}>
+                                            Font: {font}
+                                        </Button>
+                                        <Dropdown as={ButtonGroup} drop = "right">
+                                            <Button
+                                                variant="outline-dark"
+                                                style={font40.dropdown}>
+                                                Font Size: {fontSize}
+                                            </Button>
+                                            <Dropdown.Toggle
+                                                split
+                                                variant="outline-dark"
+                                                id="dropdown-split-basic"
+                                                style={font40.dropdown}/>
+                                            <Dropdown.Menu style={font40.fontSize}>
+                                                <Button
+                                                    variant="outline-dark"
+                                                    style={font40.dropdown}
+                                                    onClick = {this.change16}>
+                                                    16
+                                                </Button>
+                                                <Button
+                                                    variant="outline-dark"
+                                                    style={font40.dropdown}
+                                                    onClick = {this.change24}>
+                                                    24
+                                                </Button>
+                                                <Button
+                                                    variant="outline-dark"
+                                                    style={font40.dropdown}
+                                                    onClick = {this.change32}>
+                                                    32
+                                                </Button>
+                                                <Button
+                                                    variant="outline-dark"
+                                                    style={font40.dropdown}
+                                                    onClick = {this.change40}>
+                                                    40
+                                                </Button>
+                                            </Dropdown.Menu>
+                                        </Dropdown>
+                                        <Button
+                                            variant="outline-dark"
+                                            style={font40.dropdown}>
+                                            Log Out
+                                        </Button>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            </Nav>
+                            <Nav>
+                                <Button
+                                    className="g-signin2"
+                                    data-onsuccess="onSignIn"
+                                    data-height="48"
+                                    data-width="162"
+                                    data-borderStyle="none"
+                                    variant="outline-light"
+                                    style = {styles.gButton}>
+                                    Google
+                                </Button>
+                            </Nav>
+                        </Navbar.Collapse>
+                    </Navbar>
+                </Container>;
+            }
+
+        }
+        return(
+            navBar
         );
     }
 }
