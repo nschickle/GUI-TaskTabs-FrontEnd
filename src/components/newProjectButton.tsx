@@ -5,6 +5,7 @@ import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import { UserInfo } from "./userInfo";
 import { UserHeaderHttpRequest } from "./userHeaderHttpRequest";
+import { RetryableFetch } from "./retryableFetch";
 
 const styles = {
     button16: {
@@ -61,7 +62,7 @@ export class ProjectButton extends React.Component<ProjectButtonProps> {
         const newProject: NewProjectPost = { owner: this.props.userInfo.email, collaborators: [ this.props.userInfo.email ], parentId: null, title: "New project", description: "", notes: "", assignedTo: null, status: "Active", progress: 0 };
 
         const request = new UserHeaderHttpRequest("/api/projects", this.props.userInfo, { 'Content-Type': 'application/json' });
-        fetch(request,
+        RetryableFetch.fetch_retry(request,
             {
                 method: 'POST',
                 mode: 'cors',

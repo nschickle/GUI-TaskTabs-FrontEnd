@@ -9,6 +9,7 @@ import { SubTaskButton } from './subTaskButton';
 import { NewSubTaskButton } from "./newSubTaskButton";
 import { UserHeaderHttpRequest } from './userHeaderHttpRequest';
 import { UserInfo } from './userInfo';
+import { RetryableFetch } from './retryableFetch';
 
 const styles = {
     box: {
@@ -99,7 +100,7 @@ export class SubTaskColumn extends React.Component<SubTaskColumnProps, { error: 
             });
         } else {
             const request = new UserHeaderHttpRequest(`/api/subtasks/${this.props.head}`, this.props.userInfo);
-            fetch(request)
+            RetryableFetch.fetch_retry(request)
                 .then(res => res.json())
                 .then(
                     (result) => {
