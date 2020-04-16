@@ -11,25 +11,49 @@ import { UserHeaderHttpRequest } from './userHeaderHttpRequest';
 import { UserInfo } from './userInfo';
 
 const styles = {
-    button: {
-        width: window.innerWidth,
-        height: 100,
-        fontSize: 32
-    },
     box: {
         paddingRight: 0,
         paddingLeft: 0,
         margin: 0,
         borderStyle: "solid",
-        borderColor: "gray",
-        height: window.innerHeight - 75,
-        minWidth: 200
+        borderColor: "#15617c",
+        height: window.innerHeight - 175,
+        minWidth: 250,
+        overflow: "auto",
+        borderRadius: 5,
+        borderWidth: 1
+    },
+    box16: {
+        paddingRight: 0,
+        paddingLeft: 0,
+        margin: 0,
+        borderStyle: "solid",
+        borderColor: "#15617c",
+        height: window.innerHeight - 135,
+        minWidth: 250,
+        overflow: "auto",
+        borderRadius: 5,
+        borderWidth: 1
+    },
+    box40: {
+        paddingRight: 0,
+        paddingLeft: 0,
+        margin: 0,
+        borderStyle: "solid",
+        borderColor: "#15617c",
+        height: window.innerHeight - 210,
+        minWidth: 250,
+        overflow: "auto",
+        borderRadius: 5,
+        borderWidth: 1
     }
 };
 
 interface SubTaskColumnProps {
     head: number;
     changeHead: (newHead: number) => any;
+    theme: string;
+    fontSize: number;
     projectId: number;
     userInfo: UserInfo;
 }
@@ -38,6 +62,7 @@ interface SubTaskColumnProps {
 // and hands down a single element of a subtask array to create subtask buttons one by one.
 export class SubTaskColumn extends React.Component<SubTaskColumnProps, { error: any, isLoaded: boolean, subTasks: Task[] }>{
     head: number;
+
     constructor(props: SubTaskColumnProps) {
         super(props);
 
@@ -112,20 +137,52 @@ export class SubTaskColumn extends React.Component<SubTaskColumnProps, { error: 
                 <>Loading...</>
             );
         } else {
-            return (
-                <Container>
-                    <Col style={styles.box}>
-                        <Row noGutters={true}>
-                            <NewSubTaskButton head={this.props.head} changeHead={this.props.changeHead} userInfo={this.props.userInfo} projectId={this.props.projectId}/>
-                        </Row>
-                        <Row noGutters={true}>
-                            {subTasks.map((task) => {
-                                return <SubTaskButton name={task.title} percentage={task.progress} key={task._id} changeHead={this.props.changeHead} taskHead={task._id} ></SubTaskButton>;
-                            })}
-                        </Row>
-                    </Col>
-                </Container>
-            );
+            if(this.props.fontSize === 16) {
+                return (
+                    <Container>
+                        <Col style={styles.box16}>
+                            <Row noGutters={true}>
+                                <NewSubTaskButton head={this.props.head} changeHead={this.props.changeHead} theme = {this.props.theme} fontSize={this.props.fontSize}  userInfo={this.props.userInfo} projectId={this.props.projectId}/>
+                            </Row>
+                            <Row noGutters={true}>
+                                {subTasks.map((task) => {
+                                    return <SubTaskButton name={task.title} percentage={task.progress} key={task._id} changeHead={this.props.changeHead} taskHead={task._id} theme = {this.props.theme} fontSize = {this.props.fontSize}></SubTaskButton>;
+                                })}
+                            </Row>
+                        </Col>
+                    </Container>
+                );
+            } else if(this.props.fontSize === 40) {
+                return (
+                    <Container>
+                        <Col style={styles.box40}>
+                            <Row noGutters={true}>
+                                <NewSubTaskButton head={this.props.head} changeHead={this.props.changeHead} theme = {this.props.theme} fontSize={this.props.fontSize}  userInfo={this.props.userInfo} projectId={this.props.projectId}/>
+                            </Row>
+                            <Row noGutters={true}>
+                                {subTasks.map((task) => {
+                                    return <SubTaskButton name={task.title} percentage={task.progress} key={task._id} changeHead={this.props.changeHead} taskHead={task._id} theme = {this.props.theme} fontSize = {this.props.fontSize}></SubTaskButton>;
+                                })}
+                            </Row>
+                        </Col>
+                    </Container>
+                );
+            } else {
+                return (
+                    <Container>
+                        <Col style={styles.box}>
+                            <Row noGutters={true}>
+                                <NewSubTaskButton head={this.props.head} changeHead={this.props.changeHead} theme = {this.props.theme} fontSize={this.props.fontSize}  userInfo={this.props.userInfo} projectId={this.props.projectId}/>
+                            </Row>
+                            <Row noGutters={true}>
+                                {subTasks.map((task) => {
+                                    return <SubTaskButton name={task.title} percentage={task.progress} key={task._id} changeHead={this.props.changeHead} taskHead={task._id} theme = {this.props.theme} fontSize = {this.props.fontSize}></SubTaskButton>;
+                                })}
+                            </Row>
+                        </Col>
+                    </Container>
+                );
+            }
         }
     }
 };

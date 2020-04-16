@@ -7,18 +7,85 @@ import { Task } from "./taskType";
 import { LandProjectColumn } from "./landProjCol";
 import { UserInfo } from "./userInfo";
 
-const styles = {
-    center: {
-        marginTop: 25
-    },
+const font16 = {
     title: {
         fontSize: 96,
-        margin: "auto"
+        margin: "auto",
+        borderBottom: "dotted",
+        paddingRight: 15,
+        paddingLeft: 15,
+        marginBottom: 10
+    },
+    label: {
+        fontSize: 24,
+        margin: "auto",
+        marginBottom: 15,
+        borderBottom: "dotted",
+        paddingRight: 15,
+        paddingLeft: 15
+    },
+};
+
+const font24 = {
+    title: {
+        fontSize: 96,
+        margin: "auto",
+        borderBottom: "dotted",
+        paddingRight: 15,
+        paddingLeft: 15,
+        marginBottom: 10
+    },
+    label: {
+        fontSize: 32,
+        margin: "auto",
+        marginBottom: 15,
+        borderBottom: "dotted",
+        paddingRight: 15,
+        paddingLeft: 15
+    },
+};
+
+const font32 = {
+    title: {
+        fontSize: 96,
+        margin: "auto",
+        borderBottom: "dotted",
+        paddingRight: 15,
+        paddingLeft: 15,
+        marginBottom: 10
+    },
+    label: {
+        fontSize: 40,
+        margin: "auto",
+        marginBottom: 15,
+        borderBottom: "dotted",
+        paddingRight: 15,
+        paddingLeft: 15
+    },
+};
+
+const font40 = {
+    title: {
+        fontSize: 96,
+        margin: "auto",
+        borderBottom: "dotted",
+        paddingRight: 15,
+        paddingLeft: 15,
+        marginBottom: 10
     },
     label: {
         fontSize: 48,
         margin: "auto",
-        marginBottom: 15
+        marginBottom: 15,
+        borderBottom: "dotted",
+        paddingRight: 15,
+        paddingLeft: 15
+    },
+}
+
+const styles = {
+    center: {
+        marginTop: 10
     },
     projects: {
         width: window.innerWidth / 3,
@@ -36,6 +103,8 @@ const testOwner: IUser = { id: 0, name: "Super Steve" };
 
 interface ProjLandProps {
     showProjectPage: (projectID: number) => any;
+    theme: string;
+    fontSize: number;
     userInfo: UserInfo;
 }
 
@@ -60,19 +129,66 @@ export class ProjectLanding extends React.Component<ProjLandProps, { error: any,
     }
 
     render() {
+        if(this.props.fontSize === 16){
+            return(
+                <Container fluid>
+                    <Row style={styles.center}>
+                        <h1 style={font16.title}>TaskTabs</h1>
+                    </Row>
+                    <Row>
+                        <p style={font16.label}>Welcome, {this.owner.name}. Here are your Projects!</p>
+                    </Row>
+                    <Row style={styles.projects} noGutters={true}>
+                        <LandProjectColumn selectProject={this.selectProject} theme={this.props.theme} fontSize={this.props.fontSize} userInfo={this.props.userInfo}/>
+                    </Row>
+                </Container>
+            );
 
-        return (
-            <Container fluid>
-                <Row style={styles.center}>
-                    <h1 style={styles.title}>TaskTabs</h1>
-                </Row>
-                <Row>
-                    <p style={styles.label}>Welcome, {this.owner.name}. Here are your Projects!</p>
-                </Row>
-                <Row style={styles.projects} noGutters={true}>
-                    <LandProjectColumn selectProject={this.selectProject} userInfo={this.props.userInfo} />
-                </Row>
-            </Container>
-        );
+        } else if(this.props.fontSize === 24){
+            return(
+                <Container fluid>
+                    <Row style={styles.center}>
+                        <h1 style={font24.title}>TaskTabs</h1>
+                    </Row>
+                    <Row>
+                        <p style={font24.label}>Welcome, {this.owner.name}. Here are your Projects!</p>
+                    </Row>
+                    <Row style={styles.projects} noGutters={true}>
+                        <LandProjectColumn selectProject={this.selectProject} theme={this.props.theme} fontSize={this.props.fontSize} userInfo={this.props.userInfo}/>
+                    </Row>
+                </Container>
+            );
+
+        } else if(this.props.fontSize === 32){
+            return(
+                <Container fluid>
+                    <Row style={styles.center}>
+                        <h1 style={font32.title}>TaskTabs</h1>
+                    </Row>
+                    <Row>
+                        <p style={font32.label}>Welcome, {this.owner.name}. Here are your Projects!</p>
+                    </Row>
+                    <Row style={styles.projects} noGutters={true}>
+                        <LandProjectColumn selectProject={this.selectProject} theme={this.props.theme} fontSize={this.props.fontSize} userInfo={this.props.userInfo}/>
+                    </Row>
+                </Container>
+            );
+
+        } else{
+            return(
+                <Container fluid>
+                    <Row style={styles.center}>
+                        <h1 style={font40.title}>TaskTabs</h1>
+                    </Row>
+                    <Row>
+                        <p style={font40.label}>Welcome, {this.owner.name}. Here are your Projects!</p>
+                    </Row>
+                    <Row style={styles.projects} noGutters={true}>
+                        <LandProjectColumn selectProject={this.selectProject} theme={this.props.theme} fontSize={this.props.fontSize} userInfo={this.props.userInfo}/>
+                    </Row>
+                </Container>
+            );
+
+        }
     }
 };

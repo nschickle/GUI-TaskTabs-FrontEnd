@@ -10,19 +10,60 @@ import { UserHeaderHttpRequest } from "./userHeaderHttpRequest";
 import { UserInfo } from "./userInfo";
 
 const styles = {
-    box: {
+    box16: {
         paddingRight: 0,
         paddingLeft: 0,
         margin: 0,
         borderStyle: "solid",
-        borderColor: "gray",
-        height: window.innerHeight - 350,
-        minWidth: 250
+        borderColor: "#15617c",
+        borderRadius: 5,
+        borderWidth: 1,
+        height: window.innerHeight-275,
+        minWidth: 250,
+        overflow: "auto"
+    },
+    box24: {
+        paddingRight: 0,
+        paddingLeft: 0,
+        margin: 0,
+        borderStyle: "solid",
+        borderColor: "#15617c",
+        borderRadius: 5,
+        borderWidth: 1,
+        height: window.innerHeight-300,
+        minWidth: 250,
+        overflow: "auto"
+    },
+    box32: {
+        paddingRight: 0,
+        paddingLeft: 0,
+        margin: 0,
+        borderStyle: "solid",
+        borderColor: "#15617c",
+        borderRadius: 5,
+        borderWidth: 1,
+        height: window.innerHeight-315,
+        minWidth: 250,
+        overflow: "auto"
+    },
+    box40: {
+        paddingRight: 0,
+        paddingLeft: 0,
+        margin: 0,
+        borderStyle: "solid",
+        borderColor: "#15617c",
+        borderRadius: 5,
+        borderWidth: 1,
+        height: window.innerHeight-350,
+        minWidth: 250,
+        overflow: "auto"
     }
 };
 
 interface LandProjectColumnProps {
     selectProject: (projectID: number) => any;
+    theme: string;
+    fontSize: number;
     userInfo: UserInfo;
 }
 
@@ -34,7 +75,7 @@ export class LandProjectColumn extends React.Component<LandProjectColumnProps, {
         this.state = {
             error: null,
             isLoaded: false,
-            projects: [],
+            projects: []
         };
     }
 
@@ -69,8 +110,7 @@ export class LandProjectColumn extends React.Component<LandProjectColumnProps, {
     }
 
     public render() {
-        const { error, isLoaded, projects } = this.state;
-
+        const { error, isLoaded, projects} = this.state;
         // TODO Style error and loading screens
         if (error) {
             return (
@@ -81,16 +121,55 @@ export class LandProjectColumn extends React.Component<LandProjectColumnProps, {
                 <>Loading...</>
             );
         } else {
-            return (
-                <Container>
-                    <Col style={styles.box} >
-                        <ProjectButton changeHead={this.props.selectProject} userInfo={this.props.userInfo} />
-                        {projects.map((task) => {
-                            return <SubTaskButton name={task.title} changeHead={this.props.selectProject} percentage={task.progress} key={task._id} taskHead={task._id}></SubTaskButton>;
-                        })}
-                    </Col>
-                </Container>
-            );
+            if(this.props.fontSize === 16){
+                return (
+                    <Container>
+                        <Col style={styles.box16} >
+                            <ProjectButton changeHead={this.props.selectProject} theme = {this.props.theme} fontSize = {this.props.fontSize} userInfo={this.props.userInfo}/>
+                            {projects.map((task) => {
+                                return <SubTaskButton name={task.title} changeHead={this.props.selectProject} percentage={task.progress} key={task._id} taskHead={task._id} theme = {this.props.theme} fontSize={this.props.fontSize}></SubTaskButton>;
+                            })}
+                        </Col>
+                    </Container>
+                );
+
+            } else if(this.props.fontSize === 24){
+                return (
+                    <Container>
+                        <Col style={styles.box24} >
+                            <ProjectButton changeHead={this.props.selectProject} theme = {this.props.theme} fontSize = {this.props.fontSize} userInfo={this.props.userInfo}/>
+                            {projects.map((task) => {
+                                return <SubTaskButton name={task.title} changeHead={this.props.selectProject} percentage={task.progress} key={task._id} taskHead={task._id} theme = {this.props.theme} fontSize={this.props.fontSize}></SubTaskButton>;
+                            })}
+                        </Col>
+                    </Container>
+                );
+
+            } else if(this.props.fontSize === 32){
+                return (
+                    <Container>
+                        <Col style={styles.box32} >
+                            <ProjectButton changeHead={this.props.selectProject} theme = {this.props.theme} fontSize = {this.props.fontSize} userInfo={this.props.userInfo}/>
+                            {projects.map((task) => {
+                                return <SubTaskButton name={task.title} changeHead={this.props.selectProject} percentage={task.progress} key={task._id} taskHead={task._id} theme = {this.props.theme} fontSize={this.props.fontSize}></SubTaskButton>;
+                            })}
+                        </Col>
+                    </Container>
+                );
+
+            } else {
+                return (
+                    <Container>
+                        <Col style={styles.box40} >
+                            <ProjectButton changeHead={this.props.selectProject} theme = {this.props.theme} fontSize = {this.props.fontSize} userInfo={this.props.userInfo}/>
+                            {projects.map((task) => {
+                                return <SubTaskButton name={task.title} changeHead={this.props.selectProject} percentage={task.progress} key={task._id} taskHead={task._id} theme = {this.props.theme} fontSize={this.props.fontSize}></SubTaskButton>;
+                            })}
+                        </Col>
+                    </Container>
+                );
+
+            }
         }
     }
 
