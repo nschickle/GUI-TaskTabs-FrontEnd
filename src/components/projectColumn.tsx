@@ -8,6 +8,7 @@ import { SubTaskButton } from "./subTaskButton";
 import { Task } from "./taskType";
 import { UserInfo } from "./userInfo";
 import { UserHeaderHttpRequest } from "./userHeaderHttpRequest";
+import { RetryableFetch } from "./retryableFetch";
 
 const styles = {
     box: {
@@ -89,7 +90,7 @@ export class ProjectColumn extends React.Component<ProjectColumnProps, { error: 
     // the query can be re-run
     getProjects = () => {
         const request = new UserHeaderHttpRequest("/api/projects", this.props.userInfo);
-        fetch(request)
+        RetryableFetch.fetch_retry(request)
             .then(res => res.json())
             .then(
                 (result) => {

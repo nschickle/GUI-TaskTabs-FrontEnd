@@ -13,6 +13,7 @@ import { HistoryButton } from "./historyButton";
 import Breadcrumb from "react-bootstrap/Breadcrumb";
 import { UserInfo } from "./userInfo";
 import { UserHeaderHttpRequest } from "./userHeaderHttpRequest";
+import { RetryableFetch } from "./retryableFetch";
 
 const styles = {
 	box: {
@@ -85,7 +86,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 		} else {
 			timeout = setTimeout(() => {
 				const request = new UserHeaderHttpRequest(`/api/tasks/${this.props.projectID}`, this.props.userInfo);
-				fetch(request)
+				RetryableFetch.fetch_retry(request)
 					.then(res => res.json())
 					.then(
 						(result) => {
@@ -212,7 +213,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 			})
 
 			const request = new UserHeaderHttpRequest(`/api/tasks/${newHead}`, this.props.userInfo);
-			fetch(request)
+			RetryableFetch.fetch_retry(request)
 				.then(res => res.json())
 				.then(
 					(result) => {
