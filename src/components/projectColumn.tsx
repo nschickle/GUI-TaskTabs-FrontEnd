@@ -15,20 +15,50 @@ const styles = {
         paddingLeft: 0,
         margin: 0,
         borderStyle: "solid",
-        borderColor: "gray",
-        height: window.innerHeight - 75,
-        minWidth: 250
+        borderColor: "#15617c",
+        height: window.innerHeight - 175,
+        minWidth: 250,
+        overflow: "auto",
+        borderRadius: 5,
+        borderWidth: 1
+    },
+    box16: {
+        paddingRight: 0,
+        paddingLeft: 0,
+        margin: 0,
+        borderStyle: "solid",
+        borderColor: "#15617c",
+        height: window.innerHeight - 135,
+        minWidth: 250,
+        overflow: "auto",
+        borderRadius: 5,
+        borderWidth: 1
+    },
+    box40: {
+        paddingRight: 0,
+        paddingLeft: 0,
+        margin: 0,
+        borderStyle: "solid",
+        borderColor: "#15617c",
+        height: window.innerHeight - 210,
+        minWidth: 250,
+        overflow: "auto",
+        borderRadius: 5,
+        borderWidth: 1
     }
 };
 
 interface ProjectColumnProps {
     head: number;
     changeHead: (newHead: number) => any;
+    theme: string;
+    fontSize: number;
     userInfo: UserInfo;
 }
 
 export class ProjectColumn extends React.Component<ProjectColumnProps, { error: any, isLoaded: boolean, projects: Task[] }> {
     head: number;
+
     constructor(props: ProjectColumnProps) {
         super(props);
 
@@ -93,16 +123,51 @@ export class ProjectColumn extends React.Component<ProjectColumnProps, { error: 
                 <>Loading...</>
             );
         } else {
-            return (
-                <Container>
-                    <Col style={styles.box} >
-                        <ProjectButton changeHead={this.props.changeHead} userInfo={this.props.userInfo} />
-                        {projects.map((task) => {
-                            return <SubTaskButton name={task.title} percentage={task.progress} key={task._id} changeHead={this.props.changeHead} taskHead={task._id}></SubTaskButton>;
-                        })}
-                    </Col>
-                </Container>
-            );
+            if(this.props.fontSize == 16) {
+                return (
+                    <Container>
+                        <Col style={styles.box16} >
+                            <ProjectButton changeHead={this.props.changeHead} theme = {this.props.theme} fontSize={this.props.fontSize} userInfo={this.props.userInfo}/>
+                            {projects.map((task) => {
+                                return <SubTaskButton name={task.title} percentage={task.progress} key={task._id} changeHead={this.props.changeHead} taskHead={task._id} theme = {this.props.theme} fontSize = {this.props.fontSize}></SubTaskButton>;
+                            })}
+                        </Col>
+                    </Container>
+                );
+            } else if(this.props.fontSize == 24){
+                return (
+                    <Container>
+                        <Col style={styles.box} >
+                            <ProjectButton changeHead={this.props.changeHead} theme = {this.props.theme} fontSize = {this.props.fontSize} userInfo={this.props.userInfo}/>
+                            {projects.map((task) => {
+                                return <SubTaskButton name={task.title} percentage={task.progress} key={task._id} changeHead={this.props.changeHead} taskHead={task._id} theme = {this.props.theme} fontSize = {this.props.fontSize}></SubTaskButton>;
+                            })}
+                        </Col>
+                    </Container>
+                );
+            } else if(this.props.fontSize == 32){
+                return (
+                    <Container>
+                        <Col style={styles.box} >
+                            <ProjectButton changeHead={this.props.changeHead} theme = {this.props.theme} fontSize = {this.props.fontSize} userInfo={this.props.userInfo}/>
+                            {projects.map((task) => {
+                                return <SubTaskButton name={task.title} percentage={task.progress} key={task._id} changeHead={this.props.changeHead} taskHead={task._id} theme = {this.props.theme} fontSize = {this.props.fontSize}></SubTaskButton>;
+                            })}
+                        </Col>
+                    </Container>
+                );
+            } else {
+                return (
+                    <Container>
+                        <Col style={styles.box40} >
+                            <ProjectButton changeHead={this.props.changeHead} theme = {this.props.theme} fontSize = {this.props.fontSize} userInfo={this.props.userInfo}/>
+                            {projects.map((task) => {
+                                return <SubTaskButton name={task.title} percentage={task.progress} key={task._id} changeHead={this.props.changeHead} taskHead={task._id} theme = {this.props.theme} fontSize = {this.props.fontSize}></SubTaskButton>;
+                            })}
+                        </Col>
+                    </Container>
+                );
+            }
         }
     }
 }

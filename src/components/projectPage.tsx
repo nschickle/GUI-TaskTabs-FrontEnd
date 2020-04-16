@@ -23,12 +23,12 @@ const styles = {
 	button: {
 		height: 20,
 		fontSize: 16
-	},
+	}
 };
 
 const HistoryRow = styled.div`
-	padding: 4px;
 	padding-left: 16px;
+    padding-right: 16px;
 `;
 
 interface IUser {
@@ -49,8 +49,10 @@ interface ProjectHistory {
 };
 
 interface ProjectPageProps {
-	projectID: number;
-	userInfo: UserInfo;
+  projectID: number;
+  theme: string;
+  fontSize: number;
+  userInfo: UserInfo;
 }
 
 // ProjectPage contains the entire application past the Google oauth. This should include the left and right sidebars
@@ -148,7 +150,8 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 				<Breadcrumb>
 					{history.map(node => {
 						return (
-							<HistoryButton key={node.id} id={node.id} name={node.name} changeHead={this.changeHeadFromHistory} currentHead={head} />
+							<HistoryButton key={node.id} id={node.id} name={node.name} changeHead={this.changeHeadFromHistory} currentHead={head}
+                            theme = {this.props.theme} fontSize={this.props.fontSize}/>
 						);
 					})}
 				</Breadcrumb>;
@@ -164,7 +167,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 				<Container fluid style={styles.box}>
 					<HistoryRow>{historyComponent}</HistoryRow>
 					<Row noGutters={true}>
-						<Col sm="3"><ProjectColumn head={head} changeHead={this.changeHeadFromProject} userInfo={this.props.userInfo} /></Col>
+						<Col sm="3"><ProjectColumn head={head} changeHead={this.changeHeadFromProject} userInfo={this.props.userInfo} theme = {this.props.theme} fontSize={this.props.fontSize} /></Col>
 						<Col sm="6"><TaskView
 							taskID={head}
 							parentId={task.parentID}
@@ -178,8 +181,10 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 							owner={testOwner}
 							sharedUsers={testSharedWith}
 							userInfo={this.props.userInfo}
+                            theme = {this.props.theme}
+                            fontSize = {this.props.fontSize}
 						/></Col>
-						<Col sm="3"><SubTaskColumn head={head} changeHead={this.changeHeadFromTask} userInfo={this.props.userInfo} projectId={this.props.projectID}></SubTaskColumn></Col>
+						<Col sm="3"><SubTaskColumn head={head} changeHead={this.changeHeadFromTask} userInfo={this.props.userInfo} projectId={this.props.projectID} theme = {this.props.theme} fontSize={this.props.fontSize}/></Col>
 					</Row>
 				</Container>
 			);
