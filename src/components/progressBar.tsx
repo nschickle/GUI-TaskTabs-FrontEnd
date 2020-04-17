@@ -110,13 +110,13 @@ export class TaskProgressBar extends React.Component<IProgressBarProps> {
 
     public render() {
         const color = this.determineColor();
-
+        const progress = Math.round(this.props.percentage);
         if(this.props.fontSize === 16){
             if (this.props.isTaskButton) {
                 return (
                     <SubTaskProgressBar16>
                         <ProgressBarFilling percentage={this.props.percentage.toString()} color={color} />
-                        <PercentageText16>{this.props.percentage}%</PercentageText16>
+                        <PercentageText16>{progress}%</PercentageText16>
                     </SubTaskProgressBar16>
                 );
 
@@ -126,7 +126,7 @@ export class TaskProgressBar extends React.Component<IProgressBarProps> {
                         <Container>
                             <ProgressBar>
                                 <ProgressBarFilling percentage={this.props.percentage.toString()} color={color} />
-                                <PercentageText16>{this.props.percentage}%</PercentageText16>
+                                <PercentageText16>{progress}%</PercentageText16>
                             </ProgressBar>
                         </Container>
                     );
@@ -135,7 +135,7 @@ export class TaskProgressBar extends React.Component<IProgressBarProps> {
                         <Container>
                             <ProgressBarDark>
                                 <ProgressBarFilling percentage={this.props.percentage.toString()} color={color} />
-                                <PercentageText16>{this.props.percentage}%</PercentageText16>
+                                <PercentageText16>{progress}%</PercentageText16>
                             </ProgressBarDark>
                         </Container>
                     );
@@ -147,7 +147,7 @@ export class TaskProgressBar extends React.Component<IProgressBarProps> {
                 return (
                     <SubTaskProgressBar24>
                         <ProgressBarFilling percentage={this.props.percentage.toString()} color={color} />
-                        <PercentageText24>{this.props.percentage}%</PercentageText24>
+                        <PercentageText24>{progress}%</PercentageText24>
                     </SubTaskProgressBar24>
                 );
 
@@ -157,7 +157,7 @@ export class TaskProgressBar extends React.Component<IProgressBarProps> {
                         <Container>
                             <ProgressBar>
                                 <ProgressBarFilling percentage={this.props.percentage.toString()} color={color} />
-                                <PercentageText24>{this.props.percentage}%</PercentageText24>
+                                <PercentageText24>{progress}%</PercentageText24>
                             </ProgressBar>
                         </Container>
                     );
@@ -166,7 +166,7 @@ export class TaskProgressBar extends React.Component<IProgressBarProps> {
                         <Container>
                             <ProgressBarDark>
                                 <ProgressBarFilling percentage={this.props.percentage.toString()} color={color} />
-                                <PercentageText24>{this.props.percentage}%</PercentageText24>
+                                <PercentageText24>{progress}%</PercentageText24>
                             </ProgressBarDark>
                         </Container>
                     );
@@ -178,7 +178,7 @@ export class TaskProgressBar extends React.Component<IProgressBarProps> {
                 return (
                     <SubTaskProgressBar32>
                         <ProgressBarFilling percentage={this.props.percentage.toString()} color={color} />
-                        <PercentageText32>{this.props.percentage}%</PercentageText32>
+                        <PercentageText32>{progress}%</PercentageText32>
                     </SubTaskProgressBar32>
                 );
 
@@ -188,7 +188,7 @@ export class TaskProgressBar extends React.Component<IProgressBarProps> {
                         <Container>
                             <ProgressBar>
                                 <ProgressBarFilling percentage={this.props.percentage.toString()} color={color} />
-                                <PercentageText32>{this.props.percentage}%</PercentageText32>
+                                <PercentageText32>{progress}%</PercentageText32>
                             </ProgressBar>
                         </Container>
                     );
@@ -197,7 +197,7 @@ export class TaskProgressBar extends React.Component<IProgressBarProps> {
                         <Container>
                             <ProgressBarDark>
                                 <ProgressBarFilling percentage={this.props.percentage.toString()} color={color} />
-                                <PercentageText32>{this.props.percentage}%</PercentageText32>
+                                <PercentageText32>{progress}%</PercentageText32>
                             </ProgressBarDark>
                         </Container>
                     );
@@ -209,7 +209,7 @@ export class TaskProgressBar extends React.Component<IProgressBarProps> {
                 return (
                     <SubTaskProgressBar40>
                         <ProgressBarFilling percentage={this.props.percentage.toString()} color={color} />
-                        <PercentageText40>{this.props.percentage}%</PercentageText40>
+                        <PercentageText40>{progress}%</PercentageText40>
                     </SubTaskProgressBar40>
                 );
 
@@ -219,7 +219,7 @@ export class TaskProgressBar extends React.Component<IProgressBarProps> {
                         <Container>
                             <ProgressBar>
                                 <ProgressBarFilling percentage={this.props.percentage.toString()} color={color} />
-                                <PercentageText40>{this.props.percentage}%</PercentageText40>
+                                <PercentageText40>{progress}%</PercentageText40>
                             </ProgressBar>
                         </Container>
                     );
@@ -228,7 +228,7 @@ export class TaskProgressBar extends React.Component<IProgressBarProps> {
                         <Container>
                             <ProgressBarDark>
                                 <ProgressBarFilling percentage={this.props.percentage.toString()} color={color} />
-                                <PercentageText40>{this.props.percentage}%</PercentageText40>
+                                <PercentageText40>{progress}%</PercentageText40>
                             </ProgressBarDark>
                         </Container>
                     );
