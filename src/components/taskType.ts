@@ -1,6 +1,6 @@
 export interface Task {
     _id: number;
-    parentID: number;
+    parentId: number;
     title: string;
     description: string;
     notes: string;
