@@ -409,14 +409,28 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 								if (history[history.length - 1].childProgress.length !== parentChildProgress.length) {
 									history[history.length - 1].childProgress.push(result.progress);
 									let newAverage: number;
+									let currentAverage: number;
 									for (let i = history.length - 1; i >= 0; i--) {
+
+										currentAverage = history[i].progress;
 										newAverage = 0;
 										for (let j = 0; j < history[i].childProgress.length; j++) {
-											newAverage += history[i].childProgress[j]
+											newAverage += history[i].childProgress[j];
 										}
 										newAverage = newAverage / history[i].childProgress.length;
 										if (newAverage !== history[i].progress) {
 											this.updateProgress(history[i].id, newAverage);
+										}
+
+										// make sure that we don't go out of the array bounds
+										// and update the parent's progress to reflect new changes
+										if (i - 1 >= 0) {
+											for (let j = 0; j < history[i - 1].childProgress.length; j++) {
+												if (history[i - 1].childProgress[j] === currentAverage) {
+													history[i - 1].childProgress[j] = newAverage;
+													break;
+												}
+											}
 										}
 									}
 									// increment key to re-render projectColumn
