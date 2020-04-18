@@ -619,7 +619,7 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                 mode: 'cors',
                 body: JSON.stringify(updatedTask)
             }).then((response) => response.json())
-            .then((data) => {
+            .then(() => {
                 this.props.refreshPage();
             })
             .catch((error) => {
@@ -667,7 +667,6 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
             this.calculateDaysLeft(this.state.dueDate);
         }
         const daysLeftString = this.daysLeftCheck();
-
         if (this.props.fontSize === 16) {
             if (this.props.theme === "light") {
                 return (
@@ -833,8 +832,8 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                             <LabelText16> {daysLeftString} </LabelText16>
                         </Row>
                         <Row>
-                            <Col xs="5"> <StatusDropdown taskStatus={this.props.status} statusList={this.statusOptions} theme={this.props.theme} handleChange={this.handleStatusChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
-                            <Col xs="7"><AssignedDropdown assignedState={this.props.assignee} sharedUsers={this.sharedUsers} owner={this.owner} theme={this.props.theme} handleChange={this.handleAssignedChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
+                            <Col xs="5"> <StatusDropdown taskStatus={this.state.taskStatus} statusList={this.statusOptions} theme={this.props.theme} handleChange={this.handleStatusChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
+                            <Col xs="7"><AssignedDropdown assignedState={this.state.assignee} sharedUsers={this.sharedUsers} owner={this.owner} theme={this.props.theme} handleChange={this.handleAssignedChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
                         </Row>
                         <Row noGutters={true}>
                             <Form style={font16.descDark}>
@@ -935,8 +934,8 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                             <LabelText24> {daysLeftString} </LabelText24>
                         </Row>
                         <Row>
-                            <Col xs="5"> <StatusDropdown taskStatus={this.props.status} statusList={this.statusOptions} theme={this.props.theme} handleChange={this.handleStatusChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
-                            <Col xs="7"><AssignedDropdown assignedState={this.props.assignee} sharedUsers={this.sharedUsers} owner={this.owner} theme={this.props.theme} handleChange={this.handleAssignedChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
+                            <Col xs="5"> <StatusDropdown taskStatus={this.state.taskStatus} statusList={this.statusOptions} theme={this.props.theme} handleChange={this.handleStatusChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
+                            <Col xs="7"><AssignedDropdown assignedState={this.state.assignee} sharedUsers={this.sharedUsers} owner={this.owner} theme={this.props.theme} handleChange={this.handleAssignedChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
                         </Row>
                         <Row noGutters={true}>
                             <Form style={font24.desc}>
@@ -1037,8 +1036,8 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                             <LabelText24> {daysLeftString} </LabelText24>
                         </Row>
                         <Row>
-                            <Col xs="5"> <StatusDropdown taskStatus={this.props.status} statusList={this.statusOptions} theme={this.props.theme} handleChange={this.handleStatusChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
-                            <Col xs="7"><AssignedDropdown assignedState={this.props.assignee} sharedUsers={this.sharedUsers} owner={this.owner} theme={this.props.theme} handleChange={this.handleAssignedChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
+                            <Col xs="5"> <StatusDropdown taskStatus={this.state.taskStatus} statusList={this.statusOptions} theme={this.props.theme} handleChange={this.handleStatusChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
+                            <Col xs="7"><AssignedDropdown assignedState={this.state.assignee} sharedUsers={this.sharedUsers} owner={this.owner} theme={this.props.theme} handleChange={this.handleAssignedChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
                         </Row>
                         <Row noGutters={true}>
                             <Form style={font24.descDark}>
@@ -1142,8 +1141,8 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                             <LabelText32> {daysLeftString} </LabelText32>
                         </Row>
                         <Row>
-                            <Col xs="5"> <StatusDropdown taskStatus={this.props.status} statusList={this.statusOptions} theme={this.props.theme} handleChange={this.handleStatusChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
-                            <Col xs="7"><AssignedDropdown assignedState={this.props.assignee} sharedUsers={this.sharedUsers} owner={this.owner} theme={this.props.theme} handleChange={this.handleAssignedChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
+                            <Col xs="5"> <StatusDropdown taskStatus={this.state.taskStatus} statusList={this.statusOptions} theme={this.props.theme} handleChange={this.handleStatusChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
+                            <Col xs="7"><AssignedDropdown assignedState={this.state.assignee} sharedUsers={this.sharedUsers} owner={this.owner} theme={this.props.theme} handleChange={this.handleAssignedChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
                         </Row>
                         <Row noGutters={true}>
                             <Form style={font32.desc}>
@@ -1242,8 +1241,8 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                             <LabelText32> {daysLeftString} </LabelText32>
                         </Row>
                         <Row>
-                            <Col xs="5"> <StatusDropdown taskStatus={this.props.status} statusList={this.statusOptions} theme={this.props.theme} handleChange={this.handleStatusChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
-                            <Col xs="7"><AssignedDropdown assignedState={this.props.assignee} sharedUsers={this.sharedUsers} owner={this.owner} theme={this.props.theme} handleChange={this.handleAssignedChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
+                            <Col xs="5"> <StatusDropdown taskStatus={this.state.taskStatus} statusList={this.statusOptions} theme={this.props.theme} handleChange={this.handleStatusChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
+                            <Col xs="7"><AssignedDropdown assignedState={this.state.assignee} sharedUsers={this.sharedUsers} owner={this.owner} theme={this.props.theme} handleChange={this.handleAssignedChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
                         </Row>
                         <Row noGutters={true}>
                             <Form style={font32.descDark}>
@@ -1344,8 +1343,8 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                             <LabelText40> {daysLeftString} </LabelText40>
                         </Row>
                         <Row>
-                            <Col xs="5"> <StatusDropdown taskStatus={this.props.status} statusList={this.statusOptions} theme={this.props.theme} handleChange={this.handleStatusChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
-                            <Col xs="7"><AssignedDropdown assignedState={this.props.assignee} sharedUsers={this.sharedUsers} owner={this.owner} theme={this.props.theme} handleChange={this.handleAssignedChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
+                            <Col xs="5"> <StatusDropdown taskStatus={this.state.taskStatus} statusList={this.statusOptions} theme={this.props.theme} handleChange={this.handleStatusChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
+                            <Col xs="7"><AssignedDropdown assignedState={this.state.assignee} sharedUsers={this.sharedUsers} owner={this.owner} theme={this.props.theme} handleChange={this.handleAssignedChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
                         </Row>
                         <Row noGutters={true}>
                             <Form style={font40.desc}>
@@ -1446,8 +1445,8 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                             <LabelText40> {daysLeftString} </LabelText40>
                         </Row>
                         <Row>
-                            <Col xs="5"> <StatusDropdown taskStatus={this.props.status} statusList={this.statusOptions} theme={this.props.theme} handleChange={this.handleStatusChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
-                            <Col xs="7"><AssignedDropdown assignedState={this.props.assignee} sharedUsers={this.sharedUsers} owner={this.owner} theme={this.props.theme} handleChange={this.handleAssignedChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
+                            <Col xs="5"> <StatusDropdown taskStatus={this.state.taskStatus} statusList={this.statusOptions} theme={this.props.theme} handleChange={this.handleStatusChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
+                            <Col xs="7"><AssignedDropdown assignedState={this.state.assignee} sharedUsers={this.sharedUsers} owner={this.owner} theme={this.props.theme} handleChange={this.handleAssignedChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
                         </Row>
                         <Row noGutters={true}>
                             <Form style={font40.descDark}>

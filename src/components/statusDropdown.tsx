@@ -103,7 +103,7 @@ export class StatusDropdown extends React.Component<StatusDropdownProps, StatusS
     render() {
         const taskStatus = this.state.taskStatus;
         // Maps through the array given and sets up the options
-        const arrayOp = this.options.map((item, i) => {
+        const arrayOp = this.options.map((item) => {
             return (
                 <option key={item.id} value={item.value}>{item.label}</option>
             )
