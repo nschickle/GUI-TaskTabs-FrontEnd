@@ -402,6 +402,7 @@ interface TaskViewState {
     wasDeleteRequested: boolean;
 };
 
+
 // TaskView is intended to be the center view for all tasks, substasks and project heads.
 export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
     name: string;
@@ -649,7 +650,7 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                 console.error('Error:', error);
             });
         } else {
-            this.deleteButtonText = "CONFIRM DELETION";
+            this.deleteButtonText = "DELETE";
         }
         this.setState({ wasDeleteRequested: !this.state.wasDeleteRequested })
     }
@@ -804,7 +805,7 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                                             style={font16.deleteButton}
                                             onClick={this.deleteTask}
                                         >
-                                            Delete
+                                            {this.deleteButtonText}
                                         </Button>
                                     </Col>
                                 </Row>
@@ -909,7 +910,7 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                                             style={font24.deleteButton}
                                             onClick={this.deleteTask}
                                         >
-                                            Delete
+                                            {this.deleteButtonText}
                                         </Button>
                                     </Col>
                                 </Row>
@@ -1012,7 +1013,7 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                                             style={font24.deleteButton}
                                             onClick={this.deleteTask}
                                         >
-                                            Delete
+                                            {this.deleteButtonText}
                                         </Button>
                                     </Col>
                                 </Row>
@@ -1117,7 +1118,7 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                                             style={font32.deleteButton}
                                             onClick={this.deleteTask}
                                         >
-                                            Delete
+                                            {this.deleteButtonText}
                                         </Button>
                                     </Col>
                                 </Row>
@@ -1220,7 +1221,7 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                                             style={font32.deleteButton}
                                             onClick={this.deleteTask}
                                         >
-                                            Delete
+                                            {this.deleteButtonText}
                                         </Button>
                                     </Col>
                                 </Row>
@@ -1325,7 +1326,7 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                                             style={font40.deleteButton}
                                             onClick={this.deleteTask}
                                         >
-                                            Delete
+                                            {this.deleteButtonText}
                                         </Button>
                                     </Col>
                                 </Row>
@@ -1412,7 +1413,8 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                                             onChange={(event: any) => {
                                                 let fieldVal = event.target.value;
                                                 this.setState({name: fieldVal});
-                                                this.setState({hasChanged: true});this.setState({ wasDeleteRequested: false })
+                                                this.setState({hasChanged: true});
+                                                this.setState({ wasDeleteRequested: false })
                                                 this.deleteButtonText = "Delete";
                                             }}
                                             style={font40.darkName}
@@ -1427,7 +1429,7 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                                             style={font40.deleteButton}
                                             onClick={this.deleteTask}
                                         >
-                                            Delete
+                                            {this.deleteButtonText}
                                         </Button>
                                     </Col>
                                 </Row>
