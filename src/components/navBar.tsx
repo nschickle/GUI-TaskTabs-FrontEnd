@@ -244,7 +244,15 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
             if (this.state.theme === "light") {
                 navBar = <Container fluid>
                     <Navbar bg="light" variant="light" style={font16.size}>
-                        <Navbar.Brand>TaskTabs</Navbar.Brand>
+                        <Navbar.Brand>
+                        <img
+                        src="./logo.png"
+                        width="60"
+                        height="60"
+                        className="d-inline-block"
+                        alt="TaskTabs Logo"/>
+                            TaskTabs
+                        </Navbar.Brand>
                         <Navbar.Toggle />
                         <Navbar.Collapse>
                             <Nav>
