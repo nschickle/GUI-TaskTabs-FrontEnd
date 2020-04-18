@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import mainLogo from './logo.png';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
@@ -246,7 +247,7 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
                     <Navbar bg="light" variant="light" style={font16.size}>
                         <Navbar.Brand>
                         <img
-                        src="./logo.png"
+                        src={mainLogo}
                         width="60"
                         height="60"
                         className="d-inline-block"
