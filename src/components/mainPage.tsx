@@ -124,7 +124,7 @@ export class MainPage extends React.Component<MainPageProps, { projectPageUp: bo
                                 changeToSize40 = {this.changeToSize40}
                                 fontSize = {fontSize}/>
                         </Row>
-                        <Row><ProjectPage projectID={this.state.projectID} theme = {theme} fontSize={fontSize} userInfo={this.userInfo}/></Row></Container>;
+                        <Row><ProjectPage projectID={this.state.projectID} theme = {theme} fontSize={fontSize} userInfo={this.userInfo} hideProjectPage={this.hideProjectPage}/></Row></Container>;
                 } else {
                     showPage = <Container fluid style={fonts.verdana}>
                         <Row>
@@ -142,7 +142,7 @@ export class MainPage extends React.Component<MainPageProps, { projectPageUp: bo
                                 changeToSize40 = {this.changeToSize40}
                                 fontSize = {fontSize}/>
                         </Row>
-                        <Row><ProjectPage projectID={this.state.projectID} theme = {theme} fontSize={fontSize} userInfo={this.userInfo}/></Row></Container>;
+                        <Row><ProjectPage projectID={this.state.projectID} theme = {theme} fontSize={fontSize} userInfo={this.userInfo} hideProjectPage={this.hideProjectPage}/></Row></Container>;
                 }
             } else {
                 if (theme == "dark") {
@@ -206,7 +206,7 @@ export class MainPage extends React.Component<MainPageProps, { projectPageUp: bo
                                     changeToSize40 = {this.changeToSize40}
                                     fontSize = {fontSize}/>
                             </Row>
-                            <Row><ProjectPage projectID={this.state.projectID} theme = {theme} fontSize={fontSize} userInfo={this.userInfo}/></Row></Container>;
+                            <Row><ProjectPage projectID={this.state.projectID} theme = {theme} fontSize={fontSize} userInfo={this.userInfo} hideProjectPage={this.hideProjectPage}/></Row></Container>;
                     } else {
                         showPage = <Container fluid style={fonts.courier}>
                             <Row>
@@ -224,7 +224,7 @@ export class MainPage extends React.Component<MainPageProps, { projectPageUp: bo
                                     changeToSize40 = {this.changeToSize40}
                                     fontSize = {fontSize}/>
                             </Row>
-                            <Row><ProjectPage projectID={this.state.projectID} theme = {theme} fontSize={fontSize} userInfo={this.userInfo}/></Row></Container>;
+                            <Row><ProjectPage projectID={this.state.projectID} theme = {theme} fontSize={fontSize} userInfo={this.userInfo} hideProjectPage={this.hideProjectPage}/></Row></Container>;
                     }
                 } else {
                     if (theme == "dark") {
