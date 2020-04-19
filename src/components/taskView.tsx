@@ -613,7 +613,7 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
         const updatedTask = { owner: this.owner, parentId: this.props.parentId, projectId: this.props.projectId, title: this.state.name, status: this.state.taskStatus, assignedTo: this.state.assignee, progress: completion, deadline: this.state.dueDate, description: this.state.description };
 
         const request = new UserHeaderHttpRequest(`/api/tasks/${this.props.taskID}`, this.props.userInfo, { "Content-Type" : "application/json" });
-        fetch(request,
+        RetryableFetch.fetch_retry(request,
             {
                 method: 'PUT',
                 mode: 'cors',

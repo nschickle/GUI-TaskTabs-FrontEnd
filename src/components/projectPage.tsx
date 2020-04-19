@@ -221,7 +221,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 		let childProgress: number[] = [];
 		//get subtask progress
 		const request = new UserHeaderHttpRequest(`/api/subtasks/${id}`, this.props.userInfo);
-		await fetch(request)
+		await RetryableFetch.fetch_retry(request)
 			.then(res => res.json())
 			.then(
 				(result) => {
@@ -242,7 +242,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 	private refreshFetch = () => {
 		let history = this.state.history;
 		const request = new UserHeaderHttpRequest(`/api/tasks/${this.state.head}`, this.props.userInfo);
-		fetch(request)
+		RetryableFetch.fetch_retry(request)
 			.then(res => res.json())
 			.then(
 				async (result) => {
@@ -327,7 +327,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 		const updatedTask = { owner: this.state.task.owner, title: this.state.task.title, status: this.state.task.status, assignedTo: this.state.task.assignedTo, progress: progress, deadline: this.state.task.deadline, description: this.state.task.description };
 		//get subtask progress
 		const request = new UserHeaderHttpRequest(`/api/tasks/${id}`, this.props.userInfo, { 'Content-Type': 'application/json' });
-		await fetch(request,
+		await RetryableFetch.fetch_retry(request,
 			{
 				method: 'PUT',
 				mode: 'cors',
