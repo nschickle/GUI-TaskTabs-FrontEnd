@@ -42,6 +42,7 @@ interface MainPageProps {
 // Make it so choosing a project on the landing changes it on project page
 export class MainPage extends React.Component<MainPageProps, { projectPageUp: boolean, projectID: number, theme: string, font: string, fontSize: number }>{
     private userInfo = new UserInfo("test@test.com", "test");
+    private userInfo1 = new UserInfo(null, null);
 
     constructor(props: MainPageProps) {
         super(props);

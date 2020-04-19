@@ -1,6 +1,5 @@
 import * as React from "react";
 
-import GoogleLogin from 'react-google-login';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
