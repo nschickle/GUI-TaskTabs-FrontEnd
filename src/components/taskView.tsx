@@ -384,6 +384,7 @@ interface TaskViewProps {
     fontSize: number;
     userInfo: UserInfo;
     hideProjectPage: any;
+    refreshPage: () => any;
 };
 
 interface TaskViewState {
@@ -392,7 +393,7 @@ interface TaskViewState {
     dueDate: Date;
     description: string;
     taskStatus: string;
-    assignedState: number;
+    assignee: number;
     error: any;
     isLoaded: boolean;
     subTasks: Task[];
@@ -442,37 +443,37 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
         this.sharedUsers = props.sharedUsers;
 
         this.state = {
-            width: 0, height: 0, dueDate: this.props.dueDate, description: this.props.description, taskStatus: this.props.status, assignedState: this.props.assignee, error: null, isLoaded: false,
-            subTasks: [], name: this.props.name, completion: this.props.completion, hasChanged: false, wasDeleteRequested: false
+            width: 0, height: 0, dueDate: this.props.dueDate, description: this.props.description, taskStatus: this.props.status, assignee: this.props.assignee, error: null, isLoaded: false,
+            subTasks: [], name: this.props.name, completion: this.props.completion, hasChanged: false, wasDeleteRequested: false,
         };
 
         this.makeSubTaskQuery(5);
     }
 
-    componentDidUpdate(newProps: TaskViewProps) {
+    componentDidUpdate(oldProps: TaskViewProps) {
         const { name, description, dueDate, assignee, status, taskID, completion } = this.props;
-        if (newProps.dueDate !== dueDate) {
+        if (oldProps.dueDate !== dueDate) {
             this.setState({ dueDate: dueDate })
         }
-        if (newProps.name !== name) {
+        if (oldProps.name !== name) {
             this.setState({ name: name, wasDeleteRequested: false })
         }
-        if (newProps.description !== description) {
+        if (oldProps.description !== description) {
             this.setState({ description: description })
         }
-        if (newProps.assignee !== assignee) {
-            this.setState({ assignedState: assignee })
+        if (oldProps.assignee !== assignee) {
+            this.setState({ assignee: assignee })
         }
-        if (newProps.status !== status) {
-            this.setState({ taskStatus: status})
+        if (oldProps.status !== status) {
+            this.setState({ taskStatus: status })
         }
-        if (newProps.taskID !== taskID) {
+        if (oldProps.taskID !== taskID) {
             this.makeSubTaskQuery(5);
             this.setState({ wasDeleteRequested: false })
             this.deleteButtonText = "Delete";
         }
-        if (newProps.completion !== completion) {
-            this.setState({ completion: completion})
+        if (oldProps.completion !== completion) {
+            this.setState({ completion: completion })
         }
     }
 
@@ -496,7 +497,7 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
     }
 
     handleAssignedChange(e: React.ChangeEvent<HTMLSelectElement>) {
-        this.setState({ assignedState: Number(e.target.value) });
+        this.setState({ assignee: Number(e.target.value) });
         this.setState({ hasChanged: true });
         this.setState({ wasDeleteRequested: false })
         this.deleteButtonText = "Delete";
@@ -590,65 +591,69 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
 
     // Update Subtask in the database based on information in the current task
     updateTask = () => {
+        let completion = this.state.completion;
         if (this.state.taskStatus == "complete") {
-            if (this.state.subTasks.length > 0) {
-                let valid = true;
-                for (let i = 0; i < this.state.subTasks.length; i++) {
-                    if (this.state.subTasks[i].status != "complete") {
-                        valid = false;
-                    }
+
+            let valid = true;
+            for (let i = 0; i < this.state.subTasks.length; i++) {
+                if (this.state.subTasks[i].status !== "complete") {
+                    valid = false;
                 }
-                if (!valid) {
-                    alert("WARNING: Can not set status to complete while there are uncompleted subtasks! Reverting status to previous state and saving other changes...");
-                    this.setState({ taskStatus: this.oldStatus });
-                }
+            }
+            if (!valid) {
+                alert("WARNING: Can not set status to complete while there are uncompleted subtasks! Reverting status to previous state and saving other changes...");
+                this.setState({ taskStatus: this.oldStatus });
+            } else {
+                completion = 100;
+                this.setState({ completion: 100 });
             }
         }
         // TODO
         // should be user from google oauth
-        const updatedTask = { owner: this.owner, parentId: this.props.parentId, projectId: this.props.projectId, title: this.state.name, status: this.state.taskStatus, assignedTo: this.state.assignedState, progress: this.state.completion, deadline: this.state.dueDate, description: this.state.description };
+        const updatedTask = { owner: this.owner, parentId: this.props.parentId, projectId: this.props.projectId, title: this.state.name, status: this.state.taskStatus, assignedTo: this.state.assignee, progress: completion, deadline: this.state.dueDate, description: this.state.description };
 
-        const request = new UserHeaderHttpRequest(`/api/tasks/${this.props.taskID}`, this.props.userInfo, { "Content-Type" : "application/json" });
+        const request = new UserHeaderHttpRequest(`/api/tasks/${this.props.taskID}`, this.props.userInfo, { "Content-Type": "application/json" });
         RetryableFetch.fetch_retry(request,
             {
                 method: 'PUT',
                 mode: 'cors',
                 body: JSON.stringify(updatedTask)
             }).then((response) => response.json())
-            .then((data) => {
+            .then(() => {
+                this.props.refreshPage();
             })
             .catch((error) => {
                 console.error('Error:', error);
             });
         this.setState({ hasChanged: false });
     }
-    
+
     // First process if it's the first time delete has been requested or not - gives user opportunity to "back out"
     // Upon confirming with a second click, the task is deleted and the parent task becomes the new displayed task
     // If there is no listed parent task, then it was a project head task. In this case, user is taken back to the
     // project selection page
     deleteTask = () => {
         if (this.state.wasDeleteRequested) {
-            const request = new UserHeaderHttpRequest(`/api/tasks/${this.props.taskID}`, this.props.userInfo, { "Content-Type" : "application/json" });
+            const request = new UserHeaderHttpRequest(`/api/tasks/${this.props.taskID}`, this.props.userInfo, { "Content-Type": "application/json" });
             RetryableFetch.fetch_retry(request,
-            {
-                method: 'DELETE',
-                mode: 'cors'
-            }).then((response) => response.json())
-            .then((data) => {
-                // if parentId is "null", then it must be a project head task
-                // there is no "parent" task for a project head, so to avoid conflict, the user is
-                // taken back to the project landing, same as hitting the "Home" button in nav bar
-                if (this.props.parentId == null) {
-                    this.props.hideProjectPage();
-                } else {
-                    this.props.changeHead(this.props.parentId);
-                    this.deleteButtonText = "Delete";
-                }
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+                {
+                    method: 'DELETE',
+                    mode: 'cors'
+                }).then((response) => response.json())
+                .then((data) => {
+                    // if parentId is "null", then it must be a project head task
+                    // there is no "parent" task for a project head, so to avoid conflict, the user is
+                    // taken back to the project landing, same as hitting the "Home" button in nav bar
+                    if (this.props.parentId == null) {
+                        this.props.hideProjectPage();
+                    } else {
+                        this.props.changeHead(this.props.parentId);
+                        this.deleteButtonText = "Delete";
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
         } else {
             this.deleteButtonText = "DELETE";
         }
@@ -661,841 +666,826 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
             this.calculateDaysLeft(this.state.dueDate);
         }
         const daysLeftString = this.daysLeftCheck();
-        const name = this.displayName();
-        const description = this.props.description;
-
         if (this.props.fontSize === 16) {
             if (this.props.theme === "light") {
-                        return (
-                            <Container style={styles.container}>
-                                <Row style={styles.row} noGutters={true}>
-                                    <Col xs="2" >
-                                        <Button
-                                            variant="outline-success"
-                                            size='lg'
-                                            block
-                                            style={font16.saveButton}
-                                            onClick={this.updateTask}
-                                            disabled={!this.state.hasChanged}
-                                        >
-                                            {this.saveText}
-                                        </Button>
-                                    </Col>
+                return (
+                    <Container style={styles.container}>
+                        <Row style={styles.row} noGutters={true}>
+                            <Col xs="2" >
+                                <Button
+                                    variant="outline-success"
+                                    size='lg'
+                                    block
+                                    style={font16.saveButton}
+                                    onClick={this.updateTask}
+                                    disabled={!this.state.hasChanged}
+                                >
+                                    {this.saveText}
+                                </Button>
+                            </Col>
+                            <Col xs="8">
+                                <Form.Control
+                                    onChange={(event: any) => {
+                                        let fieldVal = event.target.value;
+                                        this.setState({ description: fieldVal });
+                                        this.setState({ hasChanged: true });
+                                        this.setState({ wasDeleteRequested: false })
+                                        this.deleteButtonText = "Delete";
+                                    }}
+                                    style={font16.name}
+                                    value={this.state.name}
+                                />
+                            </Col>
+                            <Col xs="2">
+                                <Button
+                                    variant="outline-danger"
+                                    size='lg'
+                                    block
+                                    style={font16.deleteButton}
+                                    onClick={this.deleteTask}
+                                >
+                                    {this.deleteButtonText}
+                                </Button>
+                            </Col>
+                        </Row>
+                        <Row noGutters={true}>
+                            <TaskProgressBar percentage={this.state.completion} theme={this.props.theme} fontSize={this.props.fontSize} />
+                        </Row>
+                        <Row noGutters={true}>
+                            <Form style={font16.datePick}>
+                                <Form.Group as={Row} noGutters={true}>
+                                    <Form.Label column xs="4">Due Date: </Form.Label>
                                     <Col xs="8">
+                                        <Form.Text style={font16.font}>
+                                            <DatePicker
+                                                selected={this.state.dueDate}
+                                                onChange={this.handleChange}
+                                            />
+                                        </Form.Text>
+                                    </Col>
+                                </Form.Group>
+                            </Form>
+                        </Row>
+                        <Row noGutters={true}>
+                            <LabelText16> {daysLeftString} </LabelText16>
+                        </Row>
+                        <Row>
+                            <Col xs="5"> <StatusDropdown taskStatus={this.state.taskStatus} statusList={this.statusOptions} theme={this.props.theme} handleChange={this.handleStatusChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
+                            <Col xs="7"><AssignedDropdown assignedState={this.state.assignee} sharedUsers={this.sharedUsers} owner={this.owner} theme={this.props.theme} handleChange={this.handleAssignedChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
+                        </Row>
+                        <Row noGutters={true}>
+                            <Form style={font16.desc}>
+                                <Form.Group as={Row} noGutters={true}>
+                                    <Form.Label column xs="2"> Description: </Form.Label>
+                                    <Col xs="10">
                                         <Form.Control
+                                            as="textarea"
+                                            rows="13"
+                                            cols="100"
                                             onChange={(event: any) => {
                                                 let fieldVal = event.target.value;
-                                                this.setState({name: fieldVal});
-                                                this.setState({hasChanged: true});
+                                                this.setState({ description: fieldVal });
+                                                this.setState({ hasChanged: true });
                                                 this.setState({ wasDeleteRequested: false })
                                                 this.deleteButtonText = "Delete";
                                             }}
-                                            style={font16.name}
-                                            value={this.state.name}
-                                            />
+                                            style={font16.desc}
+                                            value={this.state.description}
+                                        />
                                     </Col>
-                                    <Col xs="2">
-                                        <Button
-                                            variant="outline-danger"
-                                            size='lg'
-                                            block
-                                            style={font16.deleteButton}
-                                            onClick={this.deleteTask}
-                                        >
-                                            {this.deleteButtonText}
+                                </Form.Group>
+                            </Form>
+                        </Row>
+                        <Row noGutters={true}>
+                            <Col xs="10" style={styles.sharedTab}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} theme={this.props.theme} fontSize={this.props.fontSize} /> </Col>
+                            <Col xs="2">
+                                <Button
+                                    variant="outline-info"
+                                    size="lg"
+                                    block
+                                    style={font16.historyButton}>
+                                    History
                                         </Button>
-                                    </Col>
-                                </Row>
-                                <Row noGutters={true}>
-                                    <TaskProgressBar percentage={this.state.completion} theme = {this.props.theme} fontSize={this.props.fontSize}/>
-                                </Row>
-                                <Row noGutters={true}>
-                                    <Form style={font16.datePick}>
-                                        <Form.Group as={Row} noGutters={true}>
-                                            <Form.Label column xs="4">Due Date: </Form.Label>
-                                            <Col xs="8">
-                                                <Form.Text style={font16.font}>
-                                                    <DatePicker
-                                                        selected={this.state.dueDate}
-                                                        onChange={this.handleChange}
-                                                    />
-                                                </Form.Text>
-                                            </Col>
-                                        </Form.Group>
-                                    </Form>
-                                </Row>
-                                <Row noGutters={true}>
-                                    <LabelText16> {daysLeftString} </LabelText16>
-                                </Row>
-                                <Row>
-                                    <Col xs="5"> <StatusDropdown taskStatus={this.props.status} statusList={this.statusOptions} theme = {this.props.theme} handleChange={this.handleStatusChange.bind(this)} fontSize = {this.props.fontSize}/> </Col>
-                                    <Col xs="7"><AssignedDropdown assignedState={this.props.assignee} sharedUsers={this.sharedUsers} owner={this.owner} theme = {this.props.theme} handleChange={this.handleAssignedChange.bind(this)} fontSize = {this.props.fontSize} /> </Col>
-                                </Row>
-                                <Row noGutters={true}>
-                                    <Form style={font16.desc}>
-                                        <Form.Group as={Row} noGutters={true}>
-                                            <Form.Label column xs="2"> Description: </Form.Label>
-                                            <Col xs="10">
-                                                <Form.Control
-                                                    as="textarea"
-                                                    rows="13"
-                                                    cols="100"
-                                                    onChange={(event: any) => {
-                                                            let fieldVal = event.target.value;
-                                                            this.setState({description: fieldVal});
-                                                            this.setState({hasChanged: true});
-                                                            this.setState({ wasDeleteRequested: false })
-                                                            this.deleteButtonText = "Delete";
-                                                    }}
-                                                    style={font16.desc}
-                                                    value={this.state.description}
-                                                />
-                                            </Col>
-                                        </Form.Group>
-                                    </Form>
-                                </Row>
-                                <Row noGutters={true}>
-                                    <Col xs="10" style={styles.sharedTab}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} theme = {this.props.theme} fontSize = {this.props.fontSize}/> </Col>
-                                    <Col xs="2">
-                                        <Button
-                                            variant="outline-info"
-                                            size="lg"
-                                            block
-                                            style={font16.historyButton}>
-                                            History
-                                        </Button>
-                                    </Col>
-                                </Row>
-                            </Container>
-                        );
-                    } else {
-                        return (
-                            <Container style={styles.container}>
-                                <Row style={styles.row} noGutters={true}>
-                                    <Col xs="2" >
-                                        <Button
-                                            variant="success"
-                                            size='lg'
-                                            block
-                                            style={font16.saveButton}
-                                            onClick={this.updateTask}
-                                            disabled={!this.state.hasChanged}
-                                        >
-                                            {this.saveText}
-                                        </Button>
-                                    </Col>
+                            </Col>
+                        </Row>
+                    </Container>
+                );
+            } else {
+                return (
+                    <Container style={styles.container}>
+                        <Row style={styles.row} noGutters={true}>
+                            <Col xs="2" >
+                                <Button
+                                    variant="success"
+                                    size='lg'
+                                    block
+                                    style={font16.saveButton}
+                                    onClick={this.updateTask}
+                                    disabled={!this.state.hasChanged}
+                                >
+                                    {this.saveText}
+                                </Button>
+                            </Col>
+                            <Col xs="8">
+                                <Form.Control
+                                    onChange={(event: any) => {
+                                        let fieldVal = event.target.value;
+                                        this.setState({ description: fieldVal });
+                                        this.setState({ hasChanged: true });
+                                        this.setState({ wasDeleteRequested: false })
+                                        this.deleteButtonText = "Delete";
+                                    }}
+                                    style={font16.darkName}
+                                    value={this.state.name}
+                                />
+                            </Col>
+                            <Col xs="2">
+                                <Button
+                                    variant="danger"
+                                    size='lg'
+                                    block
+                                    style={font16.deleteButton}
+                                >
+                                    {this.deleteButtonText}
+                                </Button>
+                            </Col>
+                        </Row>
+                        <Row noGutters={true}>
+                            <TaskProgressBar percentage={this.state.completion} theme={this.props.theme} fontSize={this.props.fontSize} />
+                        </Row>
+                        <Row noGutters={true}>
+                            <Form style={font16.datePick}>
+                                <Form.Group as={Row} noGutters={true}>
+                                    <Form.Label column xs="4">Due Date: </Form.Label>
                                     <Col xs="8">
+                                        <Form.Text style={font16.darkFont}>
+                                            <DatePicker
+                                                selected={this.state.dueDate}
+                                                onChange={this.handleChange}
+                                            />
+                                        </Form.Text>
+                                    </Col>
+                                </Form.Group>
+                            </Form>
+                        </Row>
+                        <Row noGutters={true}>
+                            <LabelText16> {daysLeftString} </LabelText16>
+                        </Row>
+                        <Row>
+                            <Col xs="5"> <StatusDropdown taskStatus={this.state.taskStatus} statusList={this.statusOptions} theme={this.props.theme} handleChange={this.handleStatusChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
+                            <Col xs="7"><AssignedDropdown assignedState={this.state.assignee} sharedUsers={this.sharedUsers} owner={this.owner} theme={this.props.theme} handleChange={this.handleAssignedChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
+                        </Row>
+                        <Row noGutters={true}>
+                            <Form style={font16.descDark}>
+                                <Form.Group as={Row} noGutters={true}>
+                                    <Form.Label column xs="2"> Description: </Form.Label>
+                                    <Col xs="10">
                                         <Form.Control
+                                            as="textarea"
+                                            rows="13"
+                                            cols="100"
+                                            value={this.state.description}
+                                            style={font16.descDarkBox}
                                             onChange={(event: any) => {
                                                 let fieldVal = event.target.value;
-                                                this.setState({name: fieldVal});
-                                                this.setState({hasChanged: true});
+                                                this.setState({ description: fieldVal });
+                                                this.setState({ hasChanged: true });
+                                            }}
+                                        />
+                                    </Col>
+                                </Form.Group>
+                            </Form>
+                        </Row>
+                        <Row noGutters={true}>
+                            <Col xs="10" style={styles.sharedTabDark}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} theme={this.props.theme} fontSize={this.props.fontSize} /> </Col>
+                            <Col xs="2">
+                                <Button
+                                    variant="info"
+                                    size="lg"
+                                    block
+                                    style={font16.historyButton}>
+                                    History
+                                        </Button>
+                            </Col>
+                        </Row>
+                    </Container>
+                );
+            }
+        } else if (this.props.fontSize === 24) {
+            if (this.props.theme === "light") {
+                return (
+                    <Container style={styles.container}>
+                        <Row style={styles.row} noGutters={true}>
+                            <Col xs="2" >
+                                <Button
+                                    variant="outline-success"
+                                    size='lg'
+                                    block
+                                    style={font24.saveButton}
+                                    onClick={this.updateTask}
+                                    disabled={!this.state.hasChanged}
+                                >
+                                    {this.saveText}
+                                </Button>
+                            </Col>
+                            <Col xs="8">
+                                <Form.Control
+                                    onChange={(event: any) => {
+                                        let fieldVal = event.target.value;
+                                        this.setState({ description: fieldVal });
+                                        this.setState({ hasChanged: true });
+                                        this.setState({ wasDeleteRequested: false })
+                                        this.deleteButtonText = "Delete";
+                                    }}
+                                    style={font24.name}
+                                    value={this.state.name}
+                                />
+                            </Col>
+                            <Col xs="2">
+                                <Button
+                                    variant="outline-danger"
+                                    size='lg'
+                                    block
+                                    style={font24.deleteButton}
+                                    onClick={this.deleteTask}
+                                >
+                                    {this.deleteButtonText}
+                                </Button>
+                            </Col>
+                        </Row>
+                        <Row noGutters={true}>
+                            <TaskProgressBar percentage={this.state.completion} theme={this.props.theme} fontSize={this.props.fontSize} />
+                        </Row>
+                        <Row noGutters={true}>
+                            <Form style={font24.datePick}>
+                                <Form.Group as={Row} noGutters={true}>
+                                    <Form.Label column xs="4">Due Date: </Form.Label>
+                                    <Col xs="8">
+                                        <Form.Text style={font24.font}>
+                                            <DatePicker
+                                                selected={this.state.dueDate}
+                                                onChange={this.handleChange}
+                                            />
+                                        </Form.Text>
+                                    </Col>
+                                </Form.Group>
+                            </Form>
+                        </Row>
+                        <Row noGutters={true}>
+                            <LabelText24> {daysLeftString} </LabelText24>
+                        </Row>
+                        <Row>
+                            <Col xs="5"> <StatusDropdown taskStatus={this.state.taskStatus} statusList={this.statusOptions} theme={this.props.theme} handleChange={this.handleStatusChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
+                            <Col xs="7"><AssignedDropdown assignedState={this.state.assignee} sharedUsers={this.sharedUsers} owner={this.owner} theme={this.props.theme} handleChange={this.handleAssignedChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
+                        </Row>
+                        <Row noGutters={true}>
+                            <Form style={font24.desc}>
+                                <Form.Group as={Row} noGutters={true}>
+                                    <Form.Label column xs="2"> Description: </Form.Label>
+                                    <Col xs="10">
+                                        <Form.Control
+                                            as="textarea"
+                                            rows="5"
+                                            cols="60"
+                                            onChange={(event: any) => {
+                                                let fieldVal = event.target.value;
+                                                this.setState({ name: fieldVal });
+                                                this.setState({ hasChanged: true });
                                                 this.setState({ wasDeleteRequested: false })
                                                 this.deleteButtonText = "Delete";
                                             }}
-                                            style={font16.darkName}
-                                            value={this.state.name}
-                                            />
+                                            style={font24.desc}
+                                            value={this.state.description}
+                                        />
                                     </Col>
-                                    <Col xs="2">
-                                        <Button
-                                            variant="danger"
-                                            size='lg'
-                                            block
-                                            style={font16.deleteButton}
-                                            onClick={this.deleteTask}
-                                        >
-                                            {this.deleteButtonText}
+                                </Form.Group>
+                            </Form>
+                        </Row>
+                        <Row noGutters={true}>
+                            <Col xs="10" style={styles.sharedTab}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} theme={this.props.theme} fontSize={this.props.fontSize} /> </Col>
+                            <Col xs="2">
+                                <Button
+                                    variant="outline-info"
+                                    size="lg"
+                                    block
+                                    style={font24.historyButton}>
+                                    History
                                         </Button>
-                                    </Col>
-                                </Row>
-                                <Row noGutters={true}>
-                                    <TaskProgressBar percentage={this.state.completion} theme = {this.props.theme} fontSize={this.props.fontSize}/>
-                                </Row>
-                                <Row noGutters={true}>
-                                    <Form style={font16.datePick}>
-                                        <Form.Group as={Row} noGutters={true}>
-                                            <Form.Label column xs="4">Due Date: </Form.Label>
-                                            <Col xs="8">
-                                                <Form.Text style={font16.darkFont}>
-                                                    <DatePicker
-                                                        selected={this.state.dueDate}
-                                                        onChange={this.handleChange}
-                                                    />
-                                                </Form.Text>
-                                            </Col>
-                                        </Form.Group>
-                                    </Form>
-                                </Row>
-                                <Row noGutters={true}>
-                                    <LabelText16> {daysLeftString} </LabelText16>
-                                </Row>
-                                <Row>
-                                    <Col xs="5"> <StatusDropdown taskStatus={this.props.status} statusList={this.statusOptions} theme = {this.props.theme} handleChange={this.handleStatusChange.bind(this)} fontSize = {this.props.fontSize}/> </Col>
-                                    <Col xs="7"><AssignedDropdown assignedState={this.props.assignee} sharedUsers={this.sharedUsers} owner={this.owner} theme = {this.props.theme} handleChange={this.handleAssignedChange.bind(this)} fontSize = {this.props.fontSize} /> </Col>
-                                </Row>
-                                <Row noGutters={true}>
-                                    <Form style={font16.descDark}>
-                                        <Form.Group as={Row} noGutters={true}>
-                                            <Form.Label column xs="2"> Description: </Form.Label>
-                                            <Col xs="10">
-                                                <Form.Control
-                                                    as="textarea"
-                                                    rows="13"
-                                                    cols="100"
-                                                    value={this.state.description}
-                                                    style={font16.descDarkBox}
-                                                    onChange={(event: any) => {
-                                                            let fieldVal = event.target.value;
-                                                            this.setState({description: fieldVal});
-                                                            this.setState({hasChanged: true});
-                                                            this.setState({ wasDeleteRequested: false })
-                                                            this.deleteButtonText = "Delete";
-                                                    }}
-                                                />
-                                            </Col>
-                                        </Form.Group>
-                                    </Form>
-                                </Row>
-                                <Row noGutters={true}>
-                                    <Col xs="10" style={styles.sharedTabDark}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} theme = {this.props.theme} fontSize = {this.props.fontSize}/> </Col>
-                                    <Col xs="2">
-                                        <Button
-                                            variant="info"
-                                            size="lg"
-                                            block
-                                            style={font16.historyButton}>
-                                            History
-                                        </Button>
-                                    </Col>
-                                </Row>
-                            </Container>
-                        );
-                    }
-        } else if(this.props.fontSize === 24){
-            if(this.props.theme === "light") {
-                        return (
-                            <Container style={styles.container}>
-                                <Row style={styles.row} noGutters={true}>
-                                    <Col xs="2" >
-                                        <Button
-                                            variant="outline-success"
-                                            size='lg'
-                                            block
-                                            style={font24.saveButton}
-                                            onClick={this.updateTask}
-                                            disabled={!this.state.hasChanged}
-                                        >
-                                            {this.saveText}
-                                        </Button>
-                                    </Col>
+                            </Col>
+                        </Row>
+                    </Container>
+                );
+            } else {
+                return (
+                    <Container style={styles.container}>
+                        <Row style={styles.row} noGutters={true}>
+                            <Col xs="2" >
+                                <Button
+                                    variant="success"
+                                    size='lg'
+                                    block
+                                    style={font24.saveButton}
+                                    onClick={this.updateTask}
+                                    disabled={!this.state.hasChanged}
+                                >
+                                    {this.saveText}
+                                </Button>
+                            </Col>
+                            <Col xs="8">
+                                <Form.Control
+                                    onChange={(event: any) => {
+                                        let fieldVal = event.target.value;
+                                        this.setState({ description: fieldVal });
+                                        this.setState({ hasChanged: true });
+                                        this.setState({ wasDeleteRequested: false })
+                                        this.deleteButtonText = "Delete";
+                                    }}
+                                    style={font24.darkName}
+                                    value={this.state.name}
+                                />
+                            </Col>
+                            <Col xs="2">
+                                <Button
+                                    variant="danger"
+                                    size='lg'
+                                    block
+                                    style={font24.deleteButton}
+                                >
+                                    {this.deleteButtonText}
+                                </Button>
+                            </Col>
+                        </Row>
+                        <Row noGutters={true}>
+                            <TaskProgressBar percentage={this.state.completion} theme={this.props.theme} fontSize={this.props.fontSize} />
+                        </Row>
+                        <Row noGutters={true}>
+                            <Form style={font24.datePick}>
+                                <Form.Group as={Row} noGutters={true}>
+                                    <Form.Label column xs="4">Due Date: </Form.Label>
                                     <Col xs="8">
+                                        <Form.Text style={font24.darkFont}>
+                                            <DatePicker
+                                                selected={this.state.dueDate}
+                                                onChange={this.handleChange}
+                                            />
+                                        </Form.Text>
+                                    </Col>
+                                </Form.Group>
+                            </Form>
+                        </Row>
+                        <Row noGutters={true}>
+                            <LabelText24> {daysLeftString} </LabelText24>
+                        </Row>
+                        <Row>
+                            <Col xs="5"> <StatusDropdown taskStatus={this.state.taskStatus} statusList={this.statusOptions} theme={this.props.theme} handleChange={this.handleStatusChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
+                            <Col xs="7"><AssignedDropdown assignedState={this.state.assignee} sharedUsers={this.sharedUsers} owner={this.owner} theme={this.props.theme} handleChange={this.handleAssignedChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
+                        </Row>
+                        <Row noGutters={true}>
+                            <Form style={font24.descDark}>
+                                <Form.Group as={Row} noGutters={true}>
+                                    <Form.Label column xs="2"> Description: </Form.Label>
+                                    <Col xs="10">
                                         <Form.Control
+                                            as="textarea"
+                                            rows="5"
+                                            cols="60"
+                                            value={this.state.description}
+                                            style={font24.descDarkBox}
                                             onChange={(event: any) => {
                                                 let fieldVal = event.target.value;
-                                                this.setState({name: fieldVal});
-                                                this.setState({hasChanged: true});
+                                                this.setState({ name: fieldVal });
+                                                this.setState({ hasChanged: true });
                                                 this.setState({ wasDeleteRequested: false })
                                                 this.deleteButtonText = "Delete";
                                             }}
-                                            style={font24.name}
-                                            value={this.state.name}
-                                            />
+                                        />
                                     </Col>
-                                    <Col xs="2">
-                                        <Button
-                                            variant="outline-danger"
-                                            size='lg'
-                                            block
-                                            style={font24.deleteButton}
-                                            onClick={this.deleteTask}
-                                        >
-                                            {this.deleteButtonText}
+                                </Form.Group>
+                            </Form>
+                        </Row>
+                        <Row noGutters={true}>
+                            <Col xs="10" style={styles.sharedTabDark}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} theme={this.props.theme} fontSize={this.props.fontSize} /> </Col>
+                            <Col xs="2">
+                                <Button
+                                    variant="info"
+                                    size="lg"
+                                    block
+                                    style={font24.historyButton}>
+                                    History
                                         </Button>
-                                    </Col>
-                                </Row>
-                                <Row noGutters={true}>
-                                    <TaskProgressBar percentage={this.state.completion} theme = {this.props.theme} fontSize={this.props.fontSize}/>
-                                </Row>
-                                <Row noGutters={true}>
-                                    <Form style={font24.datePick}>
-                                        <Form.Group as={Row} noGutters={true}>
-                                            <Form.Label column xs="4">Due Date: </Form.Label>
-                                            <Col xs="8">
-                                                <Form.Text style={font24.font}>
-                                                    <DatePicker
-                                                        selected={this.state.dueDate}
-                                                        onChange={this.handleChange}
-                                                    />
-                                                </Form.Text>
-                                            </Col>
-                                        </Form.Group>
-                                    </Form>
-                                </Row>
-                                <Row noGutters={true}>
-                                    <LabelText24> {daysLeftString} </LabelText24>
-                                </Row>
-                                <Row>
-                                    <Col xs="5"> <StatusDropdown taskStatus={this.props.status} statusList={this.statusOptions} theme = {this.props.theme} handleChange={this.handleStatusChange.bind(this)} fontSize = {this.props.fontSize}/> </Col>
-                                    <Col xs="7"><AssignedDropdown assignedState={this.props.assignee} sharedUsers={this.sharedUsers} owner={this.owner} theme = {this.props.theme} handleChange={this.handleAssignedChange.bind(this)} fontSize = {this.props.fontSize} /> </Col>
-                                </Row>
-                                <Row noGutters={true}>
-                                    <Form style={font24.desc}>
-                                        <Form.Group as={Row} noGutters={true}>
-                                            <Form.Label column xs="2"> Description: </Form.Label>
-                                            <Col xs="10">
-                                                <Form.Control
-                                                    as="textarea"
-                                                    rows="5"
-                                                    cols="60"
-                                                    onChange={(event: any) => {
-                                                            let fieldVal = event.target.value;
-                                                            this.setState({description: fieldVal});
-                                                            this.setState({hasChanged: true});
-                                                            this.setState({ wasDeleteRequested: false })
-                                                            this.deleteButtonText = "Delete";
-                                                    }}
-                                                    style={font24.desc}
-                                                    value={this.state.description}
-                                                />
-                                            </Col>
-                                        </Form.Group>
-                                    </Form>
-                                </Row>
-                                <Row noGutters={true}>
-                                    <Col xs="10" style={styles.sharedTab}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} theme = {this.props.theme} fontSize = {this.props.fontSize}/> </Col>
-                                    <Col xs="2">
-                                        <Button
-                                            variant="outline-info"
-                                            size="lg"
-                                            block
-                                            style={font24.historyButton}>
-                                            History
-                                        </Button>
-                                    </Col>
-                                </Row>
-                            </Container>
-                        );
-                    } else {
-                        return (
-                            <Container style={styles.container}>
-                                <Row style={styles.row} noGutters={true}>
-                                    <Col xs="2" >
-                                        <Button
-                                            variant="success"
-                                            size='lg'
-                                            block
-                                            style={font24.saveButton}
-                                            onClick={this.updateTask}
-                                            disabled={!this.state.hasChanged}
-                                        >
-                                            {this.saveText}
-                                        </Button>
-                                    </Col>
+                            </Col>
+                        </Row>
+                    </Container>
+                );
+            }
+        } else if (this.props.fontSize === 32) {
+            if (this.props.theme === "light") {
+                return (
+                    <Container style={styles.container}>
+                        <Row style={styles.row} noGutters={true}>
+                            <Col xs="2" >
+                                <Button
+                                    variant="outline-success"
+                                    size='lg'
+                                    block
+                                    style={font32.saveButton}
+                                    onClick={this.updateTask}
+                                    disabled={!this.state.hasChanged}
+                                >
+                                    {this.saveText}
+                                </Button>
+                            </Col>
+                            <Col xs="8">
+                                <Form.Control
+                                    onChange={(event: any) => {
+                                        let fieldVal = event.target.value;
+                                        this.setState({ description: fieldVal });
+                                        this.setState({ hasChanged: true });
+                                        this.setState({ wasDeleteRequested: false })
+                                        this.deleteButtonText = "Delete";
+                                    }}
+                                    style={font32.name}
+                                    value={this.state.name}
+                                />
+                            </Col>
+                            <Col xs="2">
+                                <Button
+                                    variant="outline-danger"
+                                    size='lg'
+                                    block
+                                    style={font32.deleteButton}
+                                    onClick={this.deleteTask}
+                                >
+                                    {this.deleteButtonText}
+                                </Button>
+                            </Col>
+                        </Row>
+                        <Row noGutters={true}>
+                            <TaskProgressBar percentage={this.state.completion} theme={this.props.theme} fontSize={this.props.fontSize} />
+                        </Row>
+                        <Row noGutters={true}>
+                            <Form style={font32.datePick}>
+                                <Form.Group as={Row} noGutters={true}>
+                                    <Form.Label column xs="4">Due Date: </Form.Label>
                                     <Col xs="8">
+                                        <Form.Text style={font32.font}>
+                                            <DatePicker
+                                                selected={this.state.dueDate}
+                                                onChange={this.handleChange}
+                                            />
+                                        </Form.Text>
+                                    </Col>
+                                </Form.Group>
+                            </Form>
+                        </Row>
+                        <Row noGutters={true}>
+                            <LabelText32> {daysLeftString} </LabelText32>
+                        </Row>
+                        <Row>
+                            <Col xs="5"> <StatusDropdown taskStatus={this.state.taskStatus} statusList={this.statusOptions} theme={this.props.theme} handleChange={this.handleStatusChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
+                            <Col xs="7"><AssignedDropdown assignedState={this.state.assignee} sharedUsers={this.sharedUsers} owner={this.owner} theme={this.props.theme} handleChange={this.handleAssignedChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
+                        </Row>
+                        <Row noGutters={true}>
+                            <Form style={font32.desc}>
+                                <Form.Group as={Row} noGutters={true}>
+                                    <Form.Label column xs="3"> Description: </Form.Label>
+                                    <Col xs="9">
                                         <Form.Control
+                                            as="textarea"
+                                            rows="3"
+                                            cols="60"
                                             onChange={(event: any) => {
                                                 let fieldVal = event.target.value;
-                                                this.setState({name: fieldVal});
-                                                this.setState({hasChanged: true});
-                                                this.setState({ wasDeleteRequested: false })
-                                                this.deleteButtonText = "Delete";
+                                                this.setState({ description: fieldVal });
+                                                this.setState({ hasChanged: true });
                                             }}
-                                            style={font24.darkName}
-                                            value={this.state.name}
-                                            />
+                                            style={font32.desc}
+                                            value={this.state.description}
+                                        />
                                     </Col>
-                                    <Col xs="2">
-                                        <Button
-                                            variant="danger"
-                                            size='lg'
-                                            block
-                                            style={font24.deleteButton}
-                                            onClick={this.deleteTask}
-                                        >
-                                            {this.deleteButtonText}
+                                </Form.Group>
+                            </Form>
+                        </Row>
+                        <Row noGutters={true}>
+                            <Col xs="10" style={styles.sharedTab}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} theme={this.props.theme} fontSize={this.props.fontSize} /> </Col>
+                            <Col xs="2">
+                                <Button
+                                    variant="outline-info"
+                                    size="lg"
+                                    block
+                                    style={font32.historyButton}>
+                                    History
                                         </Button>
-                                    </Col>
-                                </Row>
-                                <Row noGutters={true}>
-                                    <TaskProgressBar percentage={this.state.completion} theme = {this.props.theme} fontSize={this.props.fontSize}/>
-                                </Row>
-                                <Row noGutters={true}>
-                                    <Form style={font24.datePick}>
-                                        <Form.Group as={Row} noGutters={true}>
-                                            <Form.Label column xs="4">Due Date: </Form.Label>
-                                            <Col xs="8">
-                                                <Form.Text style={font24.darkFont}>
-                                                    <DatePicker
-                                                        selected={this.state.dueDate}
-                                                        onChange={this.handleChange}
-                                                    />
-                                                </Form.Text>
-                                            </Col>
-                                        </Form.Group>
-                                    </Form>
-                                </Row>
-                                <Row noGutters={true}>
-                                    <LabelText24> {daysLeftString} </LabelText24>
-                                </Row>
-                                <Row>
-                                    <Col xs="5"> <StatusDropdown taskStatus={this.props.status} statusList={this.statusOptions} theme = {this.props.theme} handleChange={this.handleStatusChange.bind(this)} fontSize = {this.props.fontSize}/> </Col>
-                                    <Col xs="7"><AssignedDropdown assignedState={this.props.assignee} sharedUsers={this.sharedUsers} owner={this.owner} theme = {this.props.theme} handleChange={this.handleAssignedChange.bind(this)} fontSize = {this.props.fontSize} /> </Col>
-                                </Row>
-                                <Row noGutters={true}>
-                                    <Form style={font24.descDark}>
-                                        <Form.Group as={Row} noGutters={true}>
-                                            <Form.Label column xs="2"> Description: </Form.Label>
-                                            <Col xs="10">
-                                                <Form.Control
-                                                    as="textarea"
-                                                    rows="5"
-                                                    cols="60"
-                                                    value={this.state.description}
-                                                    style={font24.descDarkBox}
-                                                    onChange={(event: any) => {
-                                                            let fieldVal = event.target.value;
-                                                            this.setState({description: fieldVal});
-                                                            this.setState({hasChanged: true});
-                                                            this.setState({ wasDeleteRequested: false })
-                                                            this.deleteButtonText = "Delete";
-                                                    }}
-                                                />
-                                            </Col>
-                                        </Form.Group>
-                                    </Form>
-                                </Row>
-                                <Row noGutters={true}>
-                                    <Col xs="10" style={styles.sharedTabDark}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} theme = {this.props.theme} fontSize = {this.props.fontSize}/> </Col>
-                                    <Col xs="2">
-                                        <Button
-                                            variant="info"
-                                            size="lg"
-                                            block
-                                            style={font24.historyButton}>
-                                            History
-                                        </Button>
-                                    </Col>
-                                </Row>
-                            </Container>
-                        );
-                    }
-        } else if(this.props.fontSize === 32) {
-            if(this.props.theme === "light") {
-                        return (
-                            <Container style={styles.container}>
-                                <Row style={styles.row} noGutters={true}>
-                                    <Col xs="2" >
-                                        <Button
-                                            variant="outline-success"
-                                            size='lg'
-                                            block
-                                            style={font32.saveButton}
-                                            onClick={this.updateTask}
-                                            disabled={!this.state.hasChanged}
-                                        >
-                                            {this.saveText}
-                                        </Button>
-                                    </Col>
+                            </Col>
+                        </Row>
+                    </Container>
+                );
+            } else {
+                return (
+                    <Container style={styles.container}>
+                        <Row style={styles.row} noGutters={true}>
+                            <Col xs="2" >
+                                <Button
+                                    variant="success"
+                                    size='lg'
+                                    block
+                                    style={font32.saveButton}
+                                    onClick={this.updateTask}
+                                    disabled={!this.state.hasChanged}
+                                >
+                                    {this.saveText}
+                                </Button>
+                            </Col>
+                            <Col xs="8">
+                                <Form.Control
+                                    onChange={(event: any) => {
+                                        let fieldVal = event.target.value;
+                                        this.setState({ description: fieldVal });
+                                        this.setState({ hasChanged: true });
+                                        this.setState({ wasDeleteRequested: false })
+                                        this.deleteButtonText = "Delete";
+                                    }}
+                                    style={font32.darkName}
+                                    value={this.state.name}
+                                />
+                            </Col>
+                            <Col xs="2">
+                                <Button
+                                    variant="danger"
+                                    size='lg'
+                                    block
+                                    style={font32.deleteButton}
+                                >
+                                    {this.deleteButtonText}
+                                </Button>
+                            </Col>
+                        </Row>
+                        <Row noGutters={true}>
+                            <TaskProgressBar percentage={this.state.completion} theme={this.props.theme} fontSize={this.props.fontSize} />
+                        </Row>
+                        <Row noGutters={true}>
+                            <Form style={font32.datePick}>
+                                <Form.Group as={Row} noGutters={true}>
+                                    <Form.Label column xs="4">Due Date: </Form.Label>
                                     <Col xs="8">
+                                        <Form.Text style={font32.darkFont}>
+                                            <DatePicker
+                                                selected={this.state.dueDate}
+                                                onChange={this.handleChange}
+                                            />
+                                        </Form.Text>
+                                    </Col>
+                                </Form.Group>
+                            </Form>
+                        </Row>
+                        <Row noGutters={true}>
+                            <LabelText32> {daysLeftString} </LabelText32>
+                        </Row>
+                        <Row>
+                            <Col xs="5"> <StatusDropdown taskStatus={this.state.taskStatus} statusList={this.statusOptions} theme={this.props.theme} handleChange={this.handleStatusChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
+                            <Col xs="7"><AssignedDropdown assignedState={this.state.assignee} sharedUsers={this.sharedUsers} owner={this.owner} theme={this.props.theme} handleChange={this.handleAssignedChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
+                        </Row>
+                        <Row noGutters={true}>
+                            <Form style={font32.descDark}>
+                                <Form.Group as={Row} noGutters={true}>
+                                    <Form.Label column xs="3"> Description: </Form.Label>
+                                    <Col xs="9">
                                         <Form.Control
+                                            as="textarea"
+                                            rows="3"
+                                            cols="60"
+                                            value={this.state.description}
+                                            style={font32.descDarkBox}
                                             onChange={(event: any) => {
                                                 let fieldVal = event.target.value;
-                                                this.setState({name: fieldVal});
-                                                this.setState({hasChanged: true});
-                                                this.setState({ wasDeleteRequested: false })
-                                                this.deleteButtonText = "Delete";
+                                                this.setState({ description: fieldVal });
+                                                this.setState({ hasChanged: true });
                                             }}
-                                            style={font32.name}
-                                            value={this.state.name}
-                                            />
+                                        />
                                     </Col>
-                                    <Col xs="2">
-                                        <Button
-                                            variant="outline-danger"
-                                            size='lg'
-                                            block
-                                            style={font32.deleteButton}
-                                            onClick={this.deleteTask}
-                                        >
-                                            {this.deleteButtonText}
+                                </Form.Group>
+                            </Form>
+                        </Row>
+                        <Row noGutters={true}>
+                            <Col xs="10" style={styles.sharedTabDark}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} theme={this.props.theme} fontSize={this.props.fontSize} /> </Col>
+                            <Col xs="2">
+                                <Button
+                                    variant="info"
+                                    size="lg"
+                                    block
+                                    style={font32.historyButton}>
+                                    History
                                         </Button>
-                                    </Col>
-                                </Row>
-                                <Row noGutters={true}>
-                                    <TaskProgressBar percentage={this.state.completion} theme = {this.props.theme} fontSize={this.props.fontSize}/>
-                                </Row>
-                                <Row noGutters={true}>
-                                    <Form style={font32.datePick}>
-                                        <Form.Group as={Row} noGutters={true}>
-                                            <Form.Label column xs="4">Due Date: </Form.Label>
-                                            <Col xs="8">
-                                                <Form.Text style={font32.font}>
-                                                    <DatePicker
-                                                        selected={this.state.dueDate}
-                                                        onChange={this.handleChange}
-                                                    />
-                                                </Form.Text>
-                                            </Col>
-                                        </Form.Group>
-                                    </Form>
-                                </Row>
-                                <Row noGutters={true}>
-                                    <LabelText32> {daysLeftString} </LabelText32>
-                                </Row>
-                                <Row>
-                                    <Col xs="5"> <StatusDropdown taskStatus={this.props.status} statusList={this.statusOptions} theme = {this.props.theme} handleChange={this.handleStatusChange.bind(this)} fontSize = {this.props.fontSize}/> </Col>
-                                    <Col xs="7"><AssignedDropdown assignedState={this.props.assignee} sharedUsers={this.sharedUsers} owner={this.owner} theme = {this.props.theme} handleChange={this.handleAssignedChange.bind(this)} fontSize = {this.props.fontSize} /> </Col>
-                                </Row>
-                                <Row noGutters={true}>
-                                    <Form style={font32.desc}>
-                                        <Form.Group as={Row} noGutters={true}>
-                                            <Form.Label column xs="3"> Description: </Form.Label>
-                                            <Col xs="9">
-                                                <Form.Control
-                                                    as="textarea"
-                                                    rows="3"
-                                                    cols="60"
-                                                    onChange={(event: any) => {
-                                                            let fieldVal = event.target.value;
-                                                            this.setState({description: fieldVal});
-                                                            this.setState({hasChanged: true});
-                                                            this.setState({ wasDeleteRequested: false })
-                                                            this.deleteButtonText = "Delete";
-                                                    }}
-                                                    style={font32.desc}
-                                                    value={this.state.description}
-                                                />
-                                            </Col>
-                                        </Form.Group>
-                                    </Form>
-                                </Row>
-                                <Row noGutters={true}>
-                                    <Col xs="10" style={styles.sharedTab}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} theme = {this.props.theme} fontSize = {this.props.fontSize}/> </Col>
-                                    <Col xs="2">
-                                        <Button
-                                            variant="outline-info"
-                                            size="lg"
-                                            block
-                                            style={font32.historyButton}>
-                                            History
-                                        </Button>
-                                    </Col>
-                                </Row>
-                            </Container>
-                        );
-                    } else {
-                        return (
-                            <Container style={styles.container}>
-                                <Row style={styles.row} noGutters={true}>
-                                    <Col xs="2" >
-                                        <Button
-                                            variant="success"
-                                            size='lg'
-                                            block
-                                            style={font32.saveButton}
-                                            onClick={this.updateTask}
-                                            disabled={!this.state.hasChanged}
-                                        >
-                                            {this.saveText}
-                                        </Button>
-                                    </Col>
-                                    <Col xs="8">
-                                        <Form.Control
-                                            onChange={(event: any) => {
-                                                let fieldVal = event.target.value;
-                                                this.setState({name: fieldVal});
-                                                this.setState({hasChanged: true});
-                                                this.setState({ wasDeleteRequested: false })
-                                                this.deleteButtonText = "Delete";
-                                            }}
-                                            style={font32.darkName}
-                                            value={this.state.name}
-                                            />
-                                    </Col>
-                                    <Col xs="2">
-                                        <Button
-                                            variant="danger"
-                                            size='lg'
-                                            block
-                                            style={font32.deleteButton}
-                                            onClick={this.deleteTask}
-                                        >
-                                            {this.deleteButtonText}
-                                        </Button>
-                                    </Col>
-                                </Row>
-                                <Row noGutters={true}>
-                                    <TaskProgressBar percentage={this.state.completion} theme = {this.props.theme} fontSize={this.props.fontSize}/>
-                                </Row>
-                                <Row noGutters={true}>
-                                    <Form style={font32.datePick}>
-                                        <Form.Group as={Row} noGutters={true}>
-                                            <Form.Label column xs="4">Due Date: </Form.Label>
-                                            <Col xs="8">
-                                                <Form.Text style={font32.darkFont}>
-                                                    <DatePicker
-                                                        selected={this.state.dueDate}
-                                                        onChange={this.handleChange}
-                                                    />
-                                                </Form.Text>
-                                            </Col>
-                                        </Form.Group>
-                                    </Form>
-                                </Row>
-                                <Row noGutters={true}>
-                                    <LabelText32> {daysLeftString} </LabelText32>
-                                </Row>
-                                <Row>
-                                    <Col xs="5"> <StatusDropdown taskStatus={this.props.status} statusList={this.statusOptions} theme = {this.props.theme} handleChange={this.handleStatusChange.bind(this)} fontSize = {this.props.fontSize}/> </Col>
-                                    <Col xs="7"><AssignedDropdown assignedState={this.props.assignee} sharedUsers={this.sharedUsers} owner={this.owner} theme = {this.props.theme} handleChange={this.handleAssignedChange.bind(this)} fontSize = {this.props.fontSize} /> </Col>
-                                </Row>
-                                <Row noGutters={true}>
-                                    <Form style={font32.descDark}>
-                                        <Form.Group as={Row} noGutters={true}>
-                                            <Form.Label column xs="3"> Description: </Form.Label>
-                                            <Col xs="9">
-                                                <Form.Control
-                                                    as="textarea"
-                                                    rows="3"
-                                                    cols="60"
-                                                    value={this.state.description}
-                                                    style={font32.descDarkBox}
-                                                    onChange={(event: any) => {
-                                                            let fieldVal = event.target.value;
-                                                            this.setState({description: fieldVal});
-                                                            this.setState({hasChanged: true});
-                                                            this.setState({ wasDeleteRequested: false })
-                                                            this.deleteButtonText = "Delete";
-                                                    }}
-                                                />
-                                            </Col>
-                                        </Form.Group>
-                                    </Form>
-                                </Row>
-                                <Row noGutters={true}>
-                                    <Col xs="10" style={styles.sharedTabDark}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} theme = {this.props.theme} fontSize = {this.props.fontSize}/> </Col>
-                                    <Col xs="2">
-                                        <Button
-                                            variant="info"
-                                            size="lg"
-                                            block
-                                            style={font32.historyButton}>
-                                            History
-                                        </Button>
-                                    </Col>
-                                </Row>
-                            </Container>
-                        );
-                    }
+                            </Col>
+                        </Row>
+                    </Container>
+                );
+            }
         } else {
-            if(this.props.theme === "light") {
-                        return (
-                            <Container style={styles.container}>
-                                <Row style={styles.row} noGutters={true}>
-                                    <Col xs="2" >
-                                        <Button
-                                            variant="outline-success"
-                                            size='lg'
-                                            block
-                                            style={font40.saveButton}
-                                            onClick={this.updateTask}
-                                            disabled={!this.state.hasChanged}
-                                        >
-                                            {this.saveText}
-                                        </Button>
-                                    </Col>
+            if (this.props.theme === "light") {
+                return (
+                    <Container style={styles.container}>
+                        <Row style={styles.row} noGutters={true}>
+                            <Col xs="2" >
+                                <Button
+                                    variant="outline-success"
+                                    size='lg'
+                                    block
+                                    style={font40.saveButton}
+                                    onClick={this.updateTask}
+                                    disabled={!this.state.hasChanged}
+                                >
+                                    {this.saveText}
+                                </Button>
+                            </Col>
+                            <Col xs="8">
+                                <Form.Control
+                                    onChange={(event: any) => {
+                                        let fieldVal = event.target.value;
+                                        this.setState({ description: fieldVal });
+                                        this.setState({ hasChanged: true });
+                                        this.setState({ wasDeleteRequested: false })
+                                        this.deleteButtonText = "Delete";
+                                    }}
+                                    style={font40.name}
+                                    value={this.state.name}
+                                />
+                            </Col>
+                            <Col xs="2">
+                                <Button
+                                    variant="outline-danger"
+                                    size='lg'
+                                    block
+                                    style={font40.deleteButton}
+                                    onClick={this.deleteTask}
+                                >
+                                    {this.deleteButtonText}
+                                </Button>
+                            </Col>
+                        </Row>
+                        <Row noGutters={true}>
+                            <TaskProgressBar percentage={this.state.completion} theme={this.props.theme} fontSize={this.props.fontSize} />
+                        </Row>
+                        <Row noGutters={true}>
+                            <Form style={font40.datePick}>
+                                <Form.Group as={Row} noGutters={true}>
+                                    <Form.Label column xs="4">Due Date: </Form.Label>
                                     <Col xs="8">
+                                        <Form.Text style={font40.font}>
+                                            <DatePicker
+                                                selected={this.state.dueDate}
+                                                onChange={this.handleChange}
+                                            />
+                                        </Form.Text>
+                                    </Col>
+                                </Form.Group>
+                            </Form>
+                        </Row>
+                        <Row noGutters={true}>
+                            <LabelText40> {daysLeftString} </LabelText40>
+                        </Row>
+                        <Row>
+                            <Col xs="5"> <StatusDropdown taskStatus={this.state.taskStatus} statusList={this.statusOptions} theme={this.props.theme} handleChange={this.handleStatusChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
+                            <Col xs="7"><AssignedDropdown assignedState={this.state.assignee} sharedUsers={this.sharedUsers} owner={this.owner} theme={this.props.theme} handleChange={this.handleAssignedChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
+                        </Row>
+                        <Row noGutters={true}>
+                            <Form style={font40.desc}>
+                                <Form.Group as={Row} noGutters={true}>
+                                    <Form.Label column xs="3"> Description: </Form.Label>
+                                    <Col xs="9">
                                         <Form.Control
+                                            as="textarea"
+                                            rows="2"
+                                            cols="60"
                                             onChange={(event: any) => {
                                                 let fieldVal = event.target.value;
-                                                this.setState({name: fieldVal});
-                                                this.setState({hasChanged: true});
+                                                this.setState({ name: fieldVal });
+                                                this.setState({ hasChanged: true });
                                                 this.setState({ wasDeleteRequested: false })
                                                 this.deleteButtonText = "Delete";
                                             }}
-                                            style={font40.name}
-                                            value={this.state.name}
-                                            />
+                                            style={font40.desc}
+                                            value={this.state.description}
+                                        />
                                     </Col>
-                                    <Col xs="2">
-                                        <Button
-                                            variant="outline-danger"
-                                            size='lg'
-                                            block
-                                            style={font40.deleteButton}
-                                            onClick={this.deleteTask}
-                                        >
-                                            {this.deleteButtonText}
+                                </Form.Group>
+                            </Form>
+                        </Row>
+                        <Row noGutters={true}>
+                            <Col xs="9" style={styles.sharedTab}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} theme={this.props.theme} fontSize={this.props.fontSize} /> </Col>
+                            <Col xs="3">
+                                <Button
+                                    variant="outline-info"
+                                    size="lg"
+                                    block
+                                    style={font40.historyButton}>
+                                    History
                                         </Button>
-                                    </Col>
-                                </Row>
-                                <Row noGutters={true}>
-                                    <TaskProgressBar percentage={this.state.completion} theme = {this.props.theme} fontSize={this.props.fontSize}/>
-                                </Row>
-                                <Row noGutters={true}>
-                                    <Form style={font40.datePick}>
-                                        <Form.Group as={Row} noGutters={true}>
-                                            <Form.Label column xs="4">Due Date: </Form.Label>
-                                            <Col xs="8">
-                                                <Form.Text style={font40.font}>
-                                                    <DatePicker
-                                                        selected={this.state.dueDate}
-                                                        onChange={this.handleChange}
-                                                    />
-                                                </Form.Text>
-                                            </Col>
-                                        </Form.Group>
-                                    </Form>
-                                </Row>
-                                <Row noGutters={true}>
-                                    <LabelText40> {daysLeftString} </LabelText40>
-                                </Row>
-                                <Row>
-                                    <Col xs="5"> <StatusDropdown taskStatus={this.props.status} statusList={this.statusOptions} theme = {this.props.theme} handleChange={this.handleStatusChange.bind(this)} fontSize = {this.props.fontSize}/> </Col>
-                                    <Col xs="7"><AssignedDropdown assignedState={this.props.assignee} sharedUsers={this.sharedUsers} owner={this.owner} theme = {this.props.theme} handleChange={this.handleAssignedChange.bind(this)} fontSize = {this.props.fontSize} /> </Col>
-                                </Row>
-                                <Row noGutters={true}>
-                                    <Form style={font40.desc}>
-                                        <Form.Group as={Row} noGutters={true}>
-                                            <Form.Label column xs="3"> Description: </Form.Label>
-                                            <Col xs="9">
-                                                <Form.Control
-                                                    as="textarea"
-                                                    rows="2"
-                                                    cols="60"
-                                                    onChange={(event: any) => {
-                                                            let fieldVal = event.target.value;
-                                                            this.setState({description: fieldVal});
-                                                            this.setState({hasChanged: true});
-                                                            this.setState({ wasDeleteRequested: false })
-                                                            this.deleteButtonText = "Delete";
-                                                    }}
-                                                    style={font40.desc}
-                                                    value={this.state.description}
-                                                />
-                                            </Col>
-                                        </Form.Group>
-                                    </Form>
-                                </Row>
-                                <Row noGutters={true}>
-                                    <Col xs="9" style={styles.sharedTab}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} theme = {this.props.theme} fontSize = {this.props.fontSize}/> </Col>
-                                    <Col xs="3">
-                                        <Button
-                                            variant="outline-info"
-                                            size="lg"
-                                            block
-                                            style={font40.historyButton}>
-                                            History
-                                        </Button>
-                                    </Col>
-                                </Row>
-                            </Container>
-                        );
-                    } else {
-                        return (
-                            <Container style={styles.container}>
-                                <Row style={styles.row} noGutters={true}>
-                                    <Col xs="2" >
-                                        <Button
-                                            variant="success"
-                                            size='lg'
-                                            block
-                                            style={font40.saveButton}
-                                            onClick={this.updateTask}
-                                            disabled={!this.state.hasChanged}
-                                        >
-                                            {this.saveText}
-                                        </Button>
-                                    </Col>
+                            </Col>
+                        </Row>
+                    </Container>
+                );
+            } else {
+                return (
+                    <Container style={styles.container}>
+                        <Row style={styles.row} noGutters={true}>
+                            <Col xs="2" >
+                                <Button
+                                    variant="success"
+                                    size='lg'
+                                    block
+                                    style={font40.saveButton}
+                                    onClick={this.updateTask}
+                                    disabled={!this.state.hasChanged}
+                                >
+                                    {this.saveText}
+                                </Button>
+                            </Col>
+                            <Col xs="8">
+                                <Form.Control
+                                    onChange={(event: any) => {
+                                        let fieldVal = event.target.value;
+                                        this.setState({ description: fieldVal });
+                                        this.setState({ hasChanged: true });
+                                        this.setState({ wasDeleteRequested: false })
+                                        this.deleteButtonText = "Delete";
+                                    }}
+                                    style={font40.darkName}
+                                    value={this.state.name}
+                                />
+                            </Col>
+                            <Col xs="2">
+                                <Button
+                                    variant="danger"
+                                    size='lg'
+                                    block
+                                    style={font40.deleteButton}
+                                >
+                                    {this.deleteButtonText}
+                                </Button>
+                            </Col>
+                        </Row>
+                        <Row noGutters={true}>
+                            <TaskProgressBar percentage={this.state.completion} theme={this.props.theme} fontSize={this.props.fontSize} />
+                        </Row>
+                        <Row noGutters={true}>
+                            <Form style={font40.datePick}>
+                                <Form.Group as={Row} noGutters={true}>
+                                    <Form.Label column xs="4">Due Date: </Form.Label>
                                     <Col xs="8">
+                                        <Form.Text style={font40.darkFont}>
+                                            <DatePicker
+                                                selected={this.state.dueDate}
+                                                onChange={this.handleChange}
+                                            />
+                                        </Form.Text>
+                                    </Col>
+                                </Form.Group>
+                            </Form>
+                        </Row>
+                        <Row noGutters={true}>
+                            <LabelText40> {daysLeftString} </LabelText40>
+                        </Row>
+                        <Row>
+                            <Col xs="5"> <StatusDropdown taskStatus={this.state.taskStatus} statusList={this.statusOptions} theme={this.props.theme} handleChange={this.handleStatusChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
+                            <Col xs="7"><AssignedDropdown assignedState={this.state.assignee} sharedUsers={this.sharedUsers} owner={this.owner} theme={this.props.theme} handleChange={this.handleAssignedChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
+                        </Row>
+                        <Row noGutters={true}>
+                            <Form style={font40.descDark}>
+                                <Form.Group as={Row} noGutters={true}>
+                                    <Form.Label column xs="3"> Description: </Form.Label>
+                                    <Col xs="9">
                                         <Form.Control
+                                            as="textarea"
+                                            rows="2"
+                                            cols="60"
+                                            value={this.state.description}
+                                            style={font40.descDarkBox}
                                             onChange={(event: any) => {
                                                 let fieldVal = event.target.value;
-                                                this.setState({name: fieldVal});
-                                                this.setState({hasChanged: true});
-                                                this.setState({ wasDeleteRequested: false })
-                                                this.deleteButtonText = "Delete";
+                                                this.setState({ description: fieldVal });
+                                                this.setState({ hasChanged: true });
                                             }}
-                                            style={font40.darkName}
-                                            value={this.state.name}
-                                            />
+                                        />
                                     </Col>
-                                    <Col xs="2">
-                                        <Button
-                                            variant="danger"
-                                            size='lg'
-                                            block
-                                            style={font40.deleteButton}
-                                            onClick={this.deleteTask}
-                                        >
-                                            {this.deleteButtonText}
+                                </Form.Group>
+                            </Form>
+                        </Row>
+                        <Row noGutters={true}>
+                            <Col xs="9" style={styles.sharedTabDark}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} theme={this.props.theme} fontSize={this.props.fontSize} /> </Col>
+                            <Col xs="3">
+                                <Button
+                                    variant="info"
+                                    size="lg"
+                                    block
+                                    style={font40.historyButton}>
+                                    History
                                         </Button>
-                                    </Col>
-                                </Row>
-                                <Row noGutters={true}>
-                                    <TaskProgressBar percentage={this.state.completion} theme = {this.props.theme} fontSize={this.props.fontSize}/>
-                                </Row>
-                                <Row noGutters={true}>
-                                    <Form style={font40.datePick}>
-                                        <Form.Group as={Row} noGutters={true}>
-                                            <Form.Label column xs="4">Due Date: </Form.Label>
-                                            <Col xs="8">
-                                                <Form.Text style={font40.darkFont}>
-                                                    <DatePicker
-                                                        selected={this.state.dueDate}
-                                                        onChange={this.handleChange}
-                                                    />
-                                                </Form.Text>
-                                            </Col>
-                                        </Form.Group>
-                                    </Form>
-                                </Row>
-                                <Row noGutters={true}>
-                                    <LabelText40> {daysLeftString} </LabelText40>
-                                </Row>
-                                <Row>
-                                    <Col xs="5"> <StatusDropdown taskStatus={this.props.status} statusList={this.statusOptions} theme = {this.props.theme} handleChange={this.handleStatusChange.bind(this)} fontSize = {this.props.fontSize}/> </Col>
-                                    <Col xs="7"><AssignedDropdown assignedState={this.props.assignee} sharedUsers={this.sharedUsers} owner={this.owner} theme = {this.props.theme} handleChange={this.handleAssignedChange.bind(this)} fontSize = {this.props.fontSize} /> </Col>
-                                </Row>
-                                <Row noGutters={true}>
-                                    <Form style={font40.descDark}>
-                                        <Form.Group as={Row} noGutters={true}>
-                                            <Form.Label column xs="3"> Description: </Form.Label>
-                                            <Col xs="9">
-                                                <Form.Control
-                                                    as="textarea"
-                                                    rows="2"
-                                                    cols="60"
-                                                    value={this.state.description}
-                                                    style={font40.descDarkBox}
-                                                    onChange={(event: any) => {
-                                                            let fieldVal = event.target.value;
-                                                            this.setState({description: fieldVal});
-                                                            this.setState({hasChanged: true});
-                                                            this.setState({ wasDeleteRequested: false })
-                                                            this.deleteButtonText = "Delete";
-                                                    }}
-                                                />
-                                            </Col>
-                                        </Form.Group>
-                                    </Form>
-                                </Row>
-                                <Row noGutters={true}>
-                                    <Col xs="9" style={styles.sharedTabDark}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} theme = {this.props.theme} fontSize = {this.props.fontSize}/> </Col>
-                                    <Col xs="3">
-                                        <Button
-                                            variant="info"
-                                            size="lg"
-                                            block
-                                            style={font40.historyButton}>
-                                            History
-                                        </Button>
-                                    </Col>
-                                </Row>
-                            </Container>
-                        );
-                    }
+                            </Col>
+                        </Row>
+                    </Container>
+                );
+            }
         }
     }
 };
