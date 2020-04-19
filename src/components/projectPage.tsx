@@ -52,11 +52,11 @@ interface ProjectHistory {
 };
 
 interface ProjectPageProps {
-  projectID: number;
-  theme: string;
-  fontSize: number;
-  userInfo: UserInfo;
-  hideProjectPage: any;
+	projectID: number;
+	theme: string;
+	fontSize: number;
+	userInfo: UserInfo;
+	hideProjectPage: any;
 }
 
 // ProjectPage contains the entire application past the Google oauth. This should include the left and right sidebars
@@ -191,7 +191,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 							hideProjectPage={this.props.hideProjectPage}
 							refreshPage={this.refreshPage}
 						/></Col>
-						<Col sm="3"><SubTaskColumn head={head} changeHead={this.changeHeadFromTask} userInfo={this.props.userInfo} projectId={this.props.projectID} theme = {this.props.theme} fontSize={this.props.fontSize}/></Col>
+						<Col sm="3"><SubTaskColumn head={head} changeHead={this.changeHeadFromTask} userInfo={this.props.userInfo} projectId={this.props.projectID} theme={this.props.theme} fontSize={this.props.fontSize} /></Col>
 					</Row>
 				</Container>
 			);
@@ -323,7 +323,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 
 		const updatedTask = { owner: this.state.task.owner, title: this.state.task.title, status: this.state.task.status, assignedTo: this.state.task.assignedTo, progress: progress, deadline: this.state.task.deadline, description: this.state.task.description };
 		//get subtask progress
-		const request = new UserHeaderHttpRequest(`/api/tasks/${id}`, this.props.userInfo,  { 'Content-Type': 'application/json' });
+		const request = new UserHeaderHttpRequest(`/api/tasks/${id}`, this.props.userInfo, { 'Content-Type': 'application/json' });
 		await fetch(request,
 			{
 				method: 'PUT',
@@ -385,6 +385,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 									isNewHeadInHistory = true;
 								}
 							}
+							// If the task is not present in the current history
 							if (!isNewHeadInHistory) {
 								// destory the end of the history until the head is discovered
 								while (!headDiscovered && history.length !== 0) {
@@ -394,10 +395,29 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 										headDiscovered = true;
 									}
 								}
+
 								let taskHistoryNode: ProjectHistory;
 								let childProgress: number[] = await this.retrieveChildProgress(this.state.head);
 
 								taskHistoryNode = { id: result._id, name: result.title, progress: result.progress, childProgress: childProgress };
+
+								let parentChildProgress: number[] = await this.retrieveChildProgress(history[history.length - 1].id);
+								// check if the parent's child progress array is up to date.
+								if (history[history.length - 1].childProgress.length !== parentChildProgress.length) {
+									history[history.length - 1].childProgress.push(result.progress);
+									let newAverage: number;
+									for (let i = history.length - 1; i >= 0; i--) {
+										newAverage = 0;
+										for (let j = 0; j < history[i].childProgress.length; j++) {
+											newAverage += history[i].childProgress[j]
+										}
+										newAverage = newAverage / history[i].childProgress.length;
+										if (newAverage !== history[i].progress) {
+											this.updateProgress(history[i].id, newAverage);
+										}
+									}
+								}
+
 
 								history.push(taskHistoryNode);
 								console.log(history);
