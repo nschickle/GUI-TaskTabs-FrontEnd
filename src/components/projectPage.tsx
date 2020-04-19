@@ -371,7 +371,6 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 								task: result,
 								history: newHistory
 							});
-							console.log(newHistory);
 
 						}
 						// This deletes the history after the previous head, and adds the new head to the end of the list.
@@ -439,7 +438,6 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 
 
 								history.push(taskHistoryNode);
-								console.log(history);
 							}
 
 							this.setState({

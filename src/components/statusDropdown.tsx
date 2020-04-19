@@ -91,9 +91,9 @@ export class StatusDropdown extends React.Component<StatusDropdownProps, StatusS
         this.options = props.statusList;
     }
 
-    componentDidUpdate(newProps: StatusDropdownProps) {
+    componentDidUpdate(oldProps: StatusDropdownProps) {
         const { taskStatus } = this.props;
-        if (newProps.taskStatus !== taskStatus) {
+        if (oldProps.taskStatus !== taskStatus) {
             this.setState({
                 taskStatus: taskStatus
             })
@@ -102,7 +102,6 @@ export class StatusDropdown extends React.Component<StatusDropdownProps, StatusS
 
     render() {
         const taskStatus = this.state.taskStatus;
-
         // Maps through the array given and sets up the options
         const arrayOp = this.options.map((item, i) => {
             return (
@@ -123,7 +122,7 @@ export class StatusDropdown extends React.Component<StatusDropdownProps, StatusS
                                         this.setState({taskStatus: event.target.value});
                                         this.props.handleChange(event);
                                     }}
-                                    defaultValue={taskStatus}
+                                    value={taskStatus}
                                     size="lg"
                                     style={light.font16}
                                 >
@@ -145,7 +144,7 @@ export class StatusDropdown extends React.Component<StatusDropdownProps, StatusS
                                         this.setState({taskStatus: event.target.value});
                                         this.props.handleChange(event);
                                     }}
-                                    defaultValue={taskStatus}
+                                    value={taskStatus}
                                     size="lg"
                                     style={light.font24}
                                 >
@@ -167,7 +166,7 @@ export class StatusDropdown extends React.Component<StatusDropdownProps, StatusS
                                         this.setState({taskStatus: event.target.value});
                                         this.props.handleChange(event);
                                     }}
-                                    defaultValue={taskStatus}
+                                    value={taskStatus}
                                     size="lg"
                                     style={light.font32}
                                 >
@@ -189,7 +188,7 @@ export class StatusDropdown extends React.Component<StatusDropdownProps, StatusS
                                         this.setState({taskStatus: event.target.value});
                                         this.props.handleChange(event);
                                     }}
-                                    defaultValue={taskStatus}
+                                    value={taskStatus}
                                     size="lg"
                                     style={light.font40}
                                 >
@@ -213,7 +212,7 @@ export class StatusDropdown extends React.Component<StatusDropdownProps, StatusS
                                         this.setState({taskStatus: event.target.value});
                                         this.props.handleChange(event);
                                     }}
-                                    defaultValue={taskStatus}
+                                    value={taskStatus}
                                     size="lg"
                                     style={dark.font16}
                                 >
@@ -235,7 +234,7 @@ export class StatusDropdown extends React.Component<StatusDropdownProps, StatusS
                                         this.setState({taskStatus: event.target.value});
                                         this.props.handleChange(event);
                                     }}
-                                    defaultValue={taskStatus}
+                                    value={taskStatus}
                                     size="lg"
                                     style={dark.font24}
                                 >
@@ -257,7 +256,7 @@ export class StatusDropdown extends React.Component<StatusDropdownProps, StatusS
                                         this.setState({taskStatus: event.target.value});
                                         this.props.handleChange(event);
                                     }}
-                                    defaultValue={taskStatus}
+                                    value={taskStatus}
                                     size="lg"
                                     style={dark.font32}
                                 >
@@ -279,7 +278,7 @@ export class StatusDropdown extends React.Component<StatusDropdownProps, StatusS
                                         this.setState({taskStatus: event.target.value});
                                         this.props.handleChange(event);
                                     }}
-                                    defaultValue={taskStatus}
+                                    value={taskStatus}
                                     size="lg"
                                     style={dark.font40}
                                 >
