@@ -61,7 +61,7 @@ interface ProjectPageProps {
 
 // ProjectPage contains the entire application past the Google oauth. This should include the left and right sidebars
 // task view, settings user info, etc.
-export class ProjectPage extends React.Component<ProjectPageProps, { error: any, isLoaded: boolean, task: Task, head: number, history: ProjectHistory[] }>{
+export class ProjectPage extends React.Component<ProjectPageProps, { error: any, isLoaded: boolean, task: Task, head: number, history: ProjectHistory[], projectColumnKey: number }>{
 
 	constructor(props: ProjectPageProps) {
 		super(props);
@@ -72,6 +72,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 			task: null,
 			head: undefined,
 			history: [],
+			projectColumnKey: 1,
 		};
 	}
 
@@ -155,39 +156,39 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 					{history.map(node => {
 						return (
 							<HistoryButton key={node.id} id={node.id} name={node.name} changeHead={this.changeHeadFromHistory} currentHead={head}
-                            theme = {this.props.theme} fontSize={this.props.fontSize}/>
-                        );
-                    })}
-                </Breadcrumb>;
+								theme={this.props.theme} fontSize={this.props.fontSize} />
+						);
+					})}
+				</Breadcrumb>;
 
-            // prevent date from being invalid, else everythign crashes
-            let deadline;
-            if (!!task.deadline) {
-                deadline = new Date(task.deadline);
-            } else {
-                deadline = null;
-            }
-            return (
-                <Container fluid style={styles.box}>
-                    <HistoryRow>{historyComponent}</HistoryRow>
-                    <Row noGutters={true}>
-                        <Col sm="3"><ProjectColumn head={head} changeHead={this.changeHeadFromProject} userInfo={this.props.userInfo} theme = {this.props.theme} fontSize={this.props.fontSize} /></Col>
-                        <Col sm="6"><TaskView
-                            taskID={head}
-                            changeHead={this.changeHeadFromTask}
-                            parentId={task.parentId}
-                            projectId={this.props.projectID}
-                            name={task.title}
-                            completion={task.progress}
-                            description={task.description}
-                            dueDate={deadline}
-                            status={task.status}
-                            assignee={task.assignedTo}
-                            owner={testOwner}
-                            sharedUsers={testSharedWith}
-                            userInfo={this.props.userInfo}
-                            theme = {this.props.theme}
-							fontSize = {this.props.fontSize}
+			// prevent date from being invalid, else everythign crashes
+			let deadline;
+			if (!!task.deadline) {
+				deadline = new Date(task.deadline);
+			} else {
+				deadline = null;
+			}
+			return (
+				<Container fluid style={styles.box}>
+					<HistoryRow>{historyComponent}</HistoryRow>
+					<Row noGutters={true}>
+						<Col sm="3"><ProjectColumn key={this.state.projectColumnKey} head={head} changeHead={this.changeHeadFromProject} userInfo={this.props.userInfo} theme={this.props.theme} fontSize={this.props.fontSize} /></Col>
+						<Col sm="6"><TaskView
+							taskID={head}
+							changeHead={this.changeHeadFromTask}
+							parentId={task.parentId}
+							projectId={this.props.projectID}
+							name={task.title}
+							completion={task.progress}
+							description={task.description}
+							dueDate={deadline}
+							status={task.status}
+							assignee={task.assignedTo}
+							owner={testOwner}
+							sharedUsers={testSharedWith}
+							userInfo={this.props.userInfo}
+							theme={this.props.theme}
+							fontSize={this.props.fontSize}
 							hideProjectPage={this.props.hideProjectPage}
 							refreshPage={this.refreshPage}
 						/></Col>
@@ -302,6 +303,8 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 								}
 							}
 						}
+						// increment key to re-render projectColumn
+						this.setState({ projectColumnKey: this.state.projectColumnKey + 1 });
 					}
 					this.setState({
 						isLoaded: true,
@@ -416,6 +419,8 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 											this.updateProgress(history[i].id, newAverage);
 										}
 									}
+									// increment key to re-render projectColumn
+									this.setState({ projectColumnKey: this.state.projectColumnKey + 1 });
 								}
 
 
