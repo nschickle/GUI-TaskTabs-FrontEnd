@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import mainLogo from './logo.png';
+import GoogleLogin from 'react-google-login';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
@@ -35,6 +35,7 @@ const font16 = {
     fontSize: {
         fontSize: 16
     },
+    
 };
 
 const font24 = {
@@ -61,8 +62,7 @@ const font24 = {
         margin: "auto"
     },
     fontSize: {
-        fontSize: 24,
-        width: 75
+        fontSize: 24
     },
 };
 
@@ -90,8 +90,7 @@ const font32 = {
         margin: "auto"
     },
     fontSize: {
-        fontSize: 32,
-        width: 75
+        fontSize: 32
     },
 };
 
@@ -119,14 +118,17 @@ const font40 = {
         margin: "auto"
     },
     fontSize: {
-        fontSize: 36,
-        width: 75
+        fontSize: 36
     },
 }
 
 const styles = {
     gButton: {
         borderStyle: "none"
+    },
+    img: {
+        
+        margin: 20
     }
 }
 
@@ -135,6 +137,10 @@ const testOwner: IUser = { id: 0, name: "Super Steve" };
 interface IUser {
     id: number;
     name: string;
+}
+
+const responseGoogle = (response: any) => {
+    console.log(response);
 }
 
 interface INavBarProps {
@@ -245,13 +251,14 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
             if (this.state.theme === "light") {
                 navBar = <Container fluid>
                     <Navbar bg="light" variant="light" style={font16.size}>
-                        <Navbar.Brand>
-                        <img
-                        src={mainLogo}
-                        width="60"
-                        height="60"
+                    <img
+                        src={require("../img/logo.png")}
+                        width="50"
+                        height="50"
                         className="d-inline-block"
+                        style={styles.img}
                         alt="TaskTabs Logo"/>
+                        <Navbar.Brand style={font16.fontSize}>
                             TaskTabs
                         </Navbar.Brand>
                         <Navbar.Toggle />
@@ -356,7 +363,14 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
             } else {
                 navBar = <Container fluid>
                     <Navbar bg="dark" variant="dark" style={font16.size}>
-                        <Navbar.Brand>TaskTabs</Navbar.Brand>
+                    <img
+                        src={require("../img/logo.png")}
+                        width="50"
+                        height="50"
+                        className="d-inline-block"
+                        style={styles.img}
+                        alt="TaskTabs Logo"/>
+                        <Navbar.Brand style={font16.fontSize}>TaskTabs</Navbar.Brand>
                         <Navbar.Toggle />
                         <Navbar.Collapse>
                             <Nav>
@@ -462,7 +476,14 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
             if (this.state.theme === "light") {
                 navBar = <Container fluid>
                     <Navbar bg="light" variant="light" style={font24.size}>
-                        <Navbar.Brand>TaskTabs</Navbar.Brand>
+                    <img
+                        src={require("../img/logo.png")}
+                        width="65"
+                        height="65"
+                        className="d-inline-block"
+                        style={styles.img}
+                        alt="TaskTabs Logo"/>
+                        <Navbar.Brand style={font24.fontSize}>TaskTabs</Navbar.Brand>
                         <Navbar.Toggle />
                         <Navbar.Collapse>
                             <Nav>
@@ -565,7 +586,14 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
             } else {
                 navBar = <Container fluid>
                     <Navbar bg="dark" variant="dark" style={font24.size}>
-                        <Navbar.Brand>TaskTabs</Navbar.Brand>
+                    <img
+                        src={require("../img/logo.png")}
+                        width="65"
+                        height="65"
+                        className="d-inline-block"
+                        style={styles.img}
+                        alt="TaskTabs Logo"/>
+                        <Navbar.Brand style={font24.fontSize}>TaskTabs</Navbar.Brand>
                         <Navbar.Toggle />
                         <Navbar.Collapse>
                             <Nav>
@@ -671,7 +699,14 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
             if (this.state.theme === "light") {
                 navBar = <Container fluid>
                     <Navbar bg="light" variant="light" style={font32.size}>
-                        <Navbar.Brand>TaskTabs</Navbar.Brand>
+                    <img
+                        src={require("../img/logo.png")}
+                        width="65"
+                        height="65"
+                        className="d-inline-block"
+                        style={styles.img}
+                        alt="TaskTabs Logo"/>
+                        <Navbar.Brand style={font32.fontSize}>TaskTabs</Navbar.Brand>
                         <Navbar.Toggle />
                         <Navbar.Collapse>
                             <Nav>
@@ -774,7 +809,14 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
             } else {
                 navBar = <Container fluid>
                     <Navbar bg="dark" variant="dark" style={font32.size}>
-                        <Navbar.Brand>TaskTabs</Navbar.Brand>
+                    <img
+                        src={require("../img/logo.png")}
+                        width="65"
+                        height="65"
+                        className="d-inline-block"
+                        style={styles.img}
+                        alt="TaskTabs Logo"/>
+                        <Navbar.Brand style={font32.fontSize}>TaskTabs</Navbar.Brand>
                         <Navbar.Toggle />
                         <Navbar.Collapse>
                             <Nav>
@@ -880,7 +922,14 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
             if (this.state.theme === "light") {
                 navBar = <Container fluid>
                     <Navbar bg="light" variant="light" style={font40.size}>
-                        <Navbar.Brand>TaskTabs</Navbar.Brand>
+                    <img
+                        src={require("../img/logo.png")}
+                        width="70"
+                        height="70"
+                        className="d-inline-block"
+                        style={styles.img}
+                        alt="TaskTabs Logo"/>
+                        <Navbar.Brand style={font40.fontSize}>TaskTabs</Navbar.Brand>
                         <Navbar.Toggle />
                         <Navbar.Collapse>
                             <Nav>
@@ -983,7 +1032,14 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
             } else {
                 navBar = <Container fluid>
                     <Navbar bg="dark" variant="dark" style={font40.size}>
-                        <Navbar.Brand>TaskTabs</Navbar.Brand>
+                    <img
+                        src={require("../img/logo.png")}
+                        width="70"
+                        height="70"
+                        className="d-inline-block"
+                        style={styles.img}
+                        alt="TaskTabs Logo"/>
+                        <Navbar.Brand style={font40.fontSize}>TaskTabs</Navbar.Brand>
                         <Navbar.Toggle />
                         <Navbar.Collapse>
                             <Nav>
