@@ -80,7 +80,12 @@ const font16 = {
         marginTop: 10
     },
     historyButton: {
-        height: 112,
+        height: 56,
+        minWidth: 100,
+        fontSize: 16
+    },
+    statButton: {
+        height: 56,
         minWidth: 100,
         fontSize: 16
     }
@@ -148,7 +153,12 @@ const font24 = {
         marginTop: 10
     },
     historyButton: {
-        height: 150,
+        height: 75,
+        minWidth: 100,
+        fontSize: 24
+    },
+    statButton: {
+        height: 75,
         minWidth: 100,
         fontSize: 24
     }
@@ -215,7 +225,12 @@ const font32 = {
         marginTop: 10
     },
     historyButton: {
-        height: 184,
+        height: 92,
+        minWidth: 100,
+        fontSize: 32
+    },
+    statButton: {
+        height: 92,
         minWidth: 100,
         fontSize: 32
     }
@@ -282,7 +297,12 @@ const font40 = {
         marginTop: 10
     },
     historyButton: {
-        height: 184,
+        height: 92,
+        minWidth: 100,
+        fontSize: 40
+    },
+    statButton: {
+        height: 92,
         minWidth: 100,
         fontSize: 40
     }
@@ -385,6 +405,9 @@ interface TaskViewProps {
     userInfo: UserInfo;
     hideProjectPage: any;
     refreshPage: () => any;
+    showStatTab: any;
+    showHistoryTab: any;
+    viewPage: string;
 };
 
 interface TaskViewState {
@@ -401,6 +424,8 @@ interface TaskViewState {
     completion: number;
     hasChanged: boolean;
     wasDeleteRequested: boolean;
+    showStatTab: any;
+    showHistoryTab: any;
 };
 
 
@@ -444,7 +469,7 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
 
         this.state = {
             width: 0, height: 0, dueDate: this.props.dueDate, description: this.props.description, taskStatus: this.props.status, assignee: this.props.assignee, error: null, isLoaded: false,
-            subTasks: [], name: this.props.name, completion: this.props.completion, hasChanged: false, wasDeleteRequested: false,
+            subTasks: [], name: this.props.name, completion: this.props.completion, hasChanged: false, wasDeleteRequested: false, showHistoryTab: props.showHistoryTab, showStatTab: props.showStatTab
         };
 
         this.makeSubTaskQuery(5);
@@ -749,13 +774,26 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                         <Row noGutters={true}>
                             <Col xs="10" style={styles.sharedTab}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} theme={this.props.theme} fontSize={this.props.fontSize} /> </Col>
                             <Col xs="2">
-                                <Button
-                                    variant="outline-info"
-                                    size="lg"
-                                    block
-                                    style={font16.historyButton}>
-                                    History
-                                        </Button>
+                                <Row noGutters={true}>
+                                    <Button
+                                        variant="outline-info"
+                                        size="lg"
+                                        block
+                                        style={font16.historyButton}
+                                        onClick={this.props.showHistoryTab}>
+                                        History
+                                    </Button>
+                                </Row>
+                                <Row noGutters={true}>
+                                    <Button
+                                        variant="outline-info"
+                                        size="lg"
+                                        block
+                                        style={font16.statButton}
+                                        onClick={this.props.showStatTab}>
+                                        Statistics
+                                    </Button>
+                                </Row>
                             </Col>
                         </Row>
                     </Container>
@@ -849,13 +887,26 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                         <Row noGutters={true}>
                             <Col xs="10" style={styles.sharedTabDark}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} theme={this.props.theme} fontSize={this.props.fontSize} /> </Col>
                             <Col xs="2">
-                                <Button
-                                    variant="info"
-                                    size="lg"
-                                    block
-                                    style={font16.historyButton}>
-                                    History
-                                        </Button>
+                                <Row noGutters={true}>
+                                    <Button
+                                        variant="info"
+                                        size="lg"
+                                        block
+                                        style={font16.historyButton}
+                                        onClick={this.props.showHistoryTab}>
+                                        History
+                                    </Button>
+                                </Row>
+                                <Row noGutters={true}>
+                                    <Button
+                                        variant="info"
+                                        size="lg"
+                                        block
+                                        style={font16.statButton}
+                                        onClick={this.props.showStatTab}>
+                                        Statistics
+                                    </Button>
+                                </Row>
                             </Col>
                         </Row>
                     </Container>
@@ -954,13 +1005,26 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                         <Row noGutters={true}>
                             <Col xs="10" style={styles.sharedTab}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} theme={this.props.theme} fontSize={this.props.fontSize} /> </Col>
                             <Col xs="2">
-                                <Button
-                                    variant="outline-info"
-                                    size="lg"
-                                    block
-                                    style={font24.historyButton}>
-                                    History
-                                        </Button>
+                                <Row noGutters={true}>
+                                    <Button
+                                        variant="outline-info"
+                                        size="lg"
+                                        block
+                                        style={font24.historyButton}
+                                        onClick={this.props.showHistoryTab}>
+                                        History
+                                    </Button>
+                                </Row>
+                                <Row noGutters={true}>
+                                    <Button
+                                        variant="outline-info"
+                                        size="lg"
+                                        block
+                                        style={font24.statButton}
+                                        onClick={this.props.showStatTab}>
+                                        Statistics
+                                    </Button>
+                                </Row>
                             </Col>
                         </Row>
                     </Container>
@@ -1056,13 +1120,26 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                         <Row noGutters={true}>
                             <Col xs="10" style={styles.sharedTabDark}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} theme={this.props.theme} fontSize={this.props.fontSize} /> </Col>
                             <Col xs="2">
-                                <Button
-                                    variant="info"
-                                    size="lg"
-                                    block
-                                    style={font24.historyButton}>
-                                    History
-                                        </Button>
+                                <Row noGutters={true}>
+                                    <Button
+                                        variant="info"
+                                        size="lg"
+                                        block
+                                        style={font24.historyButton}
+                                        onClick={this.props.showHistoryTab}>
+                                        History
+                                    </Button>
+                                </Row>
+                                <Row noGutters={true}>
+                                    <Button
+                                        variant="info"
+                                        size="lg"
+                                        block
+                                        style={font24.statButton}
+                                        onClick={this.props.showStatTab}>
+                                        Statistics
+                                    </Button>
+                                </Row>
                             </Col>
                         </Row>
                     </Container>
@@ -1159,13 +1236,26 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                         <Row noGutters={true}>
                             <Col xs="10" style={styles.sharedTab}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} theme={this.props.theme} fontSize={this.props.fontSize} /> </Col>
                             <Col xs="2">
-                                <Button
-                                    variant="outline-info"
-                                    size="lg"
-                                    block
-                                    style={font32.historyButton}>
-                                    History
-                                        </Button>
+                                <Row noGutters={true}>
+                                    <Button
+                                        variant="outline-info"
+                                        size="lg"
+                                        block
+                                        style={font32.historyButton}
+                                        onClick={this.props.showHistoryTab}>
+                                        History
+                                    </Button>
+                                </Row>
+                                <Row noGutters={true}>
+                                    <Button
+                                        variant="outline-info"
+                                        size="lg"
+                                        block
+                                        style={font32.statButton}
+                                        onClick={this.props.showStatTab}>
+                                        Statistics
+                                    </Button>
+                                </Row>
                             </Col>
                         </Row>
                     </Container>
@@ -1259,13 +1349,26 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                         <Row noGutters={true}>
                             <Col xs="10" style={styles.sharedTabDark}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} theme={this.props.theme} fontSize={this.props.fontSize} /> </Col>
                             <Col xs="2">
-                                <Button
-                                    variant="info"
-                                    size="lg"
-                                    block
-                                    style={font32.historyButton}>
-                                    History
-                                        </Button>
+                                <Row noGutters={true}>
+                                    <Button
+                                        variant="info"
+                                        size="lg"
+                                        block
+                                        style={font32.historyButton}
+                                        onClick={this.props.showHistoryTab}>
+                                        History
+                                    </Button>
+                                </Row>
+                                <Row noGutters={true}>
+                                    <Button
+                                        variant="info"
+                                        size="lg"
+                                        block
+                                        style={font32.statButton}
+                                        onClick={this.props.showStatTab}>
+                                        Statistics
+                                    </Button>
+                                </Row>
                             </Col>
                         </Row>
                     </Container>
@@ -1364,13 +1467,26 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                         <Row noGutters={true}>
                             <Col xs="9" style={styles.sharedTab}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} theme={this.props.theme} fontSize={this.props.fontSize} /> </Col>
                             <Col xs="3">
-                                <Button
-                                    variant="outline-info"
-                                    size="lg"
-                                    block
-                                    style={font40.historyButton}>
-                                    History
-                                        </Button>
+                                <Row noGutters={true}>
+                                    <Button
+                                        variant="outline-info"
+                                        size="lg"
+                                        block
+                                        style={font40.historyButton}
+                                        onClick={this.props.showHistoryTab}>
+                                        History
+                                    </Button>
+                                </Row>
+                                <Row noGutters={true}>
+                                    <Button
+                                        variant="outline-info"
+                                        size="lg"
+                                        block
+                                        style={font40.statButton}
+                                        onClick={this.props.showStatTab}>
+                                        Statistics
+                                    </Button>
+                                </Row>
                             </Col>
                         </Row>
                     </Container>
@@ -1464,13 +1580,26 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                         <Row noGutters={true}>
                             <Col xs="9" style={styles.sharedTabDark}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} theme={this.props.theme} fontSize={this.props.fontSize} /> </Col>
                             <Col xs="3">
-                                <Button
-                                    variant="info"
-                                    size="lg"
-                                    block
-                                    style={font40.historyButton}>
-                                    History
-                                        </Button>
+                                <Row noGutters={true}>
+                                    <Button
+                                        variant="info"
+                                        size="lg"
+                                        block
+                                        style={font40.historyButton}
+                                        onClick={this.props.showHistoryTab}>
+                                        History
+                                    </Button>
+                                </Row>
+                                <Row noGutters={true}>
+                                    <Button
+                                        variant="info"
+                                        size="lg"
+                                        block
+                                        style={font40.statButton}
+                                        onClick={this.props.showStatTab}>
+                                        Statistics
+                                    </Button>
+                                </Row>
                             </Col>
                         </Row>
                     </Container>
