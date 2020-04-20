@@ -503,16 +503,6 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
         this.deleteButtonText = "Delete";
     }
 
-    // If the title is too long, we should shorten it to fit the space we have.
-    displayName = () => {
-        let displayedName = this.props.name;
-        if (displayedName.length > 13) {
-            displayedName = displayedName.substring(0, 13);
-            displayedName += "...";
-        }
-        return displayedName;
-    }
-
     // Calculates the difference between the current date and the due date
     calculateDaysLeft = (dueDate: Date) => {
         let today = new Date();
@@ -687,7 +677,7 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                                 <Form.Control
                                     onChange={(event: any) => {
                                         let fieldVal = event.target.value;
-                                        this.setState({ description: fieldVal });
+                                        this.setState({ name: fieldVal });
                                         this.setState({ hasChanged: true });
                                         this.setState({ wasDeleteRequested: false })
                                         this.deleteButtonText = "Delete";
@@ -790,7 +780,7 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                                 <Form.Control
                                     onChange={(event: any) => {
                                         let fieldVal = event.target.value;
-                                        this.setState({ description: fieldVal });
+                                        this.setState({ name: fieldVal });
                                         this.setState({ hasChanged: true });
                                         this.setState({ wasDeleteRequested: false })
                                         this.deleteButtonText = "Delete";
@@ -892,7 +882,7 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                                 <Form.Control
                                     onChange={(event: any) => {
                                         let fieldVal = event.target.value;
-                                        this.setState({ description: fieldVal });
+                                        this.setState({ name: fieldVal });
                                         this.setState({ hasChanged: true });
                                         this.setState({ wasDeleteRequested: false })
                                         this.deleteButtonText = "Delete";
@@ -995,7 +985,7 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                                 <Form.Control
                                     onChange={(event: any) => {
                                         let fieldVal = event.target.value;
-                                        this.setState({ description: fieldVal });
+                                        this.setState({ name: fieldVal });
                                         this.setState({ hasChanged: true });
                                         this.setState({ wasDeleteRequested: false })
                                         this.deleteButtonText = "Delete";
@@ -1099,7 +1089,7 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                                 <Form.Control
                                     onChange={(event: any) => {
                                         let fieldVal = event.target.value;
-                                        this.setState({ description: fieldVal });
+                                        this.setState({ name: fieldVal });
                                         this.setState({ hasChanged: true });
                                         this.setState({ wasDeleteRequested: false })
                                         this.deleteButtonText = "Delete";
@@ -1200,7 +1190,7 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                                 <Form.Control
                                     onChange={(event: any) => {
                                         let fieldVal = event.target.value;
-                                        this.setState({ description: fieldVal });
+                                        this.setState({ name: fieldVal });
                                         this.setState({ hasChanged: true });
                                         this.setState({ wasDeleteRequested: false })
                                         this.deleteButtonText = "Delete";
@@ -1302,7 +1292,7 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                                 <Form.Control
                                     onChange={(event: any) => {
                                         let fieldVal = event.target.value;
-                                        this.setState({ description: fieldVal });
+                                        this.setState({ name: fieldVal });
                                         this.setState({ hasChanged: true });
                                         this.setState({ wasDeleteRequested: false })
                                         this.deleteButtonText = "Delete";
@@ -1405,7 +1395,7 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                                 <Form.Control
                                     onChange={(event: any) => {
                                         let fieldVal = event.target.value;
-                                        this.setState({ description: fieldVal });
+                                        this.setState({ name: fieldVal });
                                         this.setState({ hasChanged: true });
                                         this.setState({ wasDeleteRequested: false })
                                         this.deleteButtonText = "Delete";
