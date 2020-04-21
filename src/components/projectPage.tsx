@@ -14,6 +14,8 @@ import Breadcrumb from "react-bootstrap/Breadcrumb";
 import { UserInfo } from "./userInfo";
 import { UserHeaderHttpRequest } from "./userHeaderHttpRequest";
 import { RetryableFetch } from "./retryableFetch";
+import { HistoryTab } from "./historyTab";
+import { StatTab } from "./statTab";
 
 const styles = {
     box: {
@@ -44,6 +46,30 @@ const testSharedWith: IUser[] = [
     { id: 2, name: "Tiny Steve" },
 ];
 
+interface History {
+    id: string,
+    taskID: string,
+    responsibleUser: string,
+    timestamp: Date,
+    textBody: string
+}
+
+const historyPlaceholder: History[] = [
+    {   id: "1",
+        taskID: "task1",
+        responsibleUser: "Super Steve",
+        timestamp: new Date(),
+        textBody: "Changed title from 'task1' -> 'Task 1'"
+    },
+    {
+        id: "2",
+        taskID: "task1",
+        responsibleUser: "Super Steve",
+        timestamp: new Date(),
+        textBody: "Changed desciption from 'asdfad' -> 'This is a description'"
+    }
+];
+
 interface ProjectHistory {
 	id: number,
 	name: string,
@@ -57,11 +83,12 @@ interface ProjectPageProps {
 	fontSize: number;
 	userInfo: UserInfo;
 	hideProjectPage: any;
+    viewPage: string;
 }
 
 // ProjectPage contains the entire application past the Google oauth. This should include the left and right sidebars
 // task view, settings user info, etc.
-export class ProjectPage extends React.Component<ProjectPageProps, { error: any, isLoaded: boolean, task: Task, head: number, history: ProjectHistory[], projectColumnKey: number }>{
+export class ProjectPage extends React.Component<ProjectPageProps, { error: any, isLoaded: boolean, task: Task, head: number, history: ProjectHistory[], projectColumnKey: number, viewPage: string }>{
 
 	constructor(props: ProjectPageProps) {
 		super(props);
@@ -73,8 +100,21 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 			head: undefined,
 			history: [],
 			projectColumnKey: 1,
+            viewPage: props.viewPage
 		};
 	}
+
+    showHistoryTab = () => {
+        this.setState({ viewPage: "historyTab" });
+    }
+
+    showStatTab = () => {
+        this.setState({ viewPage: "statTab" });
+    }
+
+    showTaskView = () => {
+        this.setState({ viewPage: "taskView" });
+    }
 
 	// This will attempt to fetch from the database a given number of times.
 	// This is needed because if the head was recently inserted, the fetch will
@@ -168,33 +208,76 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 			} else {
 				deadline = null;
 			}
+            let pageView;
+            if (this.state.viewPage === "taskView"){
+                pageView = <Container fluid style={styles.box}>
+                        <HistoryRow>{historyComponent}</HistoryRow>
+                        <Row noGutters={true}>
+                            <Col sm="3"><ProjectColumn head={head} changeHead={this.changeHeadFromProject} userInfo={this.props.userInfo} theme = {this.props.theme} fontSize={this.props.fontSize} /></Col>
+                            <Col sm="6"><TaskView
+                                taskID={head}
+                                changeHead={this.changeHeadFromTask}
+                                parentId={task.parentId}
+                                projectId={this.props.projectID}
+                                name={task.title}
+                                completion={task.progress}
+                                description={task.description}
+                                dueDate={deadline}
+                                status={task.status}
+                                assignee={task.assignedTo}
+                                owner={testOwner}
+                                sharedUsers={testSharedWith}
+                                userInfo={this.props.userInfo}
+                                theme = {this.props.theme}
+                                fontSize = {this.props.fontSize}
+                                viewPage = {this.state.viewPage}
+                                showHistoryTab = {this.showHistoryTab}
+                                showStatTab = {this.showStatTab}
+                                hideProjectPage={this.props.hideProjectPage}
+                                refreshPage={this.refreshPage}
+                            /></Col>
+                            <Col sm="3"><SubTaskColumn head={head} changeHead={this.changeHeadFromTask} userInfo={this.props.userInfo} projectId={this.props.projectID} theme = {this.props.theme} fontSize={this.props.fontSize}/></Col>
+                        </Row>
+                    </Container>;
+            } else if (this.state.viewPage === "historyTab"){
+                pageView = <Container fluid style={styles.box}>
+                        <HistoryRow>{historyComponent}</HistoryRow>
+                        <Row noGutters={true}>
+                            <Col sm="3"><ProjectColumn head={head} changeHead={this.changeHeadFromProject} userInfo={this.props.userInfo} theme = {this.props.theme} fontSize={this.props.fontSize} /></Col>
+                            <Col sm="6">
+                                <HistoryTab
+                                    theme = {this.props.theme}
+                                    fontSize = {this.props.fontSize}
+                                    viewPage = {this.state.viewPage}
+                                    showStatTab = {this.showStatTab}
+                                    showTaskView = {this.showTaskView}
+                                    history = {historyPlaceholder}
+                                />
+                            </Col>
+                            <Col sm="3"><SubTaskColumn head={head} changeHead={this.changeHeadFromTask} userInfo={this.props.userInfo} projectId={this.props.projectID} theme = {this.props.theme} fontSize={this.props.fontSize}/></Col>
+                        </Row>
+                    </Container>;
+            } else {
+                pageView = <Container fluid style={styles.box}>
+                        <HistoryRow>{historyComponent}</HistoryRow>
+                        <Row noGutters={true}>
+                            <Col sm="3"><ProjectColumn head={head} changeHead={this.changeHeadFromProject} userInfo={this.props.userInfo} theme = {this.props.theme} fontSize={this.props.fontSize} /></Col>
+                            <Col sm="6">
+                                <StatTab
+                                    theme = {this.props.theme}
+                                    fontSize = {this.props.fontSize}
+                                    viewPage = {this.state.viewPage}
+                                    showHistoryTab = {this.showHistoryTab}
+                                    showTaskView = {this.showTaskView}
+                                />
+                            </Col>
+                            <Col sm="3"><SubTaskColumn head={head} changeHead={this.changeHeadFromTask} userInfo={this.props.userInfo} projectId={this.props.projectID} theme = {this.props.theme} fontSize={this.props.fontSize}/></Col>
+                        </Row>
+                    </Container>;
+            }
+
 			return (
-				<Container fluid style={styles.box}>
-					<HistoryRow>{historyComponent}</HistoryRow>
-					<Row noGutters={true}>
-						<Col sm="3"><ProjectColumn key={this.state.projectColumnKey} head={head} changeHead={this.changeHeadFromProject} userInfo={this.props.userInfo} theme={this.props.theme} fontSize={this.props.fontSize} /></Col>
-						<Col sm="6"><TaskView
-							taskID={head}
-							changeHead={this.changeHeadFromTask}
-							parentId={task.parentId}
-							projectId={this.props.projectID}
-							name={task.title}
-							completion={task.progress}
-							description={task.description}
-							dueDate={deadline}
-							status={task.status}
-							assignee={task.assignedTo}
-							owner={testOwner}
-							sharedUsers={testSharedWith}
-							userInfo={this.props.userInfo}
-							theme={this.props.theme}
-							fontSize={this.props.fontSize}
-							hideProjectPage={this.props.hideProjectPage}
-							refreshPage={this.refreshPage}
-						/></Col>
-						<Col sm="3"><SubTaskColumn head={head} changeHead={this.changeHeadFromTask} userInfo={this.props.userInfo} projectId={this.props.projectID} theme={this.props.theme} fontSize={this.props.fontSize} /></Col>
-					</Row>
-				</Container>
+				pageView
 			);
 		}
 	}
@@ -292,7 +375,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 								// insert new id into database
 								this.updateProgress(history[i].id, newAverage);
 
-								// replace 
+								// replace
 								if (i - 1 >= 0) {
 									for (let j = 0; j < history[i - 1].childProgress.length; j++) {
 										if (history[i - 1].childProgress[j] === currentAverage) {

@@ -34,7 +34,7 @@ const font16 = {
     fontSize: {
         fontSize: 16
     },
-    
+
 };
 
 const font24 = {
@@ -126,7 +126,7 @@ const styles = {
         borderStyle: "none"
     },
     img: {
-        
+
         margin: 20
     }
 }
@@ -143,32 +143,32 @@ const responseGoogle = (response: any) => {
 }
 
 interface INavBarProps {
-    hideProjectPage: any;
-    changeToDarkTheme: any;
-    changeToLightTheme: any;
-    changeToCourier: any;
-    changeToVerdana: any;
+    hideProjectPage: () => any;
+    changeToDarkTheme: () => any;
+    changeToLightTheme: () => any;
+    changeToCourier: () => any;
+    changeToVerdana: () => any;
     font: string;
     theme: string;
-    changeToSize16: any;
-    changeToSize24: any;
-    changeToSize32: any;
-    changeToSize40: any;
+    changeToSize16: () => any;
+    changeToSize24: () => any;
+    changeToSize32: () => any;
+    changeToSize40: () => any;
     fontSize: number;
 }
 
 interface NavBarState {
-    hideProjectPage: any;
-    changeToDarkTheme: any;
-    changeToLightTheme: any;
-    changeToCourier: any;
-    changeToVerdana: any;
+    hideProjectPage: () => any;
+    changeToDarkTheme: () => any;
+    changeToLightTheme: () => any;
+    changeToCourier: () => any;
+    changeToVerdana: () => any;
     font: string;
     theme: string;
-    changeToSize16: any;
-    changeToSize24: any;
-    changeToSize32: any;
-    changeToSize40: any;
+    changeToSize16: () => any;
+    changeToSize24: () => any;
+    changeToSize32: () => any;
+    changeToSize40: () => any;
     fontSize: number;
 }
 
