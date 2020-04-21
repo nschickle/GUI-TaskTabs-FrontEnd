@@ -97,19 +97,19 @@ const font40 = {
 
 
 interface HistoryTabProps {
-    showStatTab: any,
-    showTaskView: any,
+    showStatTab: () => any,
+    showTaskView: () => any,
     viewPage: string,
     fontSize: number,
-    theme: string
+    theme: string,
+    history: History[]
 }
 
 interface HistoryTabState {
-    showStatTab: any,
-    showTaskView: any
+    showStatTab: () => any,
+    showTaskView: () => any
 }
 
-//placeholder
 interface History {
     id: string,
     taskID: string,
@@ -120,8 +120,6 @@ interface History {
 
 export class HistoryTab extends React.Component<HistoryTabProps, HistoryTabState> {
     historyArray: History[];
-    placeholderOne: History;
-    placeholderTwo: History;
 
     constructor(props: HistoryTabProps){
         super(props);
@@ -131,23 +129,7 @@ export class HistoryTab extends React.Component<HistoryTabProps, HistoryTabState
             showTaskView: props.showTaskView
         }
 
-        this.placeholderOne = {
-            id: "1",
-            taskID: "task1",
-            responsibleUser: "Super Steve",
-            timestamp: new Date(),
-            textBody: "Changed title from 'task1' -> 'Task 1'"
-        };
-
-        this.placeholderTwo = {
-            id: "2",
-            taskID: "task1",
-            responsibleUser: "Super Steve",
-            timestamp: new Date(),
-            textBody: "Changed desciption from 'asdfad' -> 'This is a description'"
-        };
-
-        this.historyArray = [this.placeholderOne, this.placeholderTwo];
+        this.historyArray = props.history;
     }
 
     showStatTab = () => {

@@ -46,6 +46,30 @@ const testSharedWith: IUser[] = [
     { id: 2, name: "Tiny Steve" },
 ];
 
+interface History {
+    id: string,
+    taskID: string,
+    responsibleUser: string,
+    timestamp: Date,
+    textBody: string
+}
+
+const historyPlaceholder: History[] = [
+    {   id: "1",
+        taskID: "task1",
+        responsibleUser: "Super Steve",
+        timestamp: new Date(),
+        textBody: "Changed title from 'task1' -> 'Task 1'"
+    },
+    {
+        id: "2",
+        taskID: "task1",
+        responsibleUser: "Super Steve",
+        timestamp: new Date(),
+        textBody: "Changed desciption from 'asdfad' -> 'This is a description'"
+    }
+];
+
 interface ProjectHistory {
 	id: number,
 	name: string,
@@ -227,6 +251,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
                                     viewPage = {this.state.viewPage}
                                     showStatTab = {this.showStatTab}
                                     showTaskView = {this.showTaskView}
+                                    history = {historyPlaceholder}
                                 />
                             </Col>
                             <Col sm="3"><SubTaskColumn head={head} changeHead={this.changeHeadFromTask} userInfo={this.props.userInfo} projectId={this.props.projectID} theme = {this.props.theme} fontSize={this.props.fontSize}/></Col>
