@@ -405,8 +405,8 @@ interface TaskViewProps {
     userInfo: UserInfo;
     hideProjectPage: any;
     refreshPage: () => any;
-    showStatTab: any;
-    showHistoryTab: any;
+    showStatTab: () => any;
+    showHistoryTab: () => any;
     viewPage: string;
 };
 
@@ -424,8 +424,8 @@ interface TaskViewState {
     completion: number;
     hasChanged: boolean;
     wasDeleteRequested: boolean;
-    showStatTab: any;
-    showHistoryTab: any;
+    showStatTab: () => any;
+    showHistoryTab: () => any;
 };
 
 

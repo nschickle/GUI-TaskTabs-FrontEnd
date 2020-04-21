@@ -4,16 +4,16 @@ import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 
 interface StatTabProps {
-    showHistoryTab: any,
-    showTaskView: any,
+    showHistoryTab: () => any,
+    showTaskView: () => any,
     viewPage: string,
     fontSize: number,
     theme: string
 }
 
 interface StatTabState {
-    showHistoryTab: any,
-    showTaskView: any
+    showHistoryTab: () => any,
+    showTaskView: () => any
 }
 
 export class StatTab extends React.Component<StatTabProps, StatTabState> {
