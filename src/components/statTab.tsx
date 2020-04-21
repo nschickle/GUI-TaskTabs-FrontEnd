@@ -204,14 +204,6 @@ export class StatTab extends React.Component<StatTabProps, StatTabState> {
         this.state.showTaskView();
     }
 
-    showPieDesc = (name: string) => {
-        if(name === "Complete"){
-            return this.complete + " out of " + this.total + " total tasks are complete.";
-        } else {
-            return this.incomplete + " out of " + this.total + " total tasks are incomplete.";
-        }
-    };
-
     public render() {
         if(this.props.theme === "light"){
             if(this.props.fontSize === 16){
