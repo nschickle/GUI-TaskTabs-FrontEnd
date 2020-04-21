@@ -18,15 +18,15 @@ import { HistoryTab } from "./historyTab";
 import { StatTab } from "./statTab";
 
 const styles = {
-    box: {
-        paddingLeft: 0,
-        paddingRight: 0,
-        minWidth: 1300
-    },
-    button: {
-        height: 20,
-        fontSize: 16
-    }
+	box: {
+		paddingLeft: 0,
+		paddingRight: 0,
+		minWidth: 1300
+	},
+	button: {
+		height: 20,
+		fontSize: 16
+	}
 };
 
 const HistoryRow = styled.div`
@@ -35,15 +35,15 @@ const HistoryRow = styled.div`
 `;
 
 interface IUser {
-    id: number;
-    name: string;
+	id: number;
+	name: string;
 }
 
 const testOwner: IUser = { id: 0, name: "Super Steve" };
 
 const testSharedWith: IUser[] = [
-    { id: 1, name: "Little Steve" },
-    { id: 2, name: "Tiny Steve" },
+	{ id: 1, name: "Little Steve" },
+	{ id: 2, name: "Tiny Steve" },
 ];
 
 interface History {
@@ -386,9 +386,9 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 								}
 							}
 						}
-						// increment key to re-render projectColumn
-						this.setState({ projectColumnKey: this.state.projectColumnKey + 1 });
 					}
+					// increment key to re-render projectColumn
+					this.setState({ projectColumnKey: this.state.projectColumnKey + 1 });
 					this.setState({
 						isLoaded: true,
 						task: result,
@@ -486,6 +486,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 
 								taskHistoryNode = { id: result._id, name: result.title, progress: result.progress, childProgress: childProgress };
 
+								console.log(history);
 								let parentChildProgress: number[] = await this.retrieveChildProgress(history[history.length - 1].id);
 								// check if the parent's child progress array is up to date.
 								if (history[history.length - 1].childProgress.length !== parentChildProgress.length) {
@@ -515,14 +516,12 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 											}
 										}
 									}
-									// increment key to re-render projectColumn
-									this.setState({ projectColumnKey: this.state.projectColumnKey + 1 });
 								}
-
-
 								history.push(taskHistoryNode);
 							}
 
+							// increment key to re-render projectColumn
+							this.setState({ projectColumnKey: this.state.projectColumnKey + 1 });
 							this.setState({
 								isLoaded: true,
 								task: result,
