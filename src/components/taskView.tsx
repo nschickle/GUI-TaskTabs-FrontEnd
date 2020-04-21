@@ -551,7 +551,10 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
         }
         else if (this.daysLeft >= 0) {
             if (this.daysLeft === 1) {
-                return this.daysLeft + " Day Left!";
+                return "Due Tomorrow!";
+            }
+            else if(this.daysLeft === 0) {
+                return "Due Today!"
             }
             else {
                 return this.daysLeft + " Days Left!";
@@ -1003,8 +1006,8 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                             </Form>
                         </Row>
                         <Row noGutters={true}>
-                            <Col xs="10" style={styles.sharedTab}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} theme={this.props.theme} fontSize={this.props.fontSize} /> </Col>
-                            <Col xs="2">
+                            <Col xs="9" style={styles.sharedTab}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} theme={this.props.theme} fontSize={this.props.fontSize} /> </Col>
+                            <Col xs="3">
                                 <Row noGutters={true}>
                                     <Button
                                         variant="outline-info"
@@ -1118,8 +1121,8 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                             </Form>
                         </Row>
                         <Row noGutters={true}>
-                            <Col xs="10" style={styles.sharedTabDark}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} theme={this.props.theme} fontSize={this.props.fontSize} /> </Col>
-                            <Col xs="2">
+                            <Col xs="9" style={styles.sharedTabDark}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} theme={this.props.theme} fontSize={this.props.fontSize} /> </Col>
+                            <Col xs="3">
                                 <Row noGutters={true}>
                                     <Button
                                         variant="info"
@@ -1234,8 +1237,8 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                             </Form>
                         </Row>
                         <Row noGutters={true}>
-                            <Col xs="10" style={styles.sharedTab}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} theme={this.props.theme} fontSize={this.props.fontSize} /> </Col>
-                            <Col xs="2">
+                            <Col xs="9" style={styles.sharedTab}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} theme={this.props.theme} fontSize={this.props.fontSize} /> </Col>
+                            <Col xs="3">
                                 <Row noGutters={true}>
                                     <Button
                                         variant="outline-info"
@@ -1347,8 +1350,8 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                             </Form>
                         </Row>
                         <Row noGutters={true}>
-                            <Col xs="10" style={styles.sharedTabDark}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} theme={this.props.theme} fontSize={this.props.fontSize} /> </Col>
-                            <Col xs="2">
+                            <Col xs="9" style={styles.sharedTabDark}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} theme={this.props.theme} fontSize={this.props.fontSize} /> </Col>
+                            <Col xs="3">
                                 <Row noGutters={true}>
                                     <Button
                                         variant="info"
@@ -1465,8 +1468,8 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                             </Form>
                         </Row>
                         <Row noGutters={true}>
-                            <Col xs="9" style={styles.sharedTab}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} theme={this.props.theme} fontSize={this.props.fontSize} /> </Col>
-                            <Col xs="3">
+                            <Col xs="8" style={styles.sharedTab}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} theme={this.props.theme} fontSize={this.props.fontSize} /> </Col>
+                            <Col xs="4">
                                 <Row noGutters={true}>
                                     <Button
                                         variant="outline-info"
@@ -1578,8 +1581,8 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                             </Form>
                         </Row>
                         <Row noGutters={true}>
-                            <Col xs="9" style={styles.sharedTabDark}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} theme={this.props.theme} fontSize={this.props.fontSize} /> </Col>
-                            <Col xs="3">
+                            <Col xs="8" style={styles.sharedTabDark}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} theme={this.props.theme} fontSize={this.props.fontSize} /> </Col>
+                            <Col xs="4">
                                 <Row noGutters={true}>
                                     <Button
                                         variant="info"
