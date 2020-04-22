@@ -178,7 +178,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 	// but should be replaced.
 	public render() {
 
-		const { error, isLoaded, task, head, history } = this.state;
+		const { error, isLoaded, task, head, history, projectColumnKey } = this.state;
 		// TODO Style error and loading screens
 
 		if (error) {
@@ -213,10 +213,10 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
                 pageView = <Container fluid style={styles.box}>
                         <HistoryRow>{historyComponent}</HistoryRow>
                         <Row noGutters={true}>
-                            <Col sm="3"><ProjectColumn head={head} changeHead={this.changeHeadFromProject} userInfo={this.props.userInfo} theme = {this.props.theme} fontSize={this.props.fontSize} /></Col>
+                            <Col sm="3"><ProjectColumn key={projectColumnKey} head={head} changeHead={this.changeHeadFromProject} userInfo={this.props.userInfo} theme = {this.props.theme} fontSize={this.props.fontSize} /></Col>
                             <Col sm="6"><TaskView
                                 taskID={head}
-                                changeHead={this.changeHeadFromTask}
+                                changeHead={this.changeHeadFromDelete}
                                 parentId={task.parentId}
                                 projectId={this.props.projectID}
                                 name={task.title}
@@ -243,7 +243,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
                 pageView = <Container fluid style={styles.box}>
                         <HistoryRow>{historyComponent}</HistoryRow>
                         <Row noGutters={true}>
-                            <Col sm="3"><ProjectColumn head={head} changeHead={this.changeHeadFromProject} userInfo={this.props.userInfo} theme = {this.props.theme} fontSize={this.props.fontSize} /></Col>
+                            <Col sm="3"><ProjectColumn key={projectColumnKey} head={head} changeHead={this.changeHeadFromProject} userInfo={this.props.userInfo} theme = {this.props.theme} fontSize={this.props.fontSize} /></Col>
                             <Col sm="6">
                                 <HistoryTab
                                     theme = {this.props.theme}
@@ -261,7 +261,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
                 pageView = <Container fluid style={styles.box}>
                         <HistoryRow>{historyComponent}</HistoryRow>
                         <Row noGutters={true}>
-                            <Col sm="3"><ProjectColumn head={head} changeHead={this.changeHeadFromProject} userInfo={this.props.userInfo} theme = {this.props.theme} fontSize={this.props.fontSize} /></Col>
+                            <Col sm="3"><ProjectColumn key={projectColumnKey} head={head} changeHead={this.changeHeadFromProject} userInfo={this.props.userInfo} theme = {this.props.theme} fontSize={this.props.fontSize} /></Col>
                             <Col sm="6">
                                 <StatTab
                                     theme = {this.props.theme}
@@ -296,6 +296,81 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 
 	private changeHeadFromProject = (newHead: number) => {
 		this.changeHead(newHead, true);
+	}
+
+	private changeHeadFromDelete = () => {
+		let history = this.state.history;
+
+		let deletedTaskHistory = history.pop();
+
+		if (history.length > 0) {
+
+			this.setState({
+				head: history[history.length - 1].id,
+			});
+			const request = new UserHeaderHttpRequest(`/api/tasks/${history[history.length - 1].id}`, this.props.userInfo);
+			RetryableFetch.fetch_retry(request)
+				.then(res => res.json())
+				.then((result) => {
+
+					let newAverage;
+					let currentAverage;
+
+					// remove the progress of the deleted task from the parent history node 
+					let parentHistoryNode = history[history.length - 1];
+					for (let j = 0; j < parentHistoryNode.childProgress.length; j++) {
+						if (parentHistoryNode.childProgress[j] === deletedTaskHistory.progress) {
+							history[history.length - 1].childProgress.splice(j, 1);
+							break;
+						}
+					}
+
+					deletedTaskHistory.progress
+					for (let i = history.length - 1; i >= 0; i--) {
+						currentAverage = history[i].progress;
+						newAverage = 0;
+						// build new average
+						for (let j = 0; j < history[i].childProgress.length; j++) {
+							newAverage += history[i].childProgress[j]
+						}
+						if (history[i].childProgress.length != 0) {
+							newAverage = newAverage / history[i].childProgress.length;
+						} else {
+							newAverage = history[i].progress;
+						}
+
+						if (newAverage !== currentAverage) {
+							// update history
+							history[i].progress = newAverage;
+							// insert new id into database
+							this.updateProgress(history[i].id, newAverage);
+
+							// replace 
+							if (i - 1 >= 0) {
+								for (let j = 0; j < history[i - 1].childProgress.length; j++) {
+									if (history[i - 1].childProgress[j] === currentAverage) {
+										history[i - 1].childProgress[j] = newAverage;
+										break;
+									}
+								}
+							}
+						}
+					}
+
+					let updatedProgressResult = result;
+					updatedProgressResult.progress = history[history.length -1].progress;
+					this.setState({ projectColumnKey: this.state.projectColumnKey + 1 });
+					this.setState({
+						isLoaded: true,
+						task: updatedProgressResult,
+						history: history
+					});
+
+				});
+		} else {
+			console.error("tried to delete from a project head");
+		}
+
 	}
 
 	// get the progress of all the children and return it as an array

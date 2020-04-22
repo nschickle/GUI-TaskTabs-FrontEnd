@@ -389,7 +389,7 @@ interface User {
 
 interface TaskViewProps {
     taskID: number;
-    changeHead: (newHead: number) => any;
+    changeHead: () => any;
     parentId: number;
     projectId: number;
     name: string;
@@ -676,7 +676,7 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                     if (this.props.parentId == null) {
                         this.props.hideProjectPage();
                     } else {
-                        this.props.changeHead(this.props.parentId);
+                        this.props.changeHead();
                         this.deleteButtonText = "Delete";
                     }
                 })
