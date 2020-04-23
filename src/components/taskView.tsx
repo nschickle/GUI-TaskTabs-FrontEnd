@@ -389,7 +389,7 @@ interface User {
 
 interface TaskViewProps {
     taskID: number;
-    changeHead: (newHead: number) => any;
+    changeHead: () => any;
     parentId: number;
     projectId: number;
     name: string;
@@ -622,6 +622,20 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                 completion = 100;
                 this.setState({ completion: 100 });
             }
+        } else if (this.state.taskStatus == "active" || this.state.taskStatus == "inactive") {
+            let valid = true;
+            for (let i = 0; i < this.state.subTasks.length; i++) {
+                if (this.state.subTasks[i].status !== "active" || this.state.subTasks[i].status !== "inactive") {
+                    valid = false;
+                }
+            }
+            if (!valid) {
+                alert("WARNING: Can not set status to active or inactive while there are completed subtasks! Reverting status to previous state and saving other changes...");
+                this.setState({ taskStatus: this.oldStatus });
+            } else {
+                completion = 0;
+                this.setState({ completion: 0 });
+            }
         }
         // TODO
         // should be user from google oauth
@@ -634,13 +648,13 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                 mode: 'cors',
                 body: JSON.stringify(updatedTask)
             }).then((response) => response.json())
-            .then(() => {
-                this.props.refreshPage();
+            .then(async () => {
+                await this.props.refreshPage();
+                this.setState({ hasChanged: false });
             })
             .catch((error) => {
                 console.error('Error:', error);
             });
-        this.setState({ hasChanged: false });
     }
 
     // First process if it's the first time delete has been requested or not - gives user opportunity to "back out"
@@ -662,7 +676,7 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                     if (this.props.parentId == null) {
                         this.props.hideProjectPage();
                     } else {
-                        this.props.changeHead(this.props.parentId);
+                        this.props.changeHead();
                         this.deleteButtonText = "Delete";
                     }
                 })
