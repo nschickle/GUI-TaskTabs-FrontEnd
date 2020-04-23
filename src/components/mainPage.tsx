@@ -6,6 +6,7 @@ import Row from 'react-bootstrap/Row';
 import { NavBar } from './navBar';
 import { ProjectPage } from './projectPage';
 import { ProjectLanding } from './projLanding';
+import { MainLanding } from './mainLanding'
 import { UserInfo } from "./userInfo";
 
 const fonts = {
@@ -42,7 +43,7 @@ interface MainPageProps {
 // Make it so choosing a project on the landing changes it on project page
 export class MainPage extends React.Component<MainPageProps, { projectPageUp: boolean, projectID: number, theme: string, font: string, fontSize: number }>{
     private userInfo = new UserInfo("test@test.com", "test");
-    private userInfo1 = new UserInfo(null, null);
+    
 
     constructor(props: MainPageProps) {
         super(props);
@@ -61,10 +62,14 @@ export class MainPage extends React.Component<MainPageProps, { projectPageUp: bo
         this.setState({ projectID: projectID });
     }
 
-
     // Currently makes projectID null because it's state can't be guarentee
     hideProjectPage = () => {
         this.setState({ projectPageUp: false });
+        this.setState({ projectID: null });
+    }
+
+    showProjectLanding = () => {
+        this.setState({ projectPageUp: true });
         this.setState({ projectID: null });
     }
 
@@ -169,23 +174,9 @@ export class MainPage extends React.Component<MainPageProps, { projectPageUp: bo
                 } else {
                     showPage = <Container fluid style={fonts.verdana}>
                         <Row>
-                            <NavBar
-                                hideProjectPage = {this.hideProjectPage}
-                                changeToDarkTheme = {this.changeToDarkTheme}
-                                changeToLightTheme = {this.changeToLightTheme}
-                                theme = {theme}
-                                changeToCourier = {this.changeToCourier}
-                                changeToVerdana = {this.changeToVerdana}
-                                font = {font}
-                                changeToSize16 = {this.changeToSize16}
-                                changeToSize24 = {this.changeToSize24}
-                                changeToSize32 = {this.changeToSize32}
-                                changeToSize40 = {this.changeToSize40}
-                                fontSize = {fontSize}/>
+                            
                         </Row>
-                        <Row>
-                        <ProjectLanding showProjectPage = {this.showProjectPage} theme={theme}  fontSize={fontSize} userInfo={this.userInfo}/>
-                        </Row></Container>;
+                        <Row><MainLanding showProjectLanding = {this.showProjectLanding}/></Row></Container>;
                 }
             }
         } else {
