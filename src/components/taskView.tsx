@@ -535,7 +535,10 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
         }
         else if (this.daysLeft >= 0) {
             if (this.daysLeft === 1) {
-                return this.daysLeft + " Day Left!";
+                return "Due Tomorrow!";
+            }
+            else if(this.daysLeft === 0) {
+                return "Due Today!"
             }
             else {
                 return this.daysLeft + " Days Left!";
@@ -683,6 +686,8 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
         let style;
         let formLabelColumns:any;
         let formGroupColumns:any;
+        let sharedTabCol1: any;
+        let sharedTabCol2: any;
 
         // We can calculate the date only if state is populated
         if (!!(this.state.dueDate)) {
@@ -694,24 +699,32 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
             columns = "100";
             formLabelColumns = "2";
             formGroupColumns = "10";
+            sharedTabCol1 = "10";
+            sharedTabCol2 = "2";
         } else if (this.props.fontSize === 24) {
             style = font24;
             rows = "5";
             columns = "60";
             formLabelColumns = "2";
             formGroupColumns = "10";
+            sharedTabCol1 = "9";
+            sharedTabCol2 = "3";
         } else if (this.props.fontSize === 32) {
             style = font32;
             rows = "3";
             columns = "60";
             formLabelColumns = "3";
             formGroupColumns = "9";
+            sharedTabCol1 = "9";
+            sharedTabCol2 = "3";
         } else {
             style = font40;
             rows = "2";
             columns = "60";
             formLabelColumns = "3";
             formGroupColumns = "9";
+            sharedTabCol1 = "8";
+            sharedTabCol2 = "4";
         }
 
         let descFormStyle;
@@ -825,8 +838,8 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                     </Form>
                 </Row>
                 <Row noGutters={true}>
-                    <Col xs="10" style={styles.sharedTab}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} theme={this.props.theme} fontSize={this.props.fontSize} /> </Col>
-                    <Col xs="2">
+                    <Col xs={sharedTabCol1} style={styles.sharedTab}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} theme={this.props.theme} fontSize={this.props.fontSize} /> </Col>
+                    <Col xs={sharedTabCol2}>
                         <Row noGutters={true}>
                             <Button
                                 variant={HistoryButton}
@@ -851,5 +864,5 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                 </Row>
             </Container>
         );
-    } 
+    }
 };

@@ -70,6 +70,13 @@ const historyPlaceholder: History[] = [
     }
 ];
 
+interface Statistics {
+    numTotal: number,
+    numCompleted: number
+}
+
+const statPlaceholder: Statistics = { numTotal: 20, numCompleted: 5 };
+
 interface ProjectHistory {
 	id: number,
 	name: string,
@@ -269,6 +276,8 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
                                     viewPage = {this.state.viewPage}
                                     showHistoryTab = {this.showHistoryTab}
                                     showTaskView = {this.showTaskView}
+                                    stats = {statPlaceholder}
+                                    task={task.title}
                                 />
                             </Col>
                             <Col sm="3"><SubTaskColumn head={head} changeHead={this.changeHeadFromTask} userInfo={this.props.userInfo} projectId={this.props.projectID} theme = {this.props.theme} fontSize={this.props.fontSize}/></Col>
