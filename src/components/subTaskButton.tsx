@@ -67,43 +67,18 @@ const font40 = {
     }
 };
 
-const SubTaskName16 = styled.div`
-    font-size: 16px;
-    position: absolute;
-    z-index: 99;
-    right: 100px;
-    left: 100px;
-    margin-top: 10px;
-    min-width: 225px;
-`;
+interface SubTaskNameProps {
+    fontSize: number;
+    marginTop: number;
+};
 
-const SubTaskName24 = styled.div`
-    font-size: 24px;
+const SubTaskName = styled.div`
+    font-size: ${(props: SubTaskNameProps) => props.fontSize}px;
     position: absolute;
     z-index: 99;
     right: 100px;
     left: 100px;
-    margin-top: 15px;
-    min-width: 225px;
-`;
-
-const SubTaskName32 = styled.div`
-    font-size: 32px;
-    position: absolute;
-    z-index: 99;
-    right: 100px;
-    left: 100px;
-    margin-top: 20px;
-    min-width: 225px;
-`;
-
-const SubTaskName40 = styled.div`
-    font-size: 40px;
-    position: absolute;
-    z-index: 99;
-    right: 100px;
-    left: 100px;
-    margin-top: 30px;
+    margin-top: ${(props: SubTaskNameProps) => props.marginTop}px;
     min-width: 225px;
 `;
 
@@ -132,8 +107,9 @@ export class SubTaskButton extends React.Component<SubTaskButtonProps>{
 
     // If the title is too long, we should shorten it to fit the space we have.
     checkNameLength = () => {
-        if (this.name.length > 9) {
-            this.displayedName = this.name.substring(0, 8);
+        const maxNameLength = 24;
+        if (this.name.length > maxNameLength) {
+            this.displayedName = this.name.substring(0, maxNameLength);
             this.displayedName += "...";
         }
     }
@@ -143,93 +119,34 @@ export class SubTaskButton extends React.Component<SubTaskButtonProps>{
     }
 
     render() {
+        const variant = this.props.theme === "light" ? "outline-dark" : "outline-light";
         this.checkNameLength();
-        let subTaskButton;
+        let marginTop;
+        let style;
 
-        if(this.props.fontSize === 16){
-            if(this.props.theme === "light") {
-                subTaskButton = <Container>
-                    <Row>
-                        <Button style={font16.button} onClick={this.onButtonClick} variant="outline-dark">
-                            <SubTaskName16>{this.displayedName}</SubTaskName16>
-                            <TaskProgressBar percentage={this.props.percentage} isTaskButton={true} theme={this.props.theme} fontSize={this.props.fontSize}></TaskProgressBar>
-                        </Button>
-                    </Row>
-                </Container>;
-            } else {
-                subTaskButton = <Container>
-                    <Row>
-                        <Button style={font16.button} onClick={this.onButtonClick} variant="outline-light">
-                            <SubTaskName16>{this.displayedName}</SubTaskName16>
-                            <TaskProgressBar percentage={this.props.percentage} isTaskButton={true} theme={this.props.theme} fontSize={this.props.fontSize}></TaskProgressBar>
-                        </Button>
-                    </Row>
-                </Container>;
-            }
-        } else if(this.props.fontSize === 24){
-            if(this.props.theme === "light") {
-                subTaskButton = <Container>
-                    <Row>
-                        <Button style={font24.button} onClick={this.onButtonClick} variant="outline-dark">
-                            <SubTaskName24>{this.displayedName}</SubTaskName24>
-                            <TaskProgressBar percentage={this.props.percentage} isTaskButton={true} theme={this.props.theme} fontSize={this.props.fontSize}></TaskProgressBar>
-                        </Button>
-                    </Row>
-                </Container>;
-            } else {
-                subTaskButton = <Container>
-                    <Row>
-                        <Button style={font24.button} onClick={this.onButtonClick} variant="outline-light">
-                            <SubTaskName24>{this.displayedName}</SubTaskName24>
-                            <TaskProgressBar percentage={this.props.percentage} isTaskButton={true} theme={this.props.theme} fontSize={this.props.fontSize}></TaskProgressBar>
-                        </Button>
-                    </Row>
-                </Container>;
-            }
-        } else if(this.props.fontSize === 32){
-            if(this.props.theme === "light") {
-                subTaskButton = <Container>
-                    <Row>
-                        <Button style={font32.button} onClick={this.onButtonClick} variant="outline-dark">
-                            <SubTaskName32>{this.displayedName}</SubTaskName32>
-                            <TaskProgressBar percentage={this.props.percentage} isTaskButton={true} theme={this.props.theme} fontSize={this.props.fontSize}></TaskProgressBar>
-                        </Button>
-                    </Row>
-                </Container>;
-            } else {
-                subTaskButton = <Container>
-                    <Row>
-                        <Button style={font32.button} onClick={this.onButtonClick} variant="outline-light">
-                            <SubTaskName32>{this.displayedName}</SubTaskName32>
-                            <TaskProgressBar percentage={this.props.percentage} isTaskButton={true} theme={this.props.theme} fontSize={this.props.fontSize}></TaskProgressBar>
-                        </Button>
-                    </Row>
-                </Container>;
-            }
+        if (this.props.fontSize === 16) {
+            marginTop = 10;
+            style = font16.button;
+        } else if (this.props.fontSize === 24) {
+            marginTop = 15;
+            style = font24.button;
+        } else if (this.props.fontSize === 32) {
+            marginTop = 20;
+            style = font32.button;
         } else {
-            if(this.props.theme === "light") {
-                subTaskButton = <Container>
-                    <Row>
-                        <Button style={font40.button} onClick={this.onButtonClick} variant="outline-dark">
-                            <SubTaskName40>{this.displayedName}</SubTaskName40>
-                            <TaskProgressBar percentage={this.props.percentage} isTaskButton={true} theme={this.props.theme} fontSize={this.props.fontSize}></TaskProgressBar>
-                        </Button>
-                    </Row>
-                </Container>;
-            } else {
-                subTaskButton = <Container>
-                    <Row>
-                        <Button style={font40.button} onClick={this.onButtonClick} variant="outline-light">
-                            <SubTaskName40>{this.displayedName}</SubTaskName40>
-                            <TaskProgressBar percentage={this.props.percentage} isTaskButton={true} theme={this.props.theme} fontSize={this.props.fontSize}></TaskProgressBar>
-                        </Button>
-                    </Row>
-                </Container>;
-            }
+            marginTop = 30;
+            style = font40.button;
         }
 
         return (
-            subTaskButton
+            <Container>
+                <Row>
+                    <Button style={style} onClick={this.onButtonClick} variant={variant}>
+                        <SubTaskName fontSize={this.props.fontSize} marginTop={marginTop}>{this.displayedName}</SubTaskName>
+                        <TaskProgressBar percentage={this.props.percentage} isTaskButton={true} theme={this.props.theme} fontSize={this.props.fontSize}></TaskProgressBar>
+                    </Button>
+                </Row>
+            </Container>
         );
     }
 };
