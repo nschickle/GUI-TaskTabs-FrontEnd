@@ -71,8 +71,6 @@ const SubTaskName16 = styled.div`
     font-size: 16px;
     position: absolute;
     z-index: 99;
-    right: 100px;
-    left: 100px;
     margin-top: 10px;
     min-width: 225px;
 `;
@@ -81,8 +79,6 @@ const SubTaskName24 = styled.div`
     font-size: 24px;
     position: absolute;
     z-index: 99;
-    right: 100px;
-    left: 100px;
     margin-top: 15px;
     min-width: 225px;
 `;
@@ -91,8 +87,6 @@ const SubTaskName32 = styled.div`
     font-size: 32px;
     position: absolute;
     z-index: 99;
-    right: 100px;
-    left: 100px;
     margin-top: 20px;
     min-width: 225px;
 `;
@@ -101,8 +95,6 @@ const SubTaskName40 = styled.div`
     font-size: 40px;
     position: absolute;
     z-index: 99;
-    right: 100px;
-    left: 100px;
     margin-top: 30px;
     min-width: 225px;
 `;
@@ -132,8 +124,8 @@ export class SubTaskButton extends React.Component<SubTaskButtonProps>{
 
     // If the title is too long, we should shorten it to fit the space we have.
     checkNameLength = () => {
-        if (this.name.length > 9) {
-            this.displayedName = this.name.substring(0, 8);
+        if (this.name.length > 25) {
+            this.displayedName = this.name.substring(0, 24);
             this.displayedName += "...";
         }
     }
