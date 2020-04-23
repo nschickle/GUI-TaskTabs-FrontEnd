@@ -14,6 +14,7 @@ const font16 = {
         fontSize: 16,
         padding: 0,
         margin: 0
+        
     },
     progress: {
         height: 50,
@@ -72,6 +73,7 @@ const SubTaskName16 = styled.div`
     position: absolute;
     z-index: 99;
     margin-top: 10px;
+    margin-left: 10px;
     min-width: 225px;
 `;
 
@@ -80,6 +82,7 @@ const SubTaskName24 = styled.div`
     position: absolute;
     z-index: 99;
     margin-top: 15px;
+    margin-left: 10px;
     min-width: 225px;
 `;
 
@@ -88,6 +91,7 @@ const SubTaskName32 = styled.div`
     position: absolute;
     z-index: 99;
     margin-top: 20px;
+    margin-left: 10px;
     min-width: 225px;
 `;
 
@@ -96,6 +100,7 @@ const SubTaskName40 = styled.div`
     position: absolute;
     z-index: 99;
     margin-top: 30px;
+    margin-left: 10px;
     min-width: 225px;
 `;
 
@@ -124,8 +129,8 @@ export class SubTaskButton extends React.Component<SubTaskButtonProps>{
 
     // If the title is too long, we should shorten it to fit the space we have.
     checkNameLength = () => {
-        if (this.name.length > 25) {
-            this.displayedName = this.name.substring(0, 24);
+        if (this.name.length > 32) {
+            this.displayedName = this.name.substring(0, 31);
             this.displayedName += "...";
         }
     }
@@ -143,7 +148,7 @@ export class SubTaskButton extends React.Component<SubTaskButtonProps>{
                 subTaskButton = <Container>
                     <Row>
                         <Button style={font16.button} onClick={this.onButtonClick} variant="outline-dark">
-                            <SubTaskName16>{this.displayedName}</SubTaskName16>
+                            <SubTaskName16 className="text-left">{this.displayedName}</SubTaskName16>
                             <TaskProgressBar percentage={this.props.percentage} isTaskButton={true} theme={this.props.theme} fontSize={this.props.fontSize}></TaskProgressBar>
                         </Button>
                     </Row>
@@ -152,7 +157,7 @@ export class SubTaskButton extends React.Component<SubTaskButtonProps>{
                 subTaskButton = <Container>
                     <Row>
                         <Button style={font16.button} onClick={this.onButtonClick} variant="outline-light">
-                            <SubTaskName16>{this.displayedName}</SubTaskName16>
+                            <SubTaskName16 className="text-left">{this.displayedName}</SubTaskName16>
                             <TaskProgressBar percentage={this.props.percentage} isTaskButton={true} theme={this.props.theme} fontSize={this.props.fontSize}></TaskProgressBar>
                         </Button>
                     </Row>
@@ -163,7 +168,7 @@ export class SubTaskButton extends React.Component<SubTaskButtonProps>{
                 subTaskButton = <Container>
                     <Row>
                         <Button style={font24.button} onClick={this.onButtonClick} variant="outline-dark">
-                            <SubTaskName24>{this.displayedName}</SubTaskName24>
+                            <SubTaskName24 className="text-left">{this.displayedName}</SubTaskName24>
                             <TaskProgressBar percentage={this.props.percentage} isTaskButton={true} theme={this.props.theme} fontSize={this.props.fontSize}></TaskProgressBar>
                         </Button>
                     </Row>
@@ -172,7 +177,7 @@ export class SubTaskButton extends React.Component<SubTaskButtonProps>{
                 subTaskButton = <Container>
                     <Row>
                         <Button style={font24.button} onClick={this.onButtonClick} variant="outline-light">
-                            <SubTaskName24>{this.displayedName}</SubTaskName24>
+                            <SubTaskName24 className="text-left">{this.displayedName}</SubTaskName24>
                             <TaskProgressBar percentage={this.props.percentage} isTaskButton={true} theme={this.props.theme} fontSize={this.props.fontSize}></TaskProgressBar>
                         </Button>
                     </Row>
@@ -183,7 +188,7 @@ export class SubTaskButton extends React.Component<SubTaskButtonProps>{
                 subTaskButton = <Container>
                     <Row>
                         <Button style={font32.button} onClick={this.onButtonClick} variant="outline-dark">
-                            <SubTaskName32>{this.displayedName}</SubTaskName32>
+                            <SubTaskName32 className="text-left">{this.displayedName}</SubTaskName32>
                             <TaskProgressBar percentage={this.props.percentage} isTaskButton={true} theme={this.props.theme} fontSize={this.props.fontSize}></TaskProgressBar>
                         </Button>
                     </Row>
@@ -192,7 +197,7 @@ export class SubTaskButton extends React.Component<SubTaskButtonProps>{
                 subTaskButton = <Container>
                     <Row>
                         <Button style={font32.button} onClick={this.onButtonClick} variant="outline-light">
-                            <SubTaskName32>{this.displayedName}</SubTaskName32>
+                            <SubTaskName32 className="text-left">{this.displayedName}</SubTaskName32>
                             <TaskProgressBar percentage={this.props.percentage} isTaskButton={true} theme={this.props.theme} fontSize={this.props.fontSize}></TaskProgressBar>
                         </Button>
                     </Row>
@@ -203,7 +208,7 @@ export class SubTaskButton extends React.Component<SubTaskButtonProps>{
                 subTaskButton = <Container>
                     <Row>
                         <Button style={font40.button} onClick={this.onButtonClick} variant="outline-dark">
-                            <SubTaskName40>{this.displayedName}</SubTaskName40>
+                            <SubTaskName40 className="text-left">{this.displayedName}</SubTaskName40>
                             <TaskProgressBar percentage={this.props.percentage} isTaskButton={true} theme={this.props.theme} fontSize={this.props.fontSize}></TaskProgressBar>
                         </Button>
                     </Row>
@@ -212,7 +217,7 @@ export class SubTaskButton extends React.Component<SubTaskButtonProps>{
                 subTaskButton = <Container>
                     <Row>
                         <Button style={font40.button} onClick={this.onButtonClick} variant="outline-light">
-                            <SubTaskName40>{this.displayedName}</SubTaskName40>
+                            <SubTaskName40 className="text-left">{this.displayedName}</SubTaskName40>
                             <TaskProgressBar percentage={this.props.percentage} isTaskButton={true} theme={this.props.theme} fontSize={this.props.fontSize}></TaskProgressBar>
                         </Button>
                     </Row>
