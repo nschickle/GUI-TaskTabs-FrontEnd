@@ -14,7 +14,7 @@ const styles = {
     tab2: {
         marginLeft: 50
     }
-}
+};
 
 const font16 = {
     box: {
@@ -131,6 +131,10 @@ const font40 = {
     }
 };
 
+interface ButtonVariantProps {
+    variant: "link" | "light" | "outline-success" | "success" | "primary" | "secondary" | "danger" | "warning" | "info" | "dark" | "outline-primary" | "outline-secondary" | "outline-danger" | "outline-warning" | "outline-info" | "outline-dark" | "outline-light";
+}
+
 interface Statistics {
     numTotal: number,
     numCompleted: number
@@ -155,16 +159,6 @@ interface StatTabState {
     showHistoryTab: () => any,
     showTaskView: () => any
 }
-
-const darkColors = [
-    "#28a745",
-    "#aa1b29"
-];
-
-const lightColors = [
-    "#8cde88",
-    "#f76d6d"
-];
 
 export class StatTab extends React.Component<StatTabProps, StatTabState> {
     complete: number;
@@ -204,251 +198,93 @@ export class StatTab extends React.Component<StatTabProps, StatTabState> {
         this.state.showTaskView();
     }
 
+
     public render() {
-        if(this.props.theme === "light"){
-            if(this.props.fontSize === 16){
-                return(
-                    <Container>
-                        <Row style={font16.box}>
-                            <PieChart width={900} height={600}>
-                                <Pie data={this.statData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={250}>
-                                    {this.statData.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={lightColors[index]}/>
-                                    ))}
-                                </Pie>
-                                <Tooltip />
-                            </PieChart>
-                        </Row>
-                        <Row>
-                            <Col xs="3"/>
-                            <Col xs="6" >
-                                <Row><h2>{this.props.task} Progress:</h2></Row>
-                                <Row style={font16.desc}>{this.complete} out of {this.total} tasks completed!</Row>
-                            </Col>
-                            <Col xs="3">
-                                <Row noGutters>
-                                    <Button onClick = {this.showTaskView} variant="outline-info" style={font16.button}> Task View </Button>
-                                </Row>
-                                <Row noGutters>
-                                    <Button onClick = {this.showHistoryTab} variant="outline-info" style={font16.button}> History </Button>
-                                </Row>
-                            </Col>
-                        </Row>
-                    </Container>
-                );
-            } else if(this.props.fontSize === 24){
-                return(
-                    <Container>
-                        <Row style={font24.box}>
-                            <PieChart width={900} height={500}>
-                                <Pie data={this.statData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={235}>
-                                    {this.statData.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={lightColors[index]}/>
-                                    ))}
-                                </Pie>
-                                <Tooltip />
-                            </PieChart>
-                        </Row>
-                        <Row>
-                            <Col xs="2"/>
-                            <Col xs="6" >
-                                <Row><h2>{this.props.task} Progress:</h2></Row>
-                                <Row style={font24.desc}>{this.complete} out of {this.total} tasks completed!</Row>
-                            </Col>
-                            <Col xs="4">
-                                <Row noGutters>
-                                    <Button onClick = {this.showTaskView} variant="outline-info" style={font24.button}> Task View </Button>
-                                </Row>
-                                <Row noGutters>
-                                    <Button onClick = {this.showHistoryTab} variant="outline-info" style={font24.button}> History </Button>
-                                </Row>
-                            </Col>
-                        </Row>
-                    </Container>
-                );
-            } else if(this.props.fontSize === 32){
-                return(
-                    <Container>
-                        <Row style={font32.box}>
-                            <PieChart width={900} height={500}>
-                                <Pie data={this.statData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={235}>
-                                    {this.statData.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={lightColors[index]}/>
-                                    ))}
-                                </Pie>
-                                <Tooltip />
-                            </PieChart>
-                        </Row>
-                        <Row>
-                            <Col xs="1"/>
-                            <Col xs="7" >
-                                <Row><h1>{this.props.task} Progress:</h1></Row>
-                                <Row style={font32.desc}>{this.complete} out of {this.total} tasks completed!</Row>
-                            </Col>
-                            <Col xs="4">
-                                <Row noGutters>
-                                    <Button onClick = {this.showTaskView} variant="outline-info" style={font32.button}> Task View </Button>
-                                </Row>
-                                <Row noGutters>
-                                    <Button onClick = {this.showHistoryTab} variant="outline-info" style={font32.button}> History </Button>
-                                </Row>
-                            </Col>
-                        </Row>
-                    </Container>
-                );
-            } else {
-                return(
-                    <Container>
-                        <Row style={font40.box}>
-                            <PieChart width={900} height={485}>
-                                <Pie data={this.statData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={230}>
-                                    {this.statData.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={lightColors[index]}/>
-                                    ))}
-                                </Pie>
-                                <Tooltip />
-                            </PieChart>
-                        </Row>
-                        <Row>
-                            <Col xs="1"/>
-                            <Col xs="7">
-                                <Row><h1>{this.props.task} Progress:</h1></Row>
-                                <Row style={font40.desc}>{this.complete} out of {this.total} tasks completed!</Row>
-                            </Col>
-                            <Col xs="4">
-                                <Row noGutters>
-                                    <Button onClick = {this.showTaskView} variant="outline-info" style={font40.button}> Task View </Button>
-                                </Row>
-                                <Row noGutters>
-                                    <Button onClick = {this.showHistoryTab} variant="outline-info" style={font40.button}> History </Button>
-                                </Row>
-                            </Col>
-                        </Row>
-                    </Container>
-                );
-            }
+        let Buttons: ButtonVariantProps["variant"];
+        let bottomCol1: any;
+        let bottomCol2: any;
+        let bottomCol3: any;
+        let colorArray: string[];
+        let style;
+        let height;
+        let outerRadius;
+
+        if(this.props.fontSize === 16){
+            style = font16;
+            height = 600;
+            outerRadius = 250;
+            bottomCol1 = "3";
+            bottomCol2 = "6";
+            bottomCol3 = "3";
+        } else if(this.props.fontSize === 24){
+            style = font24;
+            height = 500;
+            outerRadius = 235;
+            bottomCol1 = "2";
+            bottomCol2 = "6";
+            bottomCol3 = "4";
+        } else if(this.props.fontSize === 32){
+            style = font32;
+            height = 500;
+            outerRadius = 235;
+            bottomCol1 = "1";
+            bottomCol2 = "7";
+            bottomCol3 = "4";
         } else {
-            if(this.props.fontSize === 16){
-                return(
-                    <Container>
-                        <Row style={font16.box}>
-                            <PieChart width={900} height={600}>
-                                <Pie data={this.statData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={250}>
-                                    {this.statData.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={darkColors[index]}/>
-                                    ))}
-                                </Pie>
-                                <Tooltip />
-                            </PieChart>
-                        </Row>
-                        <Row>
-                            <Col xs="3"/>
-                            <Col xs="6" >
-                                <Row><h2>{this.props.task} Progress:</h2></Row>
-                                <Row style={font16.desc}>{this.complete} out of {this.total} tasks completed!</Row>
-                            </Col>
-                            <Col xs="3">
-                                <Row noGutters>
-                                    <Button onClick = {this.showTaskView} variant="info" style={font16.button}> Task View </Button>
-                                </Row>
-                                <Row noGutters>
-                                    <Button onClick = {this.showHistoryTab} variant="info" style={font16.button}> History </Button>
-                                </Row>
-                            </Col>
-                        </Row>
-                    </Container>
-                );
-            } else if(this.props.fontSize === 24){
-                return(
-                    <Container>
-                        <Row style={font24.box}>
-                            <PieChart width={900} height={500}>
-                                <Pie data={this.statData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={235}>
-                                    {this.statData.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={darkColors[index]}/>
-                                    ))}
-                                </Pie>
-                                <Tooltip />
-                            </PieChart>
-                        </Row>
-                        <Row>
-                            <Col xs="2"/>
-                            <Col xs="6" >
-                                <Row><h2>{this.props.task} Progress:</h2></Row>
-                                <Row style={font24.desc}>{this.complete} out of {this.total} tasks completed!</Row>
-                            </Col>
-                            <Col xs="4">
-                                <Row noGutters>
-                                    <Button onClick = {this.showTaskView} variant="info" style={font24.button}> Task View </Button>
-                                </Row>
-                                <Row noGutters>
-                                    <Button onClick = {this.showHistoryTab} variant="info" style={font24.button}> History </Button>
-                                </Row>
-                            </Col>
-                        </Row>
-                    </Container>
-                );
-            } else if(this.props.fontSize === 32){
-                return(
-                    <Container>
-                        <Row style={font32.box}>
-                            <PieChart width={900} height={500}>
-                                <Pie data={this.statData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={235}>
-                                    {this.statData.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={darkColors[index]}/>
-                                    ))}
-                                </Pie>
-                                <Tooltip />
-                            </PieChart>
-                        </Row>
-                        <Row>
-                            <Col xs="1"/>
-                            <Col xs="7" >
-                                <Row><h1>{this.props.task} Progress:</h1></Row>
-                                <Row style={font32.desc}>{this.complete} out of {this.total} tasks completed!</Row>
-                            </Col>
-                            <Col xs="4">
-                                <Row noGutters>
-                                    <Button onClick = {this.showTaskView} variant="info" style={font32.button}> Task View </Button>
-                                </Row>
-                                <Row noGutters>
-                                    <Button onClick = {this.showHistoryTab} variant="info" style={font32.button}> History </Button>
-                                </Row>
-                            </Col>
-                        </Row>
-                    </Container>
-                );
-            } else {
-                return(
-                    <Container>
-                        <Row style={font40.box}>
-                            <PieChart width={900} height={485}>
-                                <Pie data={this.statData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={230}>
-                                    {this.statData.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={darkColors[index]}/>
-                                    ))}
-                                </Pie>
-                                <Tooltip />
-                            </PieChart>
-                        </Row>
-                        <Row>
-                            <Col xs="1"/>
-                            <Col xs="7">
-                                <Row><h1>{this.props.task} Progress:</h1></Row>
-                                <Row style={font40.desc}>{this.complete} out of {this.total} tasks completed!</Row>
-                            </Col>
-                            <Col xs="4">
-                                <Row noGutters>
-                                    <Button onClick = {this.showTaskView} variant="info" style={font40.button}> Task View </Button>
-                                </Row>
-                                <Row noGutters>
-                                    <Button onClick = {this.showHistoryTab} variant="info" style={font40.button}> History </Button>
-                                </Row>
-                            </Col>
-                        </Row>
-                    </Container>
-                );
-            }
+            style = font40;
+            height = 485;
+            outerRadius = 230;
+            bottomCol1 = "1";
+            bottomCol2 = "7";
+            bottomCol3 = "4";
         }
+
+        if(this.props.theme === "light"){
+            Buttons = "outline-info";
+            colorArray = [
+                "#8cde88",
+                "#f76d6d"
+            ];
+        } else {
+            Buttons = "info";
+            colorArray = [
+                "#28a745",
+                "#aa1b29"
+            ];
+        }
+
+        return(
+            <Container>
+                <Row style={style.box}>
+                    <PieChart width={900} height={height}>
+                        <Pie data={this.statData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={outerRadius}>
+                            {this.statData.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={colorArray[index]}/>
+                            ))}
+                        </Pie>
+                        <Tooltip />
+                    </PieChart>
+                </Row>
+                <Row>
+                    <Col xs={bottomCol1}/>
+                    <Col xs={bottomCol2} >
+                        <Row><h2>{this.props.task} Progress:</h2></Row>
+                        <Row style={style.desc}>{this.complete} out of {this.total} tasks completed!</Row>
+                    </Col>
+                    <Col xs={bottomCol3}>
+                        <Row noGutters>
+                            <Button onClick = {this.showTaskView}
+                            variant = {Buttons}
+                            style = {style.button}> Task View </Button>
+                        </Row>
+                        <Row noGutters>
+                            <Button onClick = {this.showHistoryTab}
+                            variant = {Buttons}
+                            style = {style.button}> History </Button>
+                        </Row>
+                    </Col>
+                </Row>
+            </Container>
+        );
     }
 }
