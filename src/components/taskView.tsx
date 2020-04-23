@@ -664,32 +664,63 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
         let DeleteButton: ButtonVariantProps["variant"];
         let StatsButton: ButtonVariantProps["variant"];
         let HistoryButton: ButtonVariantProps["variant"];
+        let rows;
+        let columns;
         let style;
+        let formLabelColumns:any;
+        let formGroupColumns:any;
 
         // We can calculate the date only if state is populated
-        if (this.props.theme === "light") {
-            SaveButton = "outline-success";
-            DeleteButton = "outline-danger";
-            StatsButton = "outline-info";
-            HistoryButton = "outline-info";
-        } else {
-            SaveButton = "success";
-            DeleteButton = "danger";
-            StatsButton = "info";
-            HistoryButton = "info";
-        }
         if (!!(this.state.dueDate)) {
             this.calculateDaysLeft(this.state.dueDate);
         }
         if (this.props.fontSize === 16) {
             style = font16;
+            rows = "13";
+            columns = "100";
+            formLabelColumns = "2";
+            formGroupColumns = "10";
         } else if (this.props.fontSize === 24) {
             style = font24;
+            rows = "5";
+            columns = "60";
+            formLabelColumns = "2";
+            formGroupColumns = "10";
         } else if (this.props.fontSize === 32) {
             style = font32;
+            rows = "3";
+            columns = "60";
+            formLabelColumns = "3";
+            formGroupColumns = "9";
         } else {
             style = font40;
+            rows = "2";
+            columns = "60";
+            formLabelColumns = "3";
+            formGroupColumns = "9";
         }
+
+        let descFormStyle;
+        let descBoxStyle;
+        let titleStyle;
+        if (this.props.theme === "light") {
+            SaveButton = "outline-success";
+            DeleteButton = "outline-danger";
+            StatsButton = "outline-info";
+            HistoryButton = "outline-info";
+            descFormStyle = style.desc;
+            descBoxStyle = style.desc;
+            titleStyle = style.name;
+        } else {
+            SaveButton = "success";
+            DeleteButton = "danger";
+            StatsButton = "info";
+            HistoryButton = "info";
+            descFormStyle = style.descDark;
+            descBoxStyle = style.descDarkBox;
+            titleStyle = style.darkName;
+        }
+
         const daysLeftString = this.daysLeftCheck();
         return (
             <Container style={styles.container}>
@@ -715,7 +746,7 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                                 this.setState({ wasDeleteRequested: false })
                                 this.deleteButtonText = "Delete";
                             }}
-                            style={style.name}
+                            style={titleStyle}
                             value={this.state.name}
                         />
                     </Col>
@@ -757,14 +788,14 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                     <Col xs="7"><AssignedDropdown assignedState={this.state.assignee} sharedUsers={this.sharedUsers} owner={this.owner} theme={this.props.theme} handleChange={this.handleAssignedChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
                 </Row>
                 <Row noGutters={true}>
-                    <Form style={style.desc}>
+                    <Form style={descFormStyle}>
                         <Form.Group as={Row} noGutters={true}>
-                            <Form.Label column xs="2"> Description: </Form.Label>
-                            <Col xs="10">
+                            <Form.Label column xs={formLabelColumns}> Description: </Form.Label>
+                            <Col xs={formGroupColumns}>
                                 <Form.Control
                                     as="textarea"
-                                    rows="13"
-                                    cols="100"
+                                    rows={rows}
+                                    cols={columns}
                                     onChange={(event: any) => {
                                         let fieldVal = event.target.value;
                                         this.setState({ description: fieldVal });
@@ -772,7 +803,7 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                                         this.setState({ wasDeleteRequested: false })
                                         this.deleteButtonText = "Delete";
                                     }}
-                                    style={style.desc}
+                                    style={descBoxStyle}
                                     value={this.state.description}
                                 />
                             </Col>
