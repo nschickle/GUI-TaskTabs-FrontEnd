@@ -5,6 +5,6 @@ import * as ReactDOM from "react-dom";
 import { MainPage } from "./components/mainPage";
 
 ReactDOM.render(
-    <MainPage signedIn={true} projectPageUp={false} theme="light" font="verdana" fontSize = {16}/>,
+    <MainPage projectPageUp={false} theme="light" font="verdana" fontSize = {16}/>,
     document.getElementById("mainpage")
 );
