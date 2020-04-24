@@ -5,6 +5,7 @@ import Row from 'react-bootstrap/Row';
 import Col from "react-bootstrap/Col";
 import { UserInfo } from "./userInfo";
 import { SignInButton } from "./signInButton";
+import { userInfo } from "os";
 
 
 const styles = {
@@ -61,12 +62,14 @@ const styles = {
     }
 };
 
+const testOwner: UserInfo = { name: "Tester", email: "test@test.com" };
+
 interface MainLandProps {
-    showProjectLanding: () => any;
+    showProjectLanding: (userInfo: UserInfo) => any;
+    userInfo: UserInfo;
 }
 
-export class MainLanding extends React.Component<MainLandProps, { error: any, isLoaded: boolean, showProjectLanding: () => any}> {
-    private userInfo = new UserInfo(null, null);
+export class MainLanding extends React.Component<MainLandProps, { error: any, isLoaded: boolean, showProjectLanding: (userInfo: UserInfo) => any}> {
     constructor(props: MainLandProps) {
         super(props);
 
@@ -96,7 +99,7 @@ export class MainLanding extends React.Component<MainLandProps, { error: any, is
                         </h1>
                     </Col>
                     <Col style={styles.centerCols}>
-                            <SignInButton userInfo={this.userInfo}>
+                            <SignInButton userInfo={this.props.userInfo}>
                             </SignInButton> 
                     </Col>
                 </Row>
@@ -124,7 +127,7 @@ export class MainLanding extends React.Component<MainLandProps, { error: any, is
                             </p>
                         </Container>
                         <Container style={styles.center}>
-                            <SignInButton  userInfo={this.userInfo} >
+                            <SignInButton  userInfo={this.props.userInfo} >
                             </SignInButton> 
                         </Container>
                     </Col>
