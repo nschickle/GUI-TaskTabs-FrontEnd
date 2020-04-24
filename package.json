@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/JustinLaGree/GUI-TaskTabs#readme",
   "devDependencies": {
+    "@types/jwt-decode": "^2.2.1",
     "tslint": "^6.1.0",
     "typescript": "^3.8.2"
   },
@@ -35,6 +36,7 @@
     "classnames": "^2.2.6",
     "date-fns": "^2.11.1",
     "jquery": "^3.4.1",
+    "jwt-decode": "^2.2.0",
     "popper.js": "^1.16.1",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",

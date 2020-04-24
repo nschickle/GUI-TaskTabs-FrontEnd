@@ -97,9 +97,10 @@ const styles = {
 interface IUser {
     id: number;
     name: string;
+    email: string;
 }
 
-const testOwner: IUser = { id: 0, name: "Super Steve" };
+const testOwner: IUser = { id: 0, name: "Super Steve", email: "test@test.com" };
 
 interface ProjLandProps {
     showProjectPage: (projectID: number) => any;
