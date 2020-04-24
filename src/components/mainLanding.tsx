@@ -41,8 +41,8 @@ const styles = {
         margin: "auto",
     },
     center: {
-        marginTop: 10,
-        margin: "auto"
+        margin: "auto",
+        marginTop: 75        
     },
     centerCols: {
         margin: "auto"
@@ -50,9 +50,14 @@ const styles = {
     gButton: {
         borderStyle: "none"
     },
+    imgProjectPage: {
+        width: "inherit"
+    },
     img: {
-
         margin: 20
+    },
+    bottomStyle: {
+        paddingBottom: 100
     }
 };
 
@@ -91,7 +96,7 @@ export class MainLanding extends React.Component<MainLandProps, { error: any, is
                         </h1>
                     </Col>
                     <Col style={styles.centerCols}>
-                            <SignInButton theme={"light"} fontSize={16} userInfo={this.userInfo}>
+                            <SignInButton userInfo={this.userInfo}>
                             </SignInButton> 
                     </Col>
                 </Row>
@@ -99,11 +104,36 @@ export class MainLanding extends React.Component<MainLandProps, { error: any, is
                     <p style={styles.welcomeText}>Welcome, to TaskTabs!</p>
                 </Row>
                 <Row style={styles.infoText}>
-                    <Col sm={5}>
-                        <p style={styles.infoText}>TaskTabs is a project managements system to improve productivity in both personal and professional projects. 
-                        Create you project and add tasks in a few clicks to instantly start tracking your progress. Start now by signing into your Google account!</p>
+                    <Col sm={4} style={styles.bottomStyle}>
+                        <Container style={styles.centerCols}>
+                            <p style={styles.infoText}>TaskTabs is a project managements system to improve productivity in your projects:<br></br>
+                                <ul>
+                                    <li>
+                                        Use for personal or professional projects
+                                    </li>
+                                    <li>
+                                        Stay organized by planning your projects
+                                    </li>
+                                    <li>
+                                        Create and navigate your tasks and projects in a few clicks
+                                    </li>
+                                    <li>
+                                        Easy sign in with Google
+                                    </li>
+                                </ul>
+                            </p>
+                        </Container>
+                        <Container style={styles.center}>
+                            <SignInButton  userInfo={this.userInfo} >
+                            </SignInButton> 
+                        </Container>
                     </Col>
-                    <Col sm={7}>
+                    <Col sm={8} >
+                    <img
+                        src={require("../img/landingImg.png")}
+                        className="d-inline-flex"
+                        style={styles.imgProjectPage}
+                        alt="TaskTabs Project Page"/>
                     </Col>
                     </Row>
             </Container>

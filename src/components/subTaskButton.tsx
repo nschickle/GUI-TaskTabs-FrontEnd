@@ -80,7 +80,7 @@ const SubTaskName = styled.div`
     margin-left: 10px;
     margin-top: ${(props: SubTaskNameProps) => props.marginTop}px;
     min-width: 225px;
-;
+    `;
 
 interface SubTaskButtonProps {
     name: string;
