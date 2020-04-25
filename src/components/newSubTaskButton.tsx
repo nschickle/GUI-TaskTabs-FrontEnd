@@ -49,16 +49,21 @@ interface INewSubTaskButtonProps {
     fontSize: number;
     projectId: number;
     userInfo: UserInfo;
+    showLoading: () => any;
 }
 
-export class NewSubTaskButton extends React.Component<INewSubTaskButtonProps> {
+export class NewSubTaskButton extends React.Component<INewSubTaskButtonProps, { showLoading: () => any }> {
 
     constructor(props: INewSubTaskButtonProps) {
         super(props);
 
+        this.state = {
+            showLoading: props.showLoading
+        }
     }
 
     createNewSubTask = () => {
+        this.state.showLoading();
 
         // TODO
         // should be user from google oauth

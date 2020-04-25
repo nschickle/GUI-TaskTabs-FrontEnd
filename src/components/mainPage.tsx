@@ -36,11 +36,12 @@ interface MainPageProps {
     theme: string;
     font: string;
     fontSize: number;
+    viewPage: string;
 }
 
 // TODO:
 // Make it so choosing a project on the landing changes it on project page
-export class MainPage extends React.Component<MainPageProps, { projectPageUp: boolean, projectID: number, theme: string, font: string, fontSize: number }>{
+export class MainPage extends React.Component<MainPageProps, { projectPageUp: boolean, projectID: number, theme: string, font: string, fontSize: number, viewPage: string }>{
     private userInfo = new UserInfo("test@test.com", "test");
     private userInfo1 = new UserInfo(null, null);
 
@@ -52,7 +53,8 @@ export class MainPage extends React.Component<MainPageProps, { projectPageUp: bo
         projectID: null,
         theme: props.theme,
         font: props.font,
-        fontSize: props.fontSize
+        fontSize: props.fontSize,
+        viewPage: props.viewPage
       };
     }
 
@@ -100,6 +102,22 @@ export class MainPage extends React.Component<MainPageProps, { projectPageUp: bo
         this.setState({fontSize: 40});
     }
 
+    showHistoryTab = () => {
+        this.setState({ viewPage: "historyTab" });
+    }
+
+    showStatTab = () => {
+        this.setState({ viewPage: "statTab" });
+    }
+
+    showTaskView = () => {
+        this.setState({ viewPage: "taskView" });
+    }
+
+    showLoading = () => {
+        this.setState({ viewPage: "loading" });
+    }
+
     render() {
         const projectPageUp = this.state.projectPageUp;
         const theme = this.state.theme;
@@ -125,7 +143,7 @@ export class MainPage extends React.Component<MainPageProps, { projectPageUp: bo
                                 changeToSize40 = {this.changeToSize40}
                                 fontSize = {fontSize}/>
                         </Row>
-                        <Row><ProjectPage projectID={this.state.projectID} theme = {theme} fontSize={fontSize} userInfo={this.userInfo} hideProjectPage={this.hideProjectPage} viewPage = "taskView"/></Row></Container>;
+                        <Row><ProjectPage projectID={this.state.projectID} theme = {theme} fontSize={fontSize} userInfo={this.userInfo} hideProjectPage={this.hideProjectPage} viewPage = {this.state.viewPage} showLoading={this.showLoading} showStatTab={this.showStatTab} showHistoryTab={this.showHistoryTab} showTaskView={this.showTaskView}/></Row></Container>;
                 } else {
                     showPage = <Container fluid style={fonts.verdana}>
                         <Row>
@@ -143,7 +161,7 @@ export class MainPage extends React.Component<MainPageProps, { projectPageUp: bo
                                 changeToSize40 = {this.changeToSize40}
                                 fontSize = {fontSize}/>
                         </Row>
-                        <Row><ProjectPage projectID={this.state.projectID} theme = {theme} fontSize={fontSize} userInfo={this.userInfo} hideProjectPage={this.hideProjectPage} viewPage = "taskView"/></Row></Container>;
+                        <Row><ProjectPage projectID={this.state.projectID} theme = {theme} fontSize={fontSize} userInfo={this.userInfo} hideProjectPage={this.hideProjectPage} viewPage = {this.state.viewPage} showLoading={this.showLoading} showStatTab={this.showStatTab} showHistoryTab={this.showHistoryTab} showTaskView={this.showTaskView}/></Row></Container>;
                 }
             } else {
                 if (theme == "dark") {
@@ -164,7 +182,7 @@ export class MainPage extends React.Component<MainPageProps, { projectPageUp: bo
                                 fontSize = {fontSize}/>
                         </Row>
                         <Row>
-                        <ProjectLanding showProjectPage = {this.showProjectPage} theme={theme}  fontSize={fontSize} userInfo={this.userInfo}/>
+                        <ProjectLanding showProjectPage = {this.showProjectPage} theme={theme}  fontSize={fontSize} userInfo={this.userInfo} showLoading={this.showLoading}/>
                         </Row></Container>;
                 } else {
                     showPage = <Container fluid style={fonts.verdana}>
@@ -184,7 +202,7 @@ export class MainPage extends React.Component<MainPageProps, { projectPageUp: bo
                                 fontSize = {fontSize}/>
                         </Row>
                         <Row>
-                        <ProjectLanding showProjectPage = {this.showProjectPage} theme={theme}  fontSize={fontSize} userInfo={this.userInfo}/>
+                        <ProjectLanding showProjectPage = {this.showProjectPage} theme={theme}  fontSize={fontSize} userInfo={this.userInfo} showLoading={this.showLoading}/>
                         </Row></Container>;
                 }
             }
@@ -207,7 +225,7 @@ export class MainPage extends React.Component<MainPageProps, { projectPageUp: bo
                                     changeToSize40 = {this.changeToSize40}
                                     fontSize = {fontSize}/>
                             </Row>
-                            <Row><ProjectPage projectID={this.state.projectID} theme = {theme} fontSize={fontSize} userInfo={this.userInfo} hideProjectPage={this.hideProjectPage} viewPage = "taskView"/></Row></Container>;
+                            <Row><ProjectPage projectID={this.state.projectID} theme = {theme} fontSize={fontSize} userInfo={this.userInfo} hideProjectPage={this.hideProjectPage} viewPage = {this.state.viewPage} showLoading={this.showLoading} showStatTab={this.showStatTab} showHistoryTab={this.showHistoryTab} showTaskView={this.showTaskView}/></Row></Container>;
                     } else {
                         showPage = <Container fluid style={fonts.courier}>
                             <Row>
@@ -225,7 +243,7 @@ export class MainPage extends React.Component<MainPageProps, { projectPageUp: bo
                                     changeToSize40 = {this.changeToSize40}
                                     fontSize = {fontSize}/>
                             </Row>
-                            <Row><ProjectPage projectID={this.state.projectID} theme = {theme} fontSize={fontSize} userInfo={this.userInfo} hideProjectPage={this.hideProjectPage} viewPage = "taskView"/></Row></Container>;
+                            <Row><ProjectPage projectID={this.state.projectID} theme = {theme} fontSize={fontSize} userInfo={this.userInfo} hideProjectPage={this.hideProjectPage} viewPage = {this.state.viewPage} showLoading={this.showLoading} showStatTab={this.showStatTab} showHistoryTab={this.showHistoryTab} showTaskView={this.showTaskView}/></Row></Container>;
                     }
                 } else {
                     if (theme == "dark") {
@@ -246,7 +264,7 @@ export class MainPage extends React.Component<MainPageProps, { projectPageUp: bo
                                     fontSize = {fontSize}/>
                             </Row>
                             <Row>
-                            <ProjectLanding showProjectPage = {this.showProjectPage} theme={theme} fontSize={fontSize} userInfo={this.userInfo}/>
+                            <ProjectLanding showProjectPage = {this.showProjectPage} theme={theme} fontSize={fontSize} userInfo={this.userInfo} showLoading={this.showLoading}/>
                             </Row></Container>;
                     } else {
                         showPage = <Container fluid style={fonts.courier}>
@@ -266,7 +284,7 @@ export class MainPage extends React.Component<MainPageProps, { projectPageUp: bo
                                     fontSize = {fontSize}/>
                             </Row>
                             <Row>
-                            <ProjectLanding showProjectPage = {this.showProjectPage} theme={theme} fontSize={fontSize} userInfo={this.userInfo}/>
+                            <ProjectLanding showProjectPage = {this.showProjectPage} theme={theme} fontSize={fontSize} userInfo={this.userInfo} showLoading={this.showLoading}/>
                             </Row></Container>;
                     }
                 }

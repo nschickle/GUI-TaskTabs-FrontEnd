@@ -66,6 +66,7 @@ interface LandProjectColumnProps {
     theme: string;
     fontSize: number;
     userInfo: UserInfo;
+    showLoading: () => any;
 }
 
 export class LandProjectColumn extends React.Component<LandProjectColumnProps, { error: any, isLoaded: boolean, projects: Task[] }> {
@@ -126,9 +127,9 @@ export class LandProjectColumn extends React.Component<LandProjectColumnProps, {
                 return (
                     <Container>
                         <Col style={styles.box16} >
-                            <ProjectButton changeHead={this.props.selectProject} theme = {this.props.theme} fontSize = {this.props.fontSize} userInfo={this.props.userInfo}/>
+                            <ProjectButton changeHead={this.props.selectProject} theme = {this.props.theme} fontSize = {this.props.fontSize} userInfo={this.props.userInfo} showLoading={this.props.showLoading}/>
                             {projects.map((task) => {
-                                return <SubTaskButton name={task.title} changeHead={this.props.selectProject} percentage={task.progress} key={task._id} taskHead={task._id} theme = {this.props.theme} fontSize={this.props.fontSize}></SubTaskButton>;
+                                return <SubTaskButton name={task.title} changeHead={this.props.selectProject} percentage={task.progress} key={task._id} taskHead={task._id} theme = {this.props.theme} fontSize={this.props.fontSize} showLoading={this.props.showLoading}></SubTaskButton>;
                             })}
                         </Col>
                     </Container>
@@ -138,9 +139,9 @@ export class LandProjectColumn extends React.Component<LandProjectColumnProps, {
                 return (
                     <Container>
                         <Col style={styles.box24} >
-                            <ProjectButton changeHead={this.props.selectProject} theme = {this.props.theme} fontSize = {this.props.fontSize} userInfo={this.props.userInfo}/>
+                            <ProjectButton changeHead={this.props.selectProject} theme = {this.props.theme} fontSize = {this.props.fontSize} userInfo={this.props.userInfo} showLoading={this.props.showLoading}/>
                             {projects.map((task) => {
-                                return <SubTaskButton name={task.title} changeHead={this.props.selectProject} percentage={task.progress} key={task._id} taskHead={task._id} theme = {this.props.theme} fontSize={this.props.fontSize}></SubTaskButton>;
+                                return <SubTaskButton name={task.title} changeHead={this.props.selectProject} percentage={task.progress} key={task._id} taskHead={task._id} theme = {this.props.theme} fontSize={this.props.fontSize} showLoading={this.props.showLoading}></SubTaskButton>;
                             })}
                         </Col>
                     </Container>
@@ -150,9 +151,9 @@ export class LandProjectColumn extends React.Component<LandProjectColumnProps, {
                 return (
                     <Container>
                         <Col style={styles.box32} >
-                            <ProjectButton changeHead={this.props.selectProject} theme = {this.props.theme} fontSize = {this.props.fontSize} userInfo={this.props.userInfo}/>
+                            <ProjectButton changeHead={this.props.selectProject} theme = {this.props.theme} fontSize = {this.props.fontSize} userInfo={this.props.userInfo} showLoading={this.props.showLoading}/>
                             {projects.map((task) => {
-                                return <SubTaskButton name={task.title} changeHead={this.props.selectProject} percentage={task.progress} key={task._id} taskHead={task._id} theme = {this.props.theme} fontSize={this.props.fontSize}></SubTaskButton>;
+                                return <SubTaskButton name={task.title} changeHead={this.props.selectProject} percentage={task.progress} key={task._id} taskHead={task._id} theme = {this.props.theme} fontSize={this.props.fontSize} showLoading={this.props.showLoading}></SubTaskButton>;
                             })}
                         </Col>
                     </Container>
@@ -162,9 +163,9 @@ export class LandProjectColumn extends React.Component<LandProjectColumnProps, {
                 return (
                     <Container>
                         <Col style={styles.box40} >
-                            <ProjectButton changeHead={this.props.selectProject} theme = {this.props.theme} fontSize = {this.props.fontSize} userInfo={this.props.userInfo}/>
+                            <ProjectButton changeHead={this.props.selectProject} theme = {this.props.theme} fontSize = {this.props.fontSize} userInfo={this.props.userInfo} showLoading={this.props.showLoading}/>
                             {projects.map((task) => {
-                                return <SubTaskButton name={task.title} changeHead={this.props.selectProject} percentage={task.progress} key={task._id} taskHead={task._id} theme = {this.props.theme} fontSize={this.props.fontSize}></SubTaskButton>;
+                                return <SubTaskButton name={task.title} changeHead={this.props.selectProject} percentage={task.progress} key={task._id} taskHead={task._id} theme = {this.props.theme} fontSize={this.props.fontSize} showLoading={this.props.showLoading}></SubTaskButton>;
                             })}
                         </Col>
                     </Container>

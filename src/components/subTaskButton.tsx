@@ -90,16 +90,21 @@ interface SubTaskButtonProps {
     taskHead: number;
     theme: string;
     fontSize: number;
+    showLoading: () => any;
 }
 
 // This is a single SubTask button. They live in the right hand side of the project page.
 // This reuses the progress bar for the background of the button.
-export class SubTaskButton extends React.Component<SubTaskButtonProps>{
+export class SubTaskButton extends React.Component<SubTaskButtonProps , { showLoading: () => any }>{
     name: string;
     displayedName: string;
 
     constructor(props: SubTaskButtonProps) {
         super(props);
+
+        this.state = {
+            showLoading: props.showLoading
+        }
 
         this.name = this.props.name;
         this.displayedName = this.name;
@@ -115,6 +120,7 @@ export class SubTaskButton extends React.Component<SubTaskButtonProps>{
     }
 
     onButtonClick = () => {
+        this.state.showLoading();
         this.props.changeHead(this.props.taskHead);
     }
 
