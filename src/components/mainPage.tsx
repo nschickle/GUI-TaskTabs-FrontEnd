@@ -74,9 +74,10 @@ export class MainPage extends React.Component<MainPageProps, { projectPageUp: bo
     }
 
     showProjectLanding = () => {
-        this.setState({ signedIn: true });
-        this.setState({ projectPageUp: false });
-        this.setState({ projectID: null });
+        this.setState({ 
+            signedIn: true,
+            projectPageUp: false,
+            projectID: null });
     }
 
     getWebsiteLanding = () => {

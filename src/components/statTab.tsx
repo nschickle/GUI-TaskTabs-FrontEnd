@@ -6,6 +6,9 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
 import {Pie, PieChart, Cell, Tooltip} from 'recharts';
+import { RetryableFetch } from "./retryableFetch";
+import { UserInfo } from "./userInfo";
+import { UserHeaderHttpRequest } from "./userHeaderHttpRequest";
 
 const styles = {
     tab1: {
@@ -135,7 +138,7 @@ interface ButtonVariantProps {
     variant: "link" | "light" | "outline-success" | "success" | "primary" | "secondary" | "danger" | "warning" | "info" | "dark" | "outline-primary" | "outline-secondary" | "outline-danger" | "outline-warning" | "outline-info" | "outline-dark" | "outline-light";
 }
 
-interface Statistics {
+interface IStatistics {
     numTotal: number,
     numCompleted: number
 }
@@ -151,43 +154,34 @@ interface StatTabProps {
     viewPage: string,
     fontSize: number,
     theme: string,
-    stats: Statistics,
+    projectId: number,
     task: string
+    userInfo: UserInfo
 }
 
 interface StatTabState {
-    showHistoryTab: () => any,
-    showTaskView: () => any
-}
-
-export class StatTab extends React.Component<StatTabProps, StatTabState> {
+    showHistoryTab: () => any;
+    showTaskView: () => any;
+    isLoaded: boolean;
+    error: boolean;
     complete: number;
     incomplete: number;
     total: number;
-    statData: StatData[];
+}
 
+export class StatTab extends React.Component<StatTabProps, StatTabState> {
     constructor(props: StatTabProps){
         super(props);
 
         this.state = {
             showHistoryTab: props.showHistoryTab,
-            showTaskView: props.showTaskView
+            showTaskView: props.showTaskView,
+            isLoaded: false,
+            error: false,
+            complete: null,
+            incomplete: null,
+            total: null
         }
-
-        this.complete = props.stats.numCompleted;
-        this.incomplete = props.stats.numTotal - props.stats.numCompleted;
-        this.total = props.stats.numTotal;
-
-        this.statData = [
-            {
-                name: "Complete Tasks",
-                value: this.complete
-            },
-            {
-                name: "Incomplete Tasks",
-                value: this.incomplete
-            }
-        ];
     }
 
     showHistoryTab = () => {
@@ -196,6 +190,27 @@ export class StatTab extends React.Component<StatTabProps, StatTabState> {
 
     showTaskView = () => {
         this.state.showTaskView();
+    }
+
+    componentDidMount = () => {
+        const request = new UserHeaderHttpRequest(`/api/stats/completion/${this.props.projectId}`, this.props.userInfo);
+        RetryableFetch.fetch_retry(request)
+            .then(res => res.json())
+            .then(
+                (result: IStatistics) => {
+                    this.setState({ 
+                        isLoaded: true, 
+                        error: false,
+                        complete: result.numCompleted,
+                        total: result.numTotal,
+                        incomplete: result.numTotal - result.numCompleted});
+                },
+                (error) => {
+                    this.setState({ 
+                        isLoaded: true, 
+                        error: true});
+                }
+            );
     }
 
 
@@ -208,6 +223,22 @@ export class StatTab extends React.Component<StatTabProps, StatTabState> {
         let style;
         let height;
         let outerRadius;
+
+        //TODO: Implement loading mechanism
+        if (!this.state.isLoaded){
+            return <>Loading...</>;
+        }
+
+        let statData: StatData[] = [
+            {
+                name: "Complete Tasks",
+                value: this.state.complete
+            },
+            {
+                name: "Incomplete Tasks",
+                value: this.state.incomplete
+            }
+        ];
 
         if(this.props.fontSize === 16){
             style = font16;
@@ -257,8 +288,8 @@ export class StatTab extends React.Component<StatTabProps, StatTabState> {
             <Container>
                 <Row style={style.box}>
                     <PieChart width={900} height={height}>
-                        <Pie data={this.statData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={outerRadius}>
-                            {this.statData.map((entry, index) => (
+                        <Pie data={statData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={outerRadius}>
+                            {statData.map((entry, index) => (
                                 <Cell key={`cell-${index}`} fill={colorArray[index]}/>
                             ))}
                         </Pie>
@@ -269,7 +300,7 @@ export class StatTab extends React.Component<StatTabProps, StatTabState> {
                     <Col xs={bottomCol1}/>
                     <Col xs={bottomCol2} >
                         <Row><h2>{this.props.task} Progress:</h2></Row>
-                        <Row style={style.desc}>{this.complete} out of {this.total} tasks completed!</Row>
+                        <Row style={style.desc}>{this.state.complete} out of {this.state.total} tasks completed!</Row>
                     </Col>
                     <Col xs={bottomCol3}>
                         <Row noGutters>
