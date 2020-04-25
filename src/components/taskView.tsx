@@ -9,6 +9,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import Badge from 'react-bootstrap/Badge';
 
 import { TaskProgressBar } from './progressBar';
 import { StatusDropdown } from './statusDropdown';
@@ -88,8 +89,10 @@ const font16 = {
         height: 56,
         minWidth: 100,
         fontSize: 16
+    },
+    badge: {
+        fontSize: 12
     }
-
 };
 
 const font24 = {
@@ -161,8 +164,10 @@ const font24 = {
         height: 75,
         minWidth: 100,
         fontSize: 24
+    },
+    badge: {
+        fontSize: 16
     }
-
 };
 
 const font32 = {
@@ -210,7 +215,7 @@ const font32 = {
         color: "#f8f9e8"
     },
     saveButton: {
-        height: 100,
+        height: 90,
         width: 160,
         fontSize: 32
     },
@@ -233,8 +238,10 @@ const font32 = {
         height: 92,
         minWidth: 100,
         fontSize: 32
+    },
+    badge: {
+        fontSize: 16
     }
-
 };
 
 const font40 = {
@@ -282,7 +289,7 @@ const font40 = {
         color: "#f8f9e8"
     },
     saveButton: {
-        height: 100,
+        height: 90,
         width: 160,
         fontSize: 40
     },
@@ -305,8 +312,10 @@ const font40 = {
         height: 92,
         minWidth: 100,
         fontSize: 40
+    },
+    badge: {
+        fontSize: 24
     }
-
 };
 
 const styles = {
@@ -391,7 +400,6 @@ interface TaskViewProps {
     refreshPage: () => any;
     showStatTab: () => any;
     showHistoryTab: () => any;
-    viewPage: string;
 };
 
 interface TaskViewState {
@@ -711,7 +719,7 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
             sharedTabCol2 = "3";
         } else if (this.props.fontSize === 32) {
             style = font32;
-            rows = "3";
+            rows = "2";
             columns = "60";
             formLabelColumns = "3";
             formGroupColumns = "9";
@@ -719,7 +727,7 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
             sharedTabCol2 = "3";
         } else {
             style = font40;
-            rows = "2";
+            rows = "1";
             columns = "60";
             formLabelColumns = "3";
             formGroupColumns = "9";
@@ -749,11 +757,21 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
         }
 
         const daysLeftString = this.daysLeftCheck();
+
+        let savedStatusMessage;
+        if(this.state.hasChanged){
+            savedStatusMessage = <Badge style={style.badge}> Unsaved Changes </Badge>;
+        } else {
+            savedStatusMessage = <Badge/>;
+        }
+
+
+
         return (
             <Container style={styles.container}>
                 <Row style={styles.row} noGutters={true}>
                     <Col xs="2" >
-                        <Button
+                        <Row><Button
                             variant={SaveButton}
                             size='lg'
                             block
@@ -762,7 +780,8 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                             disabled={!this.state.hasChanged}
                         >
                             {this.saveText}
-                        </Button>
+                        </Button></Row>
+                        <Row> {savedStatusMessage} </Row>
                     </Col>
                     <Col xs="8">
                         <Form.Control
