@@ -69,7 +69,6 @@ export class MainPage extends React.Component<MainPageProps, { projectPageUp: bo
 
     // Currently makes projectID null because it's state can't be guarentee
     hideProjectPage = () => {
-        this.setState({ signedIn: false });
         this.setState({ projectPageUp: false });
         this.setState({ projectID: null });
     }
@@ -78,6 +77,10 @@ export class MainPage extends React.Component<MainPageProps, { projectPageUp: bo
         this.setState({ signedIn: true });
         this.setState({ projectPageUp: false });
         this.setState({ projectID: null });
+    }
+
+    getWebsiteLanding = () => {
+        this.setState({ signedIn: false });
     }
 
     changeToDarkTheme = () => {
@@ -167,7 +170,8 @@ export class MainPage extends React.Component<MainPageProps, { projectPageUp: bo
                             changeToSize24 = {this.changeToSize24}
                             changeToSize32 = {this.changeToSize32}
                             changeToSize40 = {this.changeToSize40}
-                            fontSize = {fontSize}/>
+                            fontSize = {fontSize}
+                            getWebsiteLanding = {this.getWebsiteLanding}/>
                     </Row>
                     <Row>
                         <ProjectPage projectID={this.state.projectID} theme = {theme} fontSize={fontSize} userInfo={this.userInfo} hideProjectPage={this.hideProjectPage} viewPage = {this.state.viewPage} showLoading={this.showLoading} showStatTab={this.showStatTab} showHistoryTab={this.showHistoryTab} showTaskView={this.showTaskView}/>
@@ -188,7 +192,8 @@ export class MainPage extends React.Component<MainPageProps, { projectPageUp: bo
                             changeToSize24 = {this.changeToSize24}
                             changeToSize32 = {this.changeToSize32}
                             changeToSize40 = {this.changeToSize40}
-                            fontSize = {fontSize}/>
+                            fontSize = {fontSize}
+                            getWebsiteLanding = {this.getWebsiteLanding}/>
                     </Row>
                     <Row>
                         <ProjectLanding showProjectPage = {this.showProjectPage} theme={theme}  fontSize={fontSize} userInfo={this.userInfo} showLoading={this.showLoading}/>

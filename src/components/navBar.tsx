@@ -151,6 +151,7 @@ interface INavBarProps {
     changeToSize32: () => any;
     changeToSize40: () => any;
     fontSize: number;
+    getWebsiteLanding: () => any;
 }
 
 interface NavBarState {
@@ -166,6 +167,7 @@ interface NavBarState {
     changeToSize32: () => any;
     changeToSize40: () => any;
     fontSize: number;
+    getWebsiteLanding: () => any;
 }
 
 export class NavBar extends React.Component<INavBarProps, NavBarState> {
@@ -188,12 +190,17 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
             changeToSize24: props.changeToSize24,
             changeToSize32: props.changeToSize32,
             changeToSize40: props.changeToSize40,
-            fontSize: props.fontSize
+            fontSize: props.fontSize,
+            getWebsiteLanding: props.getWebsiteLanding
             };
     }
 
     getProjectLanding = () => {
         this.state.hideProjectPage();
+    }
+
+    getWebsiteLanding = () => {
+        this.state.getWebsiteLanding();
     }
 
     checkTheme = () => {
@@ -263,7 +270,14 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
                                     onClick={this.getProjectLanding}
                                     variant="outline-dark"
                                     style={font16.button}>
-                                    Home</Button>
+                                    Home
+                                </Button>
+                                <Button
+                                    onClick={this.getWebsiteLanding}
+                                    variant="outline-dark"
+                                    style={font16.button}>
+                                    About
+                                </Button>
                             </Nav>
                         </Navbar.Collapse>
                         <Navbar.Collapse className="justify-content-end">
