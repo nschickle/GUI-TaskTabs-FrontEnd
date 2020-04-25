@@ -107,8 +107,9 @@ export class SubTaskButton extends React.Component<SubTaskButtonProps>{
 
     // If the title is too long, we should shorten it to fit the space we have.
     checkNameLength = () => {
-        if (this.name.length > 32) {
-            this.displayedName = this.name.substring(0, 31);
+        const maxNameLength = 24;
+        if (this.name.length > maxNameLength) {
+            this.displayedName = this.name.substring(0, maxNameLength);
             this.displayedName += "...";
         }
     }
