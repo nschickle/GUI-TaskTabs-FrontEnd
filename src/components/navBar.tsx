@@ -6,7 +6,7 @@ import Nav from 'react-bootstrap/Nav';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Dropdown from 'react-bootstrap/Dropdown';
-import Form from 'react-bootstrap/Form';
+import Logo from "../img/logo.png"
 
 const font16 = {
     size: {
@@ -138,10 +138,6 @@ interface IUser {
     name: string;
 }
 
-const responseGoogle = (response: any) => {
-    console.log(response);
-}
-
 interface INavBarProps {
     hideProjectPage: () => any;
     changeToDarkTheme: () => any;
@@ -251,7 +247,7 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
                 navBar = <Container fluid>
                     <Navbar bg="light" variant="light" style={font16.size}>
                     <img
-                        src={require("../img/logo.png")}
+                        src={Logo}
                         width="50"
                         height="50"
                         className="d-inline-block"
@@ -363,7 +359,7 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
                 navBar = <Container fluid>
                     <Navbar bg="dark" variant="dark" style={font16.size}>
                     <img
-                        src={require("../img/logo.png")}
+                        src={Logo}
                         width="50"
                         height="50"
                         className="d-inline-block"
@@ -476,7 +472,7 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
                 navBar = <Container fluid>
                     <Navbar bg="light" variant="light" style={font24.size}>
                     <img
-                        src={require("../img/logo.png")}
+                        src={Logo}
                         width="65"
                         height="65"
                         className="d-inline-block"
@@ -586,7 +582,7 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
                 navBar = <Container fluid>
                     <Navbar bg="dark" variant="dark" style={font24.size}>
                     <img
-                        src={require("../img/logo.png")}
+                        src={Logo}
                         width="65"
                         height="65"
                         className="d-inline-block"
@@ -699,7 +695,7 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
                 navBar = <Container fluid>
                     <Navbar bg="light" variant="light" style={font32.size}>
                     <img
-                        src={require("../img/logo.png")}
+                        src={Logo}
                         width="65"
                         height="65"
                         className="d-inline-block"
@@ -809,7 +805,7 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
                 navBar = <Container fluid>
                     <Navbar bg="dark" variant="dark" style={font32.size}>
                     <img
-                        src={require("../img/logo.png")}
+                        src={Logo}
                         width="65"
                         height="65"
                         className="d-inline-block"
@@ -922,7 +918,7 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
                 navBar = <Container fluid>
                     <Navbar bg="light" variant="light" style={font40.size}>
                     <img
-                        src={require("../img/logo.png")}
+                        src={Logo}
                         width="70"
                         height="70"
                         className="d-inline-block"
@@ -1032,7 +1028,7 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
                 navBar = <Container fluid>
                     <Navbar bg="dark" variant="dark" style={font40.size}>
                     <img
-                        src={require("../img/logo.png")}
+                        src={Logo}
                         width="70"
                         height="70"
                         className="d-inline-block"

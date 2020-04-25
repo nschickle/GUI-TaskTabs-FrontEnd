@@ -6,6 +6,7 @@ import Row from 'react-bootstrap/Row';
 import { NavBar } from './navBar';
 import { ProjectPage } from './projectPage';
 import { ProjectLanding } from './projLanding';
+import { MainLanding } from './mainLanding'
 import { UserInfo } from "./userInfo";
 
 const fonts = {
@@ -32,6 +33,7 @@ const fonts = {
 };
 
 interface MainPageProps {
+    signedIn: boolean;
     projectPageUp: boolean;
     theme: string;
     font: string;
@@ -41,14 +43,15 @@ interface MainPageProps {
 
 // TODO:
 // Make it so choosing a project on the landing changes it on project page
-export class MainPage extends React.Component<MainPageProps, { projectPageUp: boolean, projectID: number, theme: string, font: string, fontSize: number, viewPage: string }>{
+export class MainPage extends React.Component<MainPageProps, { projectPageUp: boolean, projectID: number, theme: string, font: string, fontSize: number, viewPage: string, signedIn: boolean }>{
     private userInfo = new UserInfo("test@test.com", "test");
-    private userInfo1 = new UserInfo(null, null);
+
 
     constructor(props: MainPageProps) {
         super(props);
 
       this.state = {
+        signedIn: props.signedIn,
         projectPageUp: props.projectPageUp,
         projectID: null,
         theme: props.theme,
@@ -59,13 +62,20 @@ export class MainPage extends React.Component<MainPageProps, { projectPageUp: bo
     }
 
     showProjectPage = (projectID: number) => {
+        this.setState({ signedIn: true})
         this.setState({ projectPageUp: true });
         this.setState({ projectID: projectID });
     }
 
-
     // Currently makes projectID null because it's state can't be guarentee
     hideProjectPage = () => {
+        this.setState({ signedIn: false });
+        this.setState({ projectPageUp: false });
+        this.setState({ projectID: null });
+    }
+
+    showProjectLanding = () => {
+        this.setState({ signedIn: true });
         this.setState({ projectPageUp: false });
         this.setState({ projectID: null });
     }
@@ -120,174 +130,78 @@ export class MainPage extends React.Component<MainPageProps, { projectPageUp: bo
 
     render() {
         const projectPageUp = this.state.projectPageUp;
+        const signedIn = this.state.signedIn;
         const theme = this.state.theme;
         const font = this.state.font;
         const fontSize = this.state.fontSize;
-        let showPage;
-        if (font === "verdana") {
-            if (projectPageUp) {
-                if (theme == "dark") {
-                    showPage = <Container fluid style={fonts.darkVerdana}>
-                        <Row>
-                            <NavBar
-                                hideProjectPage = {this.hideProjectPage}
-                                changeToDarkTheme = {this.changeToDarkTheme}
-                                changeToLightTheme = {this.changeToLightTheme}
-                                theme = {theme}
-                                changeToCourier = {this.changeToCourier}
-                                changeToVerdana = {this.changeToVerdana}
-                                font = {font}
-                                changeToSize16 = {this.changeToSize16}
-                                changeToSize24 = {this.changeToSize24}
-                                changeToSize32 = {this.changeToSize32}
-                                changeToSize40 = {this.changeToSize40}
-                                fontSize = {fontSize}/>
-                        </Row>
-                        <Row><ProjectPage projectID={this.state.projectID} theme = {theme} fontSize={fontSize} userInfo={this.userInfo} hideProjectPage={this.hideProjectPage} viewPage = {this.state.viewPage} showLoading={this.showLoading} showStatTab={this.showStatTab} showHistoryTab={this.showHistoryTab} showTaskView={this.showTaskView}/></Row></Container>;
-                } else {
-                    showPage = <Container fluid style={fonts.verdana}>
-                        <Row>
-                            <NavBar
-                                hideProjectPage = {this.hideProjectPage}
-                                changeToDarkTheme = {this.changeToDarkTheme}
-                                changeToLightTheme = {this.changeToLightTheme}
-                                theme = {theme}
-                                changeToCourier = {this.changeToCourier}
-                                changeToVerdana = {this.changeToVerdana}
-                                font = {font}
-                                changeToSize16 = {this.changeToSize16}
-                                changeToSize24 = {this.changeToSize24}
-                                changeToSize32 = {this.changeToSize32}
-                                changeToSize40 = {this.changeToSize40}
-                                fontSize = {fontSize}/>
-                        </Row>
-                        <Row><ProjectPage projectID={this.state.projectID} theme = {theme} fontSize={fontSize} userInfo={this.userInfo} hideProjectPage={this.hideProjectPage} viewPage = {this.state.viewPage} showLoading={this.showLoading} showStatTab={this.showStatTab} showHistoryTab={this.showHistoryTab} showTaskView={this.showTaskView}/></Row></Container>;
-                }
+
+        let style;
+        if(font === "verdana"){
+            if(theme === "dark"){
+                style = fonts.darkVerdana;
             } else {
-                if (theme == "dark") {
-                    showPage = <Container fluid style={fonts.darkVerdana}>
-                        <Row>
-                            <NavBar
-                                hideProjectPage = {this.hideProjectPage}
-                                changeToDarkTheme = {this.changeToDarkTheme}
-                                changeToLightTheme = {this.changeToLightTheme}
-                                theme = {theme}
-                                changeToCourier = {this.changeToCourier}
-                                changeToVerdana = {this.changeToVerdana}
-                                font = {font}
-                                changeToSize16 = {this.changeToSize16}
-                                changeToSize24 = {this.changeToSize24}
-                                changeToSize32 = {this.changeToSize32}
-                                changeToSize40 = {this.changeToSize40}
-                                fontSize = {fontSize}/>
-                        </Row>
-                        <Row>
-                        <ProjectLanding showProjectPage = {this.showProjectPage} theme={theme}  fontSize={fontSize} userInfo={this.userInfo} showLoading={this.showLoading}/>
-                        </Row></Container>;
-                } else {
-                    showPage = <Container fluid style={fonts.verdana}>
-                        <Row>
-                            <NavBar
-                                hideProjectPage = {this.hideProjectPage}
-                                changeToDarkTheme = {this.changeToDarkTheme}
-                                changeToLightTheme = {this.changeToLightTheme}
-                                theme = {theme}
-                                changeToCourier = {this.changeToCourier}
-                                changeToVerdana = {this.changeToVerdana}
-                                font = {font}
-                                changeToSize16 = {this.changeToSize16}
-                                changeToSize24 = {this.changeToSize24}
-                                changeToSize32 = {this.changeToSize32}
-                                changeToSize40 = {this.changeToSize40}
-                                fontSize = {fontSize}/>
-                        </Row>
-                        <Row>
-                        <ProjectLanding showProjectPage = {this.showProjectPage} theme={theme}  fontSize={fontSize} userInfo={this.userInfo} showLoading={this.showLoading}/>
-                        </Row></Container>;
-                }
+                style = fonts.verdana;
             }
         } else {
-                if (projectPageUp) {
-                    if (theme == "dark") {
-                        showPage = <Container fluid style={fonts.darkCourier}>
-                            <Row>
-                                <NavBar
-                                    hideProjectPage = {this.hideProjectPage}
-                                    changeToDarkTheme = {this.changeToDarkTheme}
-                                    changeToLightTheme = {this.changeToLightTheme}
-                                    theme = {theme}
-                                    changeToCourier = {this.changeToCourier}
-                                    changeToVerdana = {this.changeToVerdana}
-                                    font = {font}
-                                    changeToSize16 = {this.changeToSize16}
-                                    changeToSize24 = {this.changeToSize24}
-                                    changeToSize32 = {this.changeToSize32}
-                                    changeToSize40 = {this.changeToSize40}
-                                    fontSize = {fontSize}/>
-                            </Row>
-                            <Row><ProjectPage projectID={this.state.projectID} theme = {theme} fontSize={fontSize} userInfo={this.userInfo} hideProjectPage={this.hideProjectPage} viewPage = {this.state.viewPage} showLoading={this.showLoading} showStatTab={this.showStatTab} showHistoryTab={this.showHistoryTab} showTaskView={this.showTaskView}/></Row></Container>;
-                    } else {
-                        showPage = <Container fluid style={fonts.courier}>
-                            <Row>
-                                <NavBar
-                                    hideProjectPage = {this.hideProjectPage}
-                                    changeToDarkTheme = {this.changeToDarkTheme}
-                                    changeToLightTheme = {this.changeToLightTheme}
-                                    theme = {theme}
-                                    changeToCourier = {this.changeToCourier}
-                                    changeToVerdana = {this.changeToVerdana}
-                                    font = {font}
-                                    changeToSize16 = {this.changeToSize16}
-                                    changeToSize24 = {this.changeToSize24}
-                                    changeToSize32 = {this.changeToSize32}
-                                    changeToSize40 = {this.changeToSize40}
-                                    fontSize = {fontSize}/>
-                            </Row>
-                            <Row><ProjectPage projectID={this.state.projectID} theme = {theme} fontSize={fontSize} userInfo={this.userInfo} hideProjectPage={this.hideProjectPage} viewPage = {this.state.viewPage} showLoading={this.showLoading} showStatTab={this.showStatTab} showHistoryTab={this.showHistoryTab} showTaskView={this.showTaskView}/></Row></Container>;
-                    }
-                } else {
-                    if (theme == "dark") {
-                        showPage = <Container fluid style={fonts.darkCourier}>
-                            <Row>
-                                <NavBar
-                                    hideProjectPage = {this.hideProjectPage}
-                                    changeToDarkTheme = {this.changeToDarkTheme}
-                                    changeToLightTheme = {this.changeToLightTheme}
-                                    theme = {theme}
-                                    changeToCourier = {this.changeToCourier}
-                                    changeToVerdana = {this.changeToVerdana}
-                                    font = {font}
-                                    changeToSize16 = {this.changeToSize16}
-                                    changeToSize24 = {this.changeToSize24}
-                                    changeToSize32 = {this.changeToSize32}
-                                    changeToSize40 = {this.changeToSize40}
-                                    fontSize = {fontSize}/>
-                            </Row>
-                            <Row>
-                            <ProjectLanding showProjectPage = {this.showProjectPage} theme={theme} fontSize={fontSize} userInfo={this.userInfo} showLoading={this.showLoading}/>
-                            </Row></Container>;
-                    } else {
-                        showPage = <Container fluid style={fonts.courier}>
-                            <Row>
-                                <NavBar
-                                    hideProjectPage = {this.hideProjectPage}
-                                    changeToDarkTheme = {this.changeToDarkTheme}
-                                    changeToLightTheme = {this.changeToLightTheme}
-                                    theme = {theme}
-                                    changeToCourier = {this.changeToCourier}
-                                    changeToVerdana = {this.changeToVerdana}
-                                    font = {font}
-                                    changeToSize16 = {this.changeToSize16}
-                                    changeToSize24 = {this.changeToSize24}
-                                    changeToSize32 = {this.changeToSize32}
-                                    changeToSize40 = {this.changeToSize40}
-                                    fontSize = {fontSize}/>
-                            </Row>
-                            <Row>
-                            <ProjectLanding showProjectPage = {this.showProjectPage} theme={theme} fontSize={fontSize} userInfo={this.userInfo} showLoading={this.showLoading}/>
-                            </Row></Container>;
-                    }
-                }
+            if(theme === "dark"){
+                style = fonts.darkCourier;
+            } else {
+                style = fonts.courier;
+            }
+        }
+
+        let showPage;
+        if(signedIn){
+            if(projectPageUp) {
+                showPage = <Container fluid style={style}>
+                    <Row>
+                        <NavBar
+                            hideProjectPage = {this.hideProjectPage}
+                            changeToDarkTheme = {this.changeToDarkTheme}
+                            changeToLightTheme = {this.changeToLightTheme}
+                            theme = {theme}
+                            changeToCourier = {this.changeToCourier}
+                            changeToVerdana = {this.changeToVerdana}
+                            font = {font}
+                            changeToSize16 = {this.changeToSize16}
+                            changeToSize24 = {this.changeToSize24}
+                            changeToSize32 = {this.changeToSize32}
+                            changeToSize40 = {this.changeToSize40}
+                            fontSize = {fontSize}/>
+                    </Row>
+                    <Row>
+                        <ProjectPage projectID={this.state.projectID} theme = {theme} fontSize={fontSize} userInfo={this.userInfo} hideProjectPage={this.hideProjectPage} viewPage = {this.state.viewPage} showLoading={this.showLoading} showStatTab={this.showStatTab} showHistoryTab={this.showHistoryTab} showTaskView={this.showTaskView}/>
+                    </Row>
+                </Container>;
+            } else {
+                showPage = <Container fluid style={style}>
+                    <Row>
+                        <NavBar
+                            hideProjectPage = {this.hideProjectPage}
+                            changeToDarkTheme = {this.changeToDarkTheme}
+                            changeToLightTheme = {this.changeToLightTheme}
+                            theme = {theme}
+                            changeToCourier = {this.changeToCourier}
+                            changeToVerdana = {this.changeToVerdana}
+                            font = {font}
+                            changeToSize16 = {this.changeToSize16}
+                            changeToSize24 = {this.changeToSize24}
+                            changeToSize32 = {this.changeToSize32}
+                            changeToSize40 = {this.changeToSize40}
+                            fontSize = {fontSize}/>
+                    </Row>
+                    <Row>
+                        <ProjectLanding showProjectPage = {this.showProjectPage} theme={theme}  fontSize={fontSize} userInfo={this.userInfo} showLoading={this.showLoading}/>
+                    </Row>
+                </Container>;
+            }
+        } else {
+            showPage =
+            <Container fluid style={fonts.verdana}>
+                <Row>
+                    <MainLanding showProjectLanding = {this.showProjectLanding} userInfo={this.userInfo}/>
+                </Row>
+            </Container>;
         }
         return (
             showPage
