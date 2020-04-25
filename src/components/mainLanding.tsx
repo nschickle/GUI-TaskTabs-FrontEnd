@@ -62,14 +62,13 @@ const styles = {
     }
 };
 
-const testOwner: UserInfo = { name: "Tester", email: "test@test.com" };
-
 interface MainLandProps {
     showProjectLanding: (userInfo: UserInfo) => any;
     userInfo: UserInfo;
 }
 
 export class MainLanding extends React.Component<MainLandProps, { error: any, isLoaded: boolean, showProjectLanding: (userInfo: UserInfo) => any}> {
+    owner: UserInfo;
     constructor(props: MainLandProps) {
         super(props);
 
@@ -78,6 +77,11 @@ export class MainLanding extends React.Component<MainLandProps, { error: any, is
             isLoaded: false,
             showProjectLanding: props.showProjectLanding
         };
+        this.owner = this.props.userInfo
+    }
+
+    launchApp = (userInfo:UserInfo) =>{
+        this.state.showProjectLanding(userInfo);
     }
 
     render() {
@@ -99,7 +103,7 @@ export class MainLanding extends React.Component<MainLandProps, { error: any, is
                         </h1>
                     </Col>
                     <Col style={styles.centerCols}>
-                            <SignInButton userInfo={this.props.userInfo}>
+                            <SignInButton launchApp={this.launchApp} userInfo={this.owner}>
                             </SignInButton> 
                     </Col>
                 </Row>
@@ -127,7 +131,7 @@ export class MainLanding extends React.Component<MainLandProps, { error: any, is
                             </p>
                         </Container>
                         <Container style={styles.center}>
-                            <SignInButton  userInfo={this.props.userInfo} >
+                            <SignInButton launchApp={this.launchApp} userInfo={this.props.userInfo} >
                             </SignInButton> 
                         </Container>
                     </Col>

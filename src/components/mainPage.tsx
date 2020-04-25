@@ -74,7 +74,7 @@ export class MainPage extends React.Component<MainPageProps, { signedIn: boolean
 
     showProjectLanding = (userInfo: UserInfo) => {
         this.setState({ signedIn: true });
-        this.setState({ projectPageUp: true });
+        this.setState({ projectPageUp: false });
         this.setState({ projectID: null });
     }
 
@@ -285,7 +285,10 @@ export class MainPage extends React.Component<MainPageProps, { signedIn: boolean
         else {
             showPage = 
             <Container fluid style={fonts.verdana}>
-                <Row><MainLanding showProjectLanding = {this.showProjectLanding} userInfo={this.userInfo}/></Row></Container>;
+                <Row>
+                    <MainLanding showProjectLanding = {this.showProjectLanding} userInfo={this.userInfo}/>
+                </Row>
+            </Container>;
         }
         return (
             showPage
