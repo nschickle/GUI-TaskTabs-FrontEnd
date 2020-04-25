@@ -5,7 +5,7 @@ import Row from 'react-bootstrap/Row';
 import Col from "react-bootstrap/Col";
 import { UserInfo } from "./userInfo";
 import { SignInButton } from "./signInButton";
-
+import Logo from "../img/logo.png";
 
 const styles = {
     pageContainer: {
@@ -83,7 +83,7 @@ export class MainLanding extends React.Component<MainLandProps, { error: any, is
                 <Row style={styles.titleIntroduction}>
                     <Col style={styles.logo}>
                         <img
-                            src={require("../img/logo.png")}
+                            src={Logo}
                             width="200"
                             height="200"
                             className="d-inline-block"
@@ -130,7 +130,7 @@ export class MainLanding extends React.Component<MainLandProps, { error: any, is
                     </Col>
                     <Col sm={8} >
                     <img
-                        src={require("../img/landingImg.png")}
+                        src={Logo}
                         className="d-inline-flex"
                         style={styles.imgProjectPage}
                         alt="TaskTabs Project Page"/>

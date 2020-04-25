@@ -22,8 +22,6 @@ const testOwner: IUser = { id: null, name: null, email: null };
 
 
 const responseGoogle = (response: any) => {
-    console.log(response);
-    console.log(response.profileObj.name);
     testOwner.name = response.profileObj.name;
     testOwner.email = response.profileObj.email;
   }
