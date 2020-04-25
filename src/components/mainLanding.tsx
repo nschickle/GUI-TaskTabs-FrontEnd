@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import Image from 'react-bootstrap/Image'
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from "react-bootstrap/Col";
@@ -66,14 +67,12 @@ interface MainLandProps {
     userInfo: UserInfo;
 }
 
-export class MainLanding extends React.Component<MainLandProps, { error: any, isLoaded: boolean, showProjectLanding: () => any}> {
+export class MainLanding extends React.Component<MainLandProps, { showProjectLanding: () => any}> {
     owner: UserInfo;
     constructor(props: MainLandProps) {
         super(props);
 
         this.state = {
-            error: null,
-            isLoaded: false,
             showProjectLanding: props.showProjectLanding
         };
         this.owner = this.props.userInfo
