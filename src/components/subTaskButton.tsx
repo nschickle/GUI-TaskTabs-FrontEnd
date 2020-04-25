@@ -14,6 +14,7 @@ const font16 = {
         fontSize: 16,
         padding: 0,
         margin: 0
+        
     },
     progress: {
         height: 50,
@@ -76,8 +77,7 @@ const SubTaskName = styled.div`
     font-size: ${(props: SubTaskNameProps) => props.fontSize}px;
     position: absolute;
     z-index: 99;
-    right: 100px;
-    left: 100px;
+    margin-left: 10px;
     margin-top: ${(props: SubTaskNameProps) => props.marginTop}px;
     min-width: 225px;
 `;
@@ -121,6 +121,7 @@ export class SubTaskButton extends React.Component<SubTaskButtonProps>{
     render() {
         const variant = this.props.theme === "light" ? "outline-dark" : "outline-light";
         this.checkNameLength();
+
         let marginTop;
         let style;
 
@@ -142,7 +143,7 @@ export class SubTaskButton extends React.Component<SubTaskButtonProps>{
             <Container>
                 <Row>
                     <Button style={style} onClick={this.onButtonClick} variant={variant}>
-                        <SubTaskName fontSize={this.props.fontSize} marginTop={marginTop}>{this.displayedName}</SubTaskName>
+                        <SubTaskName className="text-left" fontSize={this.props.fontSize} marginTop={marginTop}>{this.displayedName}</SubTaskName>
                         <TaskProgressBar percentage={this.props.percentage} isTaskButton={true} theme={this.props.theme} fontSize={this.props.fontSize}></TaskProgressBar>
                     </Button>
                 </Row>
