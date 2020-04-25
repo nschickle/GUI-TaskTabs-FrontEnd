@@ -2,7 +2,6 @@ import * as React from "react";
 import GoogleLogin from 'react-google-login';
 import { UserInfo } from "./userInfo";
 import Container from "react-bootstrap/Container";
-import { userInfo } from "os";
 
 const styles = {
     button: {
@@ -26,10 +25,10 @@ const responseGoogle = (response: any) => {
 
 interface SignInButtonProps {
     userInfo: UserInfo;
-    launchApp: (userInfo: UserInfo) => any;
+    launchApp: () => any;
 }
 
-export class SignInButton extends React.Component<SignInButtonProps, {launchApp: (userInfo: UserInfo) => any}> {
+export class SignInButton extends React.Component<SignInButtonProps, {launchApp: () => any}> {
     owner: UserInfo;
     constructor(props: SignInButtonProps) {
         super(props);
@@ -40,10 +39,9 @@ export class SignInButton extends React.Component<SignInButtonProps, {launchApp:
         
     }
 
-    launch = () => {
+    getUser = () => {
         responseGoogle;
         this.owner = testOwner;
-        
     }
 
     public render() {
@@ -52,7 +50,7 @@ export class SignInButton extends React.Component<SignInButtonProps, {launchApp:
                             <GoogleLogin
                             clientId="528310070004-u0clc84o9iktpqi6tjujqe9pq9f6ns2n.apps.googleusercontent.com"
                             buttonText="Sign In With Google and Launch!"
-                            onSuccess={this.launch}
+                            onSuccess={this.props.launchApp}
                             onFailure={responseGoogle}
                             cookiePolicy={'single_host_origin'}
                             />

@@ -63,11 +63,11 @@ const styles = {
 };
 
 interface MainLandProps {
-    showProjectLanding: (userInfo: UserInfo) => any;
+    showProjectLanding: () => any;
     userInfo: UserInfo;
 }
 
-export class MainLanding extends React.Component<MainLandProps, { error: any, isLoaded: boolean, showProjectLanding: (userInfo: UserInfo) => any}> {
+export class MainLanding extends React.Component<MainLandProps, { error: any, isLoaded: boolean, showProjectLanding: () => any}> {
     owner: UserInfo;
     constructor(props: MainLandProps) {
         super(props);
@@ -80,8 +80,8 @@ export class MainLanding extends React.Component<MainLandProps, { error: any, is
         this.owner = this.props.userInfo
     }
 
-    launchApp = (userInfo:UserInfo) =>{
-        this.state.showProjectLanding(userInfo);
+    launchApp = () =>{
+        this.state.showProjectLanding();
     }
 
     render() {

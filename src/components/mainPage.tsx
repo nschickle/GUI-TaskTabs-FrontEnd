@@ -72,7 +72,7 @@ export class MainPage extends React.Component<MainPageProps, { signedIn: boolean
         this.setState({ projectID: null });
     }
 
-    showProjectLanding = (userInfo: UserInfo) => {
+    showProjectLanding = () => {
         this.setState({ signedIn: true });
         this.setState({ projectPageUp: false });
         this.setState({ projectID: null });
