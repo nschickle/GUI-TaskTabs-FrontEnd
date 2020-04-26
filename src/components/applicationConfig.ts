@@ -1,7 +1,7 @@
 export const ApplicationConfig = {
     api: {
         staging: {
-            baseUrl: "http://tasktabs-backend.herokuapp.com",
+            baseUrl: "https://tasktabs-backend.herokuapp.com",
         }
     }
 }
