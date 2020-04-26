@@ -3,7 +3,6 @@ import * as React from "react";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 
-import { Task } from "./taskType";
 import { LandProjectColumn } from "./landProjCol";
 import { UserInfo } from "./userInfo";
 
@@ -109,17 +108,13 @@ interface ProjLandProps {
     showLoading: () => any;
 }
 
-export class ProjectLanding extends React.Component<ProjLandProps, { error: any, isLoaded: boolean, task: Task, head: number, showProjectPage: (projectID: number) => any }> {
+export class ProjectLanding extends React.Component<ProjLandProps, { showProjectPage: (projectID: number) => any }> {
     owner: IUser;
 
     constructor(props: ProjLandProps) {
         super(props);
 
         this.state = {
-            error: null,
-            isLoaded: false,
-            task: null,
-            head: undefined,
             showProjectPage: props.showProjectPage,
         };
         this.owner = testOwner;

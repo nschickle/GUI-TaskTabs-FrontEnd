@@ -3,6 +3,8 @@ import * as React from "react";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
+import Spinner from 'react-bootstrap/Spinner';
+
 import { UserInfo } from "./userInfo";
 import { UserHeaderHttpRequest } from "./userHeaderHttpRequest";
 import { RetryableFetch } from "./retryableFetch";
@@ -50,6 +52,7 @@ interface INewSubTaskButtonProps {
     projectId: number;
     userInfo: UserInfo;
     showLoading: () => any;
+    isLoaded: boolean;
 }
 
 export class NewSubTaskButton extends React.Component<INewSubTaskButtonProps, { showLoading: () => any }> {
@@ -69,7 +72,7 @@ export class NewSubTaskButton extends React.Component<INewSubTaskButtonProps, { 
         // should be user from google oauth
         const newSubTask: INewTaskPost = { owner: this.props.userInfo.email, parentId: this.props.head, projectId: this.props.projectId, title: "New task", description: "", notes: "", assignedTo: null, status: "Active", progress: 0 };
 
-        const request = new UserHeaderHttpRequest("/api/tasks", this.props.userInfo,  { 'Content-Type': 'application/json' });
+        const request = new UserHeaderHttpRequest("/api/tasks", this.props.userInfo, { 'Content-Type': 'application/json' });
         RetryableFetch.fetch_retry(request,
             {
                 method: 'POST',
@@ -86,69 +89,32 @@ export class NewSubTaskButton extends React.Component<INewSubTaskButtonProps, { 
     }
 
     public render() {
-        if(this.props.fontSize === 16){
-            if(this.props.theme == "light") {
-                return (
-                    <Container fluid>
-                        <Row>
-                            <Button style={styles.button16} size="lg" variant="outline-primary" onClick={this.createNewSubTask}> + New Task </Button>
-                        </Row>
-                    </Container>
-                );
-            } else {
-                return (
-                    <Container fluid>
-                        <Row>
-                            <Button style={styles.button16} size="lg" variant="primary" onClick={this.createNewSubTask}> + New Task </Button>
-                        </Row>
-                    </Container>
-                );
-            }
 
-        } else if(this.props.fontSize === 24){
-            if(this.props.theme == "light") {
-                return (
-                    <Container fluid>
-                        <Row>
-                            <Button style={styles.button24} size="lg" variant="outline-primary" onClick={this.createNewSubTask}> + New Task </Button>
-                        </Row>
-                    </Container>
-                );
-            } else {
-                return (
-                    <Container fluid>
-                        <Row>
-                            <Button style={styles.button24} size="lg" variant="primary" onClick={this.createNewSubTask}> + New Task </Button>
-                        </Row>
-                    </Container>
-                );
-            }
-
-        } else if(this.props.fontSize === 32){
-            if(this.props.theme == "light") {
-                return (
-                    <Container fluid>
-                        <Row>
-                            <Button style={styles.button32} size="lg" variant="outline-primary" onClick={this.createNewSubTask}> + New Task </Button>
-                        </Row>
-                    </Container>
-                );
-            } else {
-                return (
-                    <Container fluid>
-                        <Row>
-                            <Button style={styles.button32} size="lg" variant="primary" onClick={this.createNewSubTask}> + New Task </Button>
-                        </Row>
-                    </Container>
-                );
-            }
-
+        let style;
+        if (this.props.fontSize == 16) {
+            style = styles.button16;
+        } else if (this.props.fontSize == 24) {
+            style = styles.button24;
+        } else if (this.props.fontSize == 32) {
+            style = styles.button32;
         } else {
-            if(this.props.theme == "light") {
+            style = styles.button40;
+        }
+
+        if (!this.props.isLoaded) {
+            if (this.props.theme === "light") {
                 return (
                     <Container fluid>
                         <Row>
-                            <Button style={styles.button40} size="lg" variant="outline-primary" onClick={this.createNewSubTask}> + New Task </Button>
+                            <Button style={style} size="lg" variant="outline-primary" disabled>
+                                <Spinner
+                                    as="span"
+                                    animation="border"
+                                    size="sm"
+                                    role="status"
+                                    aria-hidden="true"
+                                />
+                            </Button>
                         </Row>
                     </Container>
                 );
@@ -156,12 +122,38 @@ export class NewSubTaskButton extends React.Component<INewSubTaskButtonProps, { 
                 return (
                     <Container fluid>
                         <Row>
-                            <Button style={styles.button40} size="lg" variant="primary" onClick={this.createNewSubTask}> + New Task </Button>
+                            <Button style={style} size="lg" variant="primary" disabled>
+                                <Spinner
+                                    as="span"
+                                    animation="border"
+                                    size="sm"
+                                    role="status"
+                                    aria-hidden="true"
+                                />
+                            </Button>
                         </Row>
                     </Container>
                 );
             }
-
         }
+        
+        if (this.props.theme == "light") {
+            return (
+                <Container fluid>
+                    <Row>
+                        <Button style={style} size="lg" variant="outline-primary" onClick={this.createNewSubTask}> + New Task </Button>
+                    </Row>
+                </Container>
+            );
+        } else {
+            return (
+                <Container fluid>
+                    <Row>
+                        <Button style={style} size="lg" variant="primary" onClick={this.createNewSubTask}> + New Task </Button>
+                    </Row>
+                </Container>
+            );
+        }
+
     }
 }

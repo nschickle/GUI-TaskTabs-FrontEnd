@@ -37,8 +37,9 @@ export class LoadingPage extends React.Component<LoadingPageProps, LoadingPageSt
     }
 
     componentDidMount() {
-		setTimeout(() => {
+		let showTaskTimeout = setTimeout(() => {
             this.state.showTaskView();
+            clearTimeout(showTaskTimeout);
         }, 350);
 	}
 

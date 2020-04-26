@@ -2,6 +2,7 @@ import * as React from "react";
 
 import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
+import Alert from 'react-bootstrap/Alert';
 
 import { ProjectButton } from "./newProjectButton";
 import { SubTaskButton } from "./subTaskButton";
@@ -115,61 +116,47 @@ export class ProjectColumn extends React.Component<ProjectColumnProps, { error: 
     public render() {
 
         const { error, isLoaded, projects } = this.state;
-        // TODO Style error and loading screens
+
+        let style;
+        if (this.props.fontSize == 16) {
+            style = styles.box16;
+        } else if (this.props.fontSize == 24) {
+            style = styles.box;
+        } else if (this.props.fontSize == 32) {
+            style = styles.box;
+        } else {
+            style = styles.box40;
+        }
         if (error) {
             return (
-                <>Error!</>
+                <Container>
+                    <Col style={style} >
+                        <Alert variant="danger">
+                            <Alert.Heading>We've Experienced an Error</Alert.Heading>
+                            <p> We could not establish a connection with our database. We apologise for the inconvenience. Please try again later.</p>
+                        </Alert>
+                    </Col>
+            </Container>
             );
         } else if (!isLoaded) {
             return (
-                <>Loading...</>
+                <Container>
+                    <Col style={style} >
+                        <ProjectButton isLoaded={isLoaded} changeHead={this.props.changeHead} theme={this.props.theme} fontSize={this.props.fontSize} userInfo={this.props.userInfo} showLoading={this.props.showLoading}/>
+                    </Col>
+                </Container>
             );
         } else {
-            if(this.props.fontSize == 16) {
-                return (
-                    <Container>
-                        <Col style={styles.box16} >
-                            <ProjectButton changeHead={this.props.changeHead} theme = {this.props.theme} fontSize={this.props.fontSize} userInfo={this.props.userInfo} showLoading={this.props.showLoading}/>
-                            {projects.map((task) => {
-                                return <SubTaskButton name={task.title} percentage={task.progress} key={task._id} changeHead={this.props.changeHead} taskHead={task._id} theme = {this.props.theme} fontSize = {this.props.fontSize} showLoading={this.props.showLoading}></SubTaskButton>;
-                            })}
-                        </Col>
-                    </Container>
-                );
-            } else if(this.props.fontSize == 24){
-                return (
-                    <Container>
-                        <Col style={styles.box} >
-                            <ProjectButton changeHead={this.props.changeHead} theme = {this.props.theme} fontSize = {this.props.fontSize} userInfo={this.props.userInfo} showLoading={this.props.showLoading}/>
-                            {projects.map((task) => {
-                                return <SubTaskButton name={task.title} percentage={task.progress} key={task._id} changeHead={this.props.changeHead} taskHead={task._id} theme = {this.props.theme} fontSize = {this.props.fontSize} showLoading={this.props.showLoading}></SubTaskButton>;
-                            })}
-                        </Col>
-                    </Container>
-                );
-            } else if(this.props.fontSize == 32){
-                return (
-                    <Container>
-                        <Col style={styles.box} >
-                            <ProjectButton changeHead={this.props.changeHead} theme = {this.props.theme} fontSize = {this.props.fontSize} userInfo={this.props.userInfo} showLoading={this.props.showLoading}/>
-                            {projects.map((task) => {
-                                return <SubTaskButton name={task.title} percentage={task.progress} key={task._id} changeHead={this.props.changeHead} taskHead={task._id} theme = {this.props.theme} fontSize = {this.props.fontSize} showLoading={this.props.showLoading}></SubTaskButton>;
-                            })}
-                        </Col>
-                    </Container>
-                );
-            } else {
-                return (
-                    <Container>
-                        <Col style={styles.box40} >
-                            <ProjectButton changeHead={this.props.changeHead} theme = {this.props.theme} fontSize = {this.props.fontSize} userInfo={this.props.userInfo} showLoading={this.props.showLoading}/>
-                            {projects.map((task) => {
-                                return <SubTaskButton name={task.title} percentage={task.progress} key={task._id} changeHead={this.props.changeHead} taskHead={task._id} theme = {this.props.theme} fontSize = {this.props.fontSize} showLoading={this.props.showLoading}></SubTaskButton>;
-                            })}
-                        </Col>
-                    </Container>
-                );
-            }
+            return (
+                <Container>
+                    <Col style={style} >
+                        <ProjectButton isLoaded={isLoaded} changeHead={this.props.changeHead} theme={this.props.theme} fontSize={this.props.fontSize} userInfo={this.props.userInfo} showLoading={this.props.showLoading}/>
+                        {projects.map((task) => {
+                            return <SubTaskButton name={task.title} percentage={task.progress} key={task._id} changeHead={this.props.changeHead} taskHead={task._id} theme={this.props.theme} fontSize={this.props.fontSize} showLoading={this.props.showLoading}></SubTaskButton>;
+                        })}
+                    </Col>
+                </Container>
+            );
         }
     }
 }
