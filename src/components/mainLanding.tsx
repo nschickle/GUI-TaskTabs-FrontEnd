@@ -69,9 +69,8 @@ export class MainLanding extends React.Component<MainLandProps, {}> {
         super(props);
     }
 
-    launchApp = () =>{
-        let temp: UserInfo = {email: "test@gmail.com", name: "Bobby"};
-        this.props.reportLoginInfo(true, temp);
+    launchApp = (user:UserInfo) => {
+        this.props.reportLoginInfo(true, user);
     }
 
     render() {
@@ -93,7 +92,7 @@ export class MainLanding extends React.Component<MainLandProps, {}> {
                         </h1>
                     </Col>
                     <Col style={styles.centerCols}>
-                        <>Google Button</>
+                        <SignInButton launchApp={this.launchApp}></SignInButton>
                     </Col>
                 </Row>
                 <Row style={styles.welcomeText}>
@@ -118,9 +117,6 @@ export class MainLanding extends React.Component<MainLandProps, {}> {
                                     </li>
                                 </ul>
                             </p>
-                        </Container>
-                        <Container style={styles.center}>
-                            <>Google Button</>
                         </Container>
                     </Col>
                     <Col sm={8} >
