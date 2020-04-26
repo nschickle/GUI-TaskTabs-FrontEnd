@@ -48,35 +48,29 @@ const testSharedWith: IUser[] = [
 ];
 
 interface History {
-    id: string,
-    taskID: string,
-    responsibleUser: string,
-    timestamp: Date,
-    textBody: string
+	id: string,
+	taskID: string,
+	responsibleUser: string,
+	timestamp: Date,
+	textBody: string
 }
 
 const historyPlaceholder: History[] = [
-    {   id: "1",
-        taskID: "task1",
-        responsibleUser: "Super Steve",
-        timestamp: new Date(),
-        textBody: "Changed title from 'task1' -> 'Task 1'"
-    },
-    {
-        id: "2",
-        taskID: "task1",
-        responsibleUser: "Super Steve",
-        timestamp: new Date(),
-        textBody: "Changed desciption from 'asdfad' -> 'This is a description'"
-    }
+	{
+		id: "1",
+		taskID: "task1",
+		responsibleUser: "Super Steve",
+		timestamp: new Date(),
+		textBody: "Changed title from 'task1' -> 'Task 1'"
+	},
+	{
+		id: "2",
+		taskID: "task1",
+		responsibleUser: "Super Steve",
+		timestamp: new Date(),
+		textBody: "Changed desciption from 'asdfad' -> 'This is a description'"
+	}
 ];
-
-interface Statistics {
-    numTotal: number,
-    numCompleted: number
-}
-
-const statPlaceholder: Statistics = { numTotal: 20, numCompleted: 5 };
 
 interface ProjectHistory {
 	id: number,
@@ -91,11 +85,11 @@ interface ProjectPageProps {
 	fontSize: number;
 	userInfo: UserInfo;
 	hideProjectPage: any;
-    viewPage: string;
-    showLoading: () => any;
-    showHistoryTab: () => any;
-    showStatTab: () => any;
-    showTaskView: () => any;
+	viewPage: string;
+	showLoading: () => any;
+	showHistoryTab: () => any;
+	showStatTab: () => any;
+	showTaskView: () => any;
 }
 
 // ProjectPage contains the entire application past the Google oauth. This should include the left and right sidebars
@@ -118,57 +112,46 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 	// This will attempt to fetch from the database a given number of times.
 	// This is needed because if the head was recently inserted, the fetch will
 	// likely return null as the database will not have caught up yet.
-	makeProjectQuery = (numTries: number) => {
-		let timeout;
-		if (numTries == 0) {
-			this.setState({
-				isLoaded: false,
-				error: true
-			});
-			clearTimeout(timeout);
-		} else {
-			timeout = setTimeout(() => {
-				const request = new UserHeaderHttpRequest(`/api/tasks/${this.props.projectID}`, this.props.userInfo);
-				RetryableFetch.fetch_retry(request)
-					.then(res => res.json())
-					.then(
-						async (result) => {
-							if (result) {
+	makeProjectQuery = () => {
+		let timeout = setTimeout(() => {
+			const request = new UserHeaderHttpRequest(`/api/tasks/${this.props.projectID}`, this.props.userInfo);
+			RetryableFetch.fetch_retry(request)
+				.then(res => res.json())
+				.then(
+					async (result) => {
+						if (result) {
 
-								// add the project to the beginning of the history
-								let taskHistoryNode: ProjectHistory;
-								let childProgress: number[] = await this.retrieveChildProgress(result._id);
+							// add the project to the beginning of the history
+							let taskHistoryNode: ProjectHistory;
+							let childProgress: number[] = await this.retrieveChildProgress(result._id);
 
-								taskHistoryNode = { id: result._id, name: result.title, progress: result.progress, childProgress: childProgress };
-								// state should be treated as if it were immutable.
-								// However, concat returns a new array.
-								this.setState({
-									isLoaded: true,
-									task: result,
-									head: result._id,
-									history: this.state.history.concat([taskHistoryNode])
-								});
-							} else {
-								this.makeProjectQuery(numTries - 1);
-							}
-						},
-						// Note: it's important to handle errors here
-						// instead of a catch() block so that we don't swallow
-						// exceptions from actual bugs in components.
-						(error) => {
+							taskHistoryNode = { id: result._id, name: result.title, progress: result.progress, childProgress: childProgress };
+							// state should be treated as if it were immutable.
+							// However, concat returns a new array.
 							this.setState({
 								isLoaded: true,
-								error
+								task: result,
+								head: result._id,
+								history: this.state.history.concat([taskHistoryNode])
 							});
 						}
-					);
-			}, 1000);
-		}
+					},
+					// Note: it's important to handle errors here
+					// instead of a catch() block so that we don't swallow
+					// exceptions from actual bugs in components.
+					(error) => {
+						this.setState({
+							isLoaded: true,
+							error
+						});
+					}
+				);
+		}, 1000);
 	}
 
 	componentDidMount() {
 		// This will attempt to the make the Project Query 5 times before giving up.
-		this.makeProjectQuery(5);
+		this.makeProjectQuery();
 	}
 
 
@@ -207,63 +190,64 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 			} else {
 				deadline = null;
 			}
-            let pageView;
-            if (this.props.viewPage === "taskView"){
-                pageView = <TaskView
-                                taskID={head}
-                                changeHead={this.changeHeadFromDelete}
-                                parentId={task.parentId}
-                                projectId={this.props.projectID}
-                                name={task.title}
-                                completion={task.progress}
-                                description={task.description}
-                                dueDate={deadline}
-                                status={task.status}
-                                assignee={task.assignedTo}
-                                owner={testOwner}
-                                sharedUsers={testSharedWith}
-                                userInfo={this.props.userInfo}
-                                theme = {this.props.theme}
-                                fontSize = {this.props.fontSize}
-                                showHistoryTab = {this.props.showHistoryTab}
-                                showStatTab = {this.props.showStatTab}
-                                hideProjectPage={this.props.hideProjectPage}
-                                refreshPage={this.refreshPage}
-                            />;
-            } else if (this.props.viewPage === "historyTab"){
-                pageView = <HistoryTab
-                                    theme = {this.props.theme}
-                                    fontSize = {this.props.fontSize}
-                                    viewPage = {this.props.viewPage}
-                                    showStatTab = {this.props.showStatTab}
-                                    showTaskView = {this.props.showTaskView}
-                                    history = {historyPlaceholder}
-                                />;
-            } else if(this.props.viewPage === "statTab"){
-                pageView = <StatTab
-                                    theme = {this.props.theme}
-                                    fontSize = {this.props.fontSize}
-                                    viewPage = {this.props.viewPage}
-                                    showHistoryTab = {this.props.showHistoryTab}
-                                    showTaskView = {this.props.showTaskView}
-                                    stats = {statPlaceholder}
-                                    task={task.title}
-                                />;
-            } else {
-                pageView = <LoadingPage theme = {this.props.theme} showTaskView = {this.props.showTaskView}/>;
-            }
+			let pageView;
+			if (this.props.viewPage === "taskView") {
+				pageView = <TaskView
+					taskID={head}
+					changeHead={this.changeHeadFromDelete}
+					parentId={task.parentId}
+					projectId={this.props.projectID}
+					name={task.title}
+					completion={task.progress}
+					description={task.description}
+					dueDate={deadline}
+					status={task.status}
+					assignee={task.assignedTo}
+					owner={testOwner}
+					sharedUsers={testSharedWith}
+					userInfo={this.props.userInfo}
+					theme={this.props.theme}
+					fontSize={this.props.fontSize}
+					showHistoryTab={this.props.showHistoryTab}
+					showStatTab={this.props.showStatTab}
+					hideProjectPage={this.props.hideProjectPage}
+					refreshPage={this.refreshPage}
+				/>;
+			} else if (this.props.viewPage === "historyTab") {
+				pageView = <HistoryTab
+					theme={this.props.theme}
+					fontSize={this.props.fontSize}
+					viewPage={this.props.viewPage}
+					showStatTab={this.props.showStatTab}
+					showTaskView={this.props.showTaskView}
+					history={historyPlaceholder}
+				/>;
+			} else if (this.props.viewPage === "statTab") {
+				pageView = <StatTab
+					theme={this.props.theme}
+					fontSize={this.props.fontSize}
+					viewPage={this.props.viewPage}
+					showHistoryTab={this.props.showHistoryTab}
+					showTaskView={this.props.showTaskView}
+					projectId={this.props.projectID}
+					task={task.title}
+					userInfo={this.props.userInfo}
+				/>;
+			} else {
+				pageView = <LoadingPage theme={this.props.theme} showTaskView={this.props.showTaskView} />;
+			}
 
 			return (
-                <Container fluid style={styles.box}>
-                        <HistoryRow>{historyComponent}</HistoryRow>
-                        <Row noGutters={true}>
-                            <Col sm="3"><ProjectColumn key={projectColumnKey} head={head} changeHead={this.changeHeadFromProject} userInfo={this.props.userInfo} theme = {this.props.theme} fontSize={this.props.fontSize} showLoading = {this.props.showLoading}/></Col>
-                            <Col sm="6">
-                                {pageView}
-                            </Col>
-                            <Col sm="3"><SubTaskColumn head={head} changeHead={this.changeHeadFromTask} userInfo={this.props.userInfo} projectId={this.props.projectID} theme = {this.props.theme} fontSize={this.props.fontSize} showLoading = {this.props.showLoading}/></Col>
-                        </Row>
-                    </Container>
+				<Container fluid style={styles.box}>
+					<HistoryRow>{historyComponent}</HistoryRow>
+					<Row noGutters={true}>
+						<Col sm="3"><ProjectColumn key={projectColumnKey} head={head} changeHead={this.changeHeadFromProject} userInfo={this.props.userInfo} theme={this.props.theme} fontSize={this.props.fontSize} showLoading={this.props.showLoading} /></Col>
+						<Col sm="6">
+							{pageView}
+						</Col>
+						<Col sm="3"><SubTaskColumn head={head} changeHead={this.changeHeadFromTask} userInfo={this.props.userInfo} projectId={this.props.projectID} theme={this.props.theme} fontSize={this.props.fontSize} showLoading={this.props.showLoading} /></Col>
+					</Row>
+				</Container>
 			);
 		}
 	}
@@ -344,7 +328,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 					}
 
 					let updatedProgressResult = result;
-					updatedProgressResult.progress = history[history.length -1].progress;
+					updatedProgressResult.progress = history[history.length - 1].progress;
 					this.setState({ projectColumnKey: this.state.projectColumnKey + 1 });
 					this.setState({
 						isLoaded: true,
