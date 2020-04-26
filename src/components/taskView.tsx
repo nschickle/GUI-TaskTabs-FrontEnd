@@ -857,7 +857,13 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                     </Form>
                 </Row>
                 <Row noGutters={true}>
-                    <Col xs={sharedTabCol1} style={styles.sharedTab}> <ShareUsers owner={this.owner} sharedUsers={this.sharedUsers} theme={this.props.theme} fontSize={this.props.fontSize} /> </Col>
+                    <Col xs={sharedTabCol1} style={styles.sharedTab}>
+                        <ShareUsers
+                            projectId={this.props.projectId} 
+                            theme={this.props.theme}
+                            fontSize={this.props.fontSize}
+                            userInfo={this.props.userInfo}/>
+                    </Col>
                     <Col xs={sharedTabCol2}>
                         <Row noGutters={true}>
                             <Button
