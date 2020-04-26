@@ -17,6 +17,7 @@ import { RetryableFetch } from "./retryableFetch";
 import { HistoryTab } from "./historyTab";
 import { StatTab } from "./statTab";
 import { LoadingPage } from "./loadingPage";
+import { string } from "prop-types";
 
 const styles = {
 	box: {
@@ -45,31 +46,6 @@ const testOwner: IUser = { id: 0, name: "Super Steve" };
 const testSharedWith: IUser[] = [
 	{ id: 1, name: "Little Steve" },
 	{ id: 2, name: "Tiny Steve" },
-];
-
-interface History {
-	id: string,
-	taskID: string,
-	responsibleUser: string,
-	timestamp: Date,
-	textBody: string
-}
-
-const historyPlaceholder: History[] = [
-	{
-		id: "1",
-		taskID: "task1",
-		responsibleUser: "Super Steve",
-		timestamp: new Date(),
-		textBody: "Changed title from 'task1' -> 'Task 1'"
-	},
-	{
-		id: "2",
-		taskID: "task1",
-		responsibleUser: "Super Steve",
-		timestamp: new Date(),
-		textBody: "Changed desciption from 'asdfad' -> 'This is a description'"
-	}
 ];
 
 interface ProjectHistory {
@@ -220,7 +196,8 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 					viewPage={this.props.viewPage}
 					showStatTab={this.props.showStatTab}
 					showTaskView={this.props.showTaskView}
-					history={historyPlaceholder}
+					taskID={task._id}
+					userInfo={this.props.userInfo}
 				/>;
 			} else if (this.props.viewPage === "statTab") {
 				pageView = <StatTab

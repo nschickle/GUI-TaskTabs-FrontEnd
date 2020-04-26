@@ -5,6 +5,9 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import ListGroup from 'react-bootstrap/ListGroup';
+import { UserHeaderHttpRequest } from "./userHeaderHttpRequest";
+import { UserInfo } from "./userInfo";
+import { RetryableFetch } from "./retryableFetch";
 
 const styles = {
     tab1: {
@@ -97,39 +100,43 @@ const font40 = {
 
 
 interface HistoryTabProps {
-    showStatTab: () => any,
-    showTaskView: () => any,
-    viewPage: string,
-    fontSize: number,
-    theme: string,
-    history: History[]
+    showStatTab: () => any;
+    showTaskView: () => any;
+    viewPage: string;
+    fontSize: number;
+    theme: string;
+    taskID: number;
+    userInfo: UserInfo;
 }
 
 interface HistoryTabState {
-    showStatTab: () => any,
-    showTaskView: () => any
+    showStatTab: () => any;
+    showTaskView: () => any;
+    historyEntries: IHistory[];
+    isLoaded: boolean;
+    error: boolean;
 }
 
-interface History {
-    id: string,
-    taskID: string,
-    responsibleUser: string,
-    timestamp: Date,
-    textBody: string
+interface IHistory {
+    id: string;
+    taskID: number;
+    responsibleUser: string;
+    timestamp: string;
+    textBody: string;
 }
 
 export class HistoryTab extends React.Component<HistoryTabProps, HistoryTabState> {
-    historyArray: History[];
 
     constructor(props: HistoryTabProps){
         super(props);
 
         this.state = {
             showStatTab: props.showStatTab,
-            showTaskView: props.showTaskView
+            showTaskView: props.showTaskView,
+            historyEntries: [],
+            isLoaded: false,
+            error: false
         }
-
-        this.historyArray = props.history;
     }
 
     showStatTab = () => {
@@ -140,7 +147,9 @@ export class HistoryTab extends React.Component<HistoryTabProps, HistoryTabState
         this.state.showTaskView();
     }
 
-    dateToString = (date: Date) => {
+    formatDate = (dateStr: string) => {
+        const date: Date = new Date(dateStr);
+
         const month = date.getMonth() + 1;
         const year = date.getFullYear();
         const day = date.getDate();
@@ -160,22 +169,54 @@ export class HistoryTab extends React.Component<HistoryTabProps, HistoryTabState
         return dateString + " at " + time;
     }
 
+    formatTextBody = (textBody: string) => {
+        const text: string = textBody.replace(/\\n/gi,"<br/>")
+            .replace(/\\t/gi,"&emsp;");
+        
+        return <p dangerouslySetInnerHTML={{ __html: text }} ></p>
+
+    }
+
+    public componentDidMount = () => {
+        const request = new UserHeaderHttpRequest(`/api/history/${this.props.taskID}`, this.props.userInfo);
+        RetryableFetch.fetch_retry(request)
+            .then(res => res.json())
+            .then((result: IHistory[]) => {
+                    this.setState({ 
+                        historyEntries: result,
+                        isLoaded: true, 
+                        error: false,
+                    });
+                },
+                (error) => {
+                    this.setState({ 
+                        isLoaded: true, 
+                        error: true});
+                }
+            );
+    }
+
     public render() {
-        const listHistory = this.historyArray.map((item) => {
+        //TODO: implement loading functionality at this point
+        if (!this.state.isLoaded){
+            return <>Loading...</>
+        }
+
+        const listHistory = this.state.historyEntries.map((item) => {
             if(this.props.theme === "light"){
                 return (
                     <ListGroup.Item action key={item.id}>
-                        <strong>{this.dateToString(item.timestamp)}</strong><br/>
+                        <strong>{this.formatDate(item.timestamp)}</strong><br/>
                         <p style={styles.tab1}><em>{item.taskID} by {item.responsibleUser}</em></p>
-                        <p style={styles.tab2}>{item.textBody}</p>
+                        <p style={styles.tab2}>{this.formatTextBody(item.textBody)}</p>
                     </ListGroup.Item>
                 );
             } else {
                 return (
                     <ListGroup.Item action key={item.id} variant="dark">
-                        <strong>{this.dateToString(item.timestamp)}</strong><br/>
+                        <strong>{this.formatDate(item.timestamp)}</strong><br/>
                         <p style={styles.tab1}><em>{item.taskID} by {item.responsibleUser}</em></p>
-                        <p style={styles.tab2}>{item.textBody}</p>
+                        <p style={styles.tab2}>{this.formatTextBody(item.textBody)}</p>
                     </ListGroup.Item>
                 );
             }
