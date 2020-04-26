@@ -343,11 +343,6 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
                                                 </Button>
                                         </Dropdown.Menu>
                                     </Dropdown>
-                                    <Button
-                                        variant="outline-dark"
-                                        style={style.dropdown}>
-                                        Log Out
-                                    </Button>
                                 </Dropdown.Menu>
                             </Dropdown>
                         </Nav>
@@ -449,11 +444,6 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
                                                 </Button>
                                         </Dropdown.Menu>
                                     </Dropdown>
-                                    <Button
-                                        variant="outline-dark"
-                                        style={style.dropdown}>
-                                        Log Out
-                                        </Button>
                                 </Dropdown.Menu>
                             </Dropdown>
                         </Nav>
