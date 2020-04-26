@@ -1,12 +1,10 @@
 import * as React from "react";
-
-import Image from 'react-bootstrap/Image'
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from "react-bootstrap/Col";
 import { UserInfo } from "./userInfo";
 import { SignInButton } from "./signInButton";
-import Logo from "../img/logo.png";
+import * as Logo from "../img/logo.png";
 
 const styles = {
     pageContainer: {
@@ -63,23 +61,17 @@ const styles = {
 };
 
 interface MainLandProps {
-    showProjectLanding: () => any;
-    userInfo: UserInfo;
+    reportLoginInfo: (isLoggedIn: boolean, userInfo:UserInfo) => any;
 }
 
-export class MainLanding extends React.Component<MainLandProps, { showProjectLanding: () => any}> {
-    owner: UserInfo;
+export class MainLanding extends React.Component<MainLandProps, {}> {
     constructor(props: MainLandProps) {
         super(props);
-
-        this.state = {
-            showProjectLanding: props.showProjectLanding
-        };
-        this.owner = this.props.userInfo
     }
 
     launchApp = () =>{
-        this.state.showProjectLanding();
+        let temp: UserInfo = {email: "test@gmail.com", name: "Bobby"};
+        this.props.reportLoginInfo(true, temp);
     }
 
     render() {
@@ -101,8 +93,7 @@ export class MainLanding extends React.Component<MainLandProps, { showProjectLan
                         </h1>
                     </Col>
                     <Col style={styles.centerCols}>
-                            <SignInButton launchApp={this.launchApp} userInfo={this.owner}>
-                            </SignInButton> 
+                        <>Google Button</>
                     </Col>
                 </Row>
                 <Row style={styles.welcomeText}>
@@ -129,8 +120,7 @@ export class MainLanding extends React.Component<MainLandProps, { showProjectLan
                             </p>
                         </Container>
                         <Container style={styles.center}>
-                            <SignInButton launchApp={this.launchApp} userInfo={this.props.userInfo} >
-                            </SignInButton> 
+                            <>Google Button</>
                         </Container>
                     </Col>
                     <Col sm={8} >

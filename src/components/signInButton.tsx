@@ -26,7 +26,7 @@ interface SignInButtonProps {
     launchApp: () => any;
 }
 
-export class SignInButton extends React.Component<SignInButtonProps, {launchApp: () => any}> {
+export class SignInButton extends React.Component<SignInButtonProps, { launchApp: () => any }> {
     owner: UserInfo;
     constructor(props: SignInButtonProps) {
         super(props);
@@ -34,7 +34,7 @@ export class SignInButton extends React.Component<SignInButtonProps, {launchApp:
             launchApp: props.launchApp
         }
         this.owner = this.props.userInfo
-        
+
     }
 
     getUser = () => {
@@ -42,18 +42,22 @@ export class SignInButton extends React.Component<SignInButtonProps, {launchApp:
         this.owner = testOwner;
     }
 
+    onSuccess = (data: any) => {
+        console.log(data);
+    }
+
     public render() {
-                return (
-                        <Container style={styles.button}>
-                            <GoogleLogin
-                            clientId="528310070004-u0clc84o9iktpqi6tjujqe9pq9f6ns2n.apps.googleusercontent.com"
-                            buttonText="Sign In With Google and Launch!"
-                            onSuccess={this.props.launchApp}
-                            onFailure={responseGoogle}
-                            cookiePolicy={'single_host_origin'}
-                            />
-                        </Container>
-                );
-            
+        return (
+            <Container style={styles.button}>
+                <GoogleLogin
+                    clientId="528310070004-u0clc84o9iktpqi6tjujqe9pq9f6ns2n.apps.googleusercontent.com"
+                    buttonText="Sign In With Google and Launch!"
+                    onSuccess={this.onSuccess}
+                    onFailure={responseGoogle}
+                    cookiePolicy={'single_host_origin'}
+                />
+            </Container>
+        );
+
     }
 }
