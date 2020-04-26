@@ -1,5 +1,5 @@
 import * as React from "react";
-import { MainPage } from "./mainPage";
+import { HomePage } from "./homePage";
 import { MainLanding } from "./mainLanding";
 import { UserInfo } from "./userInfo";
 
@@ -32,7 +32,7 @@ export class AppEntryPage extends React.Component<{}, AppEntryPageState> {
 
     render() {
         if (this.state.isLoggedIn) {
-            return <MainPage userInfo={this.state.userInfo} setLoggedOut={this.setLoggedOut} projectPageUp={false} theme="light" font="verdana" fontSize={16} viewPage="loading" />;
+            return <HomePage userInfo={this.state.userInfo} setLoggedOut={this.setLoggedOut} projectPageUp={false} theme="light" font="verdana" fontSize={16} viewPage="loading" />;
         } else {
             return <MainLanding reportLoginInfo={this.collectLoginInfo} />;
         }

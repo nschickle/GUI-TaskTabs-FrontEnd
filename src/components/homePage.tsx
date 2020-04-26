@@ -6,7 +6,6 @@ import Row from 'react-bootstrap/Row';
 import { NavBar } from './navBar';
 import { ProjectPage } from './projectPage';
 import { ProjectLanding } from './projLanding';
-import { MainLanding } from './mainLanding';
 import { UserInfo } from "./userInfo";
 
 const fonts = {
@@ -42,9 +41,7 @@ interface MainPageProps {
     setLoggedOut: () => void;
 }
 
-// TODO:
-// Make it so choosing a project on the landing changes it on project page
-export class MainPage extends React.Component<MainPageProps, { projectPageUp: boolean, projectID: number, theme: string, font: string, fontSize: number, viewPage: string }>{
+export class HomePage extends React.Component<MainPageProps, { projectPageUp: boolean, projectID: number, theme: string, font: string, fontSize: number, viewPage: string }>{
 
     constructor(props: MainPageProps) {
         super(props);
