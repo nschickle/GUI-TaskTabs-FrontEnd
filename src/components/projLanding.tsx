@@ -106,6 +106,7 @@ interface ProjLandProps {
     theme: string;
     fontSize: number;
     userInfo: UserInfo;
+    showLoading: () => any;
 }
 
 export class ProjectLanding extends React.Component<ProjLandProps, { error: any, isLoaded: boolean, task: Task, head: number, showProjectPage: (projectID: number) => any }> {
@@ -139,7 +140,7 @@ export class ProjectLanding extends React.Component<ProjLandProps, { error: any,
                         <p style={font16.label}>Welcome, {this.owner.name}. Here are your Projects!</p>
                     </Row>
                     <Row style={styles.projects} noGutters={true}>
-                        <LandProjectColumn selectProject={this.selectProject} theme={this.props.theme} fontSize={this.props.fontSize} userInfo={this.props.userInfo}/>
+                        <LandProjectColumn selectProject={this.selectProject} theme={this.props.theme} fontSize={this.props.fontSize} userInfo={this.props.userInfo} showLoading = {this.props.showLoading}/>
                     </Row>
                 </Container>
             );
@@ -154,7 +155,7 @@ export class ProjectLanding extends React.Component<ProjLandProps, { error: any,
                         <p style={font24.label}>Welcome, {this.owner.name}. Here are your Projects!</p>
                     </Row>
                     <Row style={styles.projects} noGutters={true}>
-                        <LandProjectColumn selectProject={this.selectProject} theme={this.props.theme} fontSize={this.props.fontSize} userInfo={this.props.userInfo}/>
+                        <LandProjectColumn selectProject={this.selectProject} theme={this.props.theme} fontSize={this.props.fontSize} userInfo={this.props.userInfo} showLoading = {this.props.showLoading}/>
                     </Row>
                 </Container>
             );
@@ -169,7 +170,7 @@ export class ProjectLanding extends React.Component<ProjLandProps, { error: any,
                         <p style={font32.label}>Welcome, {this.owner.name}. Here are your Projects!</p>
                     </Row>
                     <Row style={styles.projects} noGutters={true}>
-                        <LandProjectColumn selectProject={this.selectProject} theme={this.props.theme} fontSize={this.props.fontSize} userInfo={this.props.userInfo}/>
+                        <LandProjectColumn selectProject={this.selectProject} theme={this.props.theme} fontSize={this.props.fontSize} userInfo={this.props.userInfo} showLoading = {this.props.showLoading}/>
                     </Row>
                 </Container>
             );
@@ -184,7 +185,7 @@ export class ProjectLanding extends React.Component<ProjLandProps, { error: any,
                         <p style={font40.label}>Welcome, {this.owner.name}. Here are your Projects!</p>
                     </Row>
                     <Row style={styles.projects} noGutters={true}>
-                        <LandProjectColumn selectProject={this.selectProject} theme={this.props.theme} fontSize={this.props.fontSize} userInfo={this.props.userInfo}/>
+                        <LandProjectColumn selectProject={this.selectProject} theme={this.props.theme} fontSize={this.props.fontSize} userInfo={this.props.userInfo} showLoading = {this.props.showLoading}/>
                     </Row>
                 </Container>
             );

@@ -47,15 +47,21 @@ interface ProjectButtonProps {
     theme: string;
     fontSize: number;
     userInfo: UserInfo;
+    showLoading: () => any;
 }
 
-export class ProjectButton extends React.Component<ProjectButtonProps> {
+export class ProjectButton extends React.Component<ProjectButtonProps, { showLoading: () => any }> {
 
     constructor(props: ProjectButtonProps) {
         super(props);
+
+        this.state = {
+            showLoading: props.showLoading
+        }
     }
 
     createNewProject = () => {
+        this.state.showLoading();
 
         // TODO
         // should be user from google oauth

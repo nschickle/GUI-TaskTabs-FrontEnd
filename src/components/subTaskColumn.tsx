@@ -57,11 +57,12 @@ interface SubTaskColumnProps {
     fontSize: number;
     projectId: number;
     userInfo: UserInfo;
+    showLoading: () => any;
 }
 
 // This creates the entire right-hand column of project page. It handles the button that creates a new task,
 // and hands down a single element of a subtask array to create subtask buttons one by one.
-export class SubTaskColumn extends React.Component<SubTaskColumnProps, { error: any, isLoaded: boolean, subTasks: Task[] }>{
+export class SubTaskColumn extends React.Component<SubTaskColumnProps, { error: any, isLoaded: boolean, subTasks: Task[]}>{
     head: number;
 
     constructor(props: SubTaskColumnProps) {
@@ -70,7 +71,7 @@ export class SubTaskColumn extends React.Component<SubTaskColumnProps, { error: 
         this.state = {
             error: null,
             isLoaded: false,
-            subTasks: []
+            subTasks: [],
         };
 
         this.head = this.props.head;
@@ -143,11 +144,11 @@ export class SubTaskColumn extends React.Component<SubTaskColumnProps, { error: 
                     <Container>
                         <Col style={styles.box16}>
                             <Row noGutters={true}>
-                                <NewSubTaskButton head={this.props.head} changeHead={this.props.changeHead} theme = {this.props.theme} fontSize={this.props.fontSize}  userInfo={this.props.userInfo} projectId={this.props.projectId}/>
+                                <NewSubTaskButton head={this.props.head} changeHead={this.props.changeHead} theme = {this.props.theme} fontSize={this.props.fontSize}  userInfo={this.props.userInfo} projectId={this.props.projectId} showLoading={this.props.showLoading}/>
                             </Row>
                             <Row noGutters={true}>
                                 {subTasks.map((task) => {
-                                    return <SubTaskButton name={task.title} percentage={task.progress} key={task._id} changeHead={this.props.changeHead} taskHead={task._id} theme = {this.props.theme} fontSize = {this.props.fontSize}></SubTaskButton>;
+                                    return <SubTaskButton name={task.title} percentage={task.progress} key={task._id} changeHead={this.props.changeHead} taskHead={task._id} theme = {this.props.theme} fontSize = {this.props.fontSize} showLoading={this.props.showLoading}></SubTaskButton>;
                                 })}
                             </Row>
                         </Col>
@@ -158,11 +159,11 @@ export class SubTaskColumn extends React.Component<SubTaskColumnProps, { error: 
                     <Container>
                         <Col style={styles.box40}>
                             <Row noGutters={true}>
-                                <NewSubTaskButton head={this.props.head} changeHead={this.props.changeHead} theme = {this.props.theme} fontSize={this.props.fontSize}  userInfo={this.props.userInfo} projectId={this.props.projectId}/>
+                                <NewSubTaskButton head={this.props.head} changeHead={this.props.changeHead} theme = {this.props.theme} fontSize={this.props.fontSize}  userInfo={this.props.userInfo} projectId={this.props.projectId} showLoading={this.props.showLoading}/>
                             </Row>
                             <Row noGutters={true}>
                                 {subTasks.map((task) => {
-                                    return <SubTaskButton name={task.title} percentage={task.progress} key={task._id} changeHead={this.props.changeHead} taskHead={task._id} theme = {this.props.theme} fontSize = {this.props.fontSize}></SubTaskButton>;
+                                    return <SubTaskButton name={task.title} percentage={task.progress} key={task._id} changeHead={this.props.changeHead} taskHead={task._id} theme = {this.props.theme} fontSize = {this.props.fontSize} showLoading={this.props.showLoading}></SubTaskButton>;
                                 })}
                             </Row>
                         </Col>
@@ -173,11 +174,11 @@ export class SubTaskColumn extends React.Component<SubTaskColumnProps, { error: 
                     <Container>
                         <Col style={styles.box}>
                             <Row noGutters={true}>
-                                <NewSubTaskButton head={this.props.head} changeHead={this.props.changeHead} theme = {this.props.theme} fontSize={this.props.fontSize}  userInfo={this.props.userInfo} projectId={this.props.projectId}/>
+                                <NewSubTaskButton head={this.props.head} changeHead={this.props.changeHead} theme = {this.props.theme} fontSize={this.props.fontSize}  userInfo={this.props.userInfo} projectId={this.props.projectId} showLoading={this.props.showLoading}/>
                             </Row>
                             <Row noGutters={true}>
                                 {subTasks.map((task) => {
-                                    return <SubTaskButton name={task.title} percentage={task.progress} key={task._id} changeHead={this.props.changeHead} taskHead={task._id} theme = {this.props.theme} fontSize = {this.props.fontSize}></SubTaskButton>;
+                                    return <SubTaskButton name={task.title} percentage={task.progress} key={task._id} changeHead={this.props.changeHead} taskHead={task._id} theme = {this.props.theme} fontSize = {this.props.fontSize} showLoading={this.props.showLoading}></SubTaskButton>;
                                 })}
                             </Row>
                         </Col>
