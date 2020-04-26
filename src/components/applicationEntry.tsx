@@ -26,9 +26,13 @@ export class AppEntryPage extends React.Component<{}, AppEntryPageState> {
         this.setState({ isLoggedIn, userInfo });
     }
 
+    setLoggedOut = () => {
+        this.setState({ isLoggedIn: false });
+    }
+
     render() {
         if (this.state.isLoggedIn) {
-            return <MainPage userInfo={this.state.userInfo} signedIn={true} projectPageUp={false} theme="light" font="verdana" fontSize={16} viewPage="loading" />;
+            return <MainPage userInfo={this.state.userInfo} setLoggedOut={this.setLoggedOut} projectPageUp={false} theme="light" font="verdana" fontSize={16} viewPage="loading" />;
         } else {
             return <MainLanding reportLoginInfo={this.collectLoginInfo} />;
         }

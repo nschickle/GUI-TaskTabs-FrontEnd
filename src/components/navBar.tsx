@@ -136,13 +136,6 @@ const styles = {
     }
 }
 
-const testOwner: IUser = { id: 0, name: "Super Steve" };
-
-interface IUser {
-    id: number;
-    name: string;
-}
-
 interface INavBarProps {
     hideProjectPage: () => any;
     changeToDarkTheme: () => any;
@@ -156,8 +149,8 @@ interface INavBarProps {
     changeToSize32: () => any;
     changeToSize40: () => any;
     fontSize: number;
-    getWebsiteLanding: () => any;
     owner: string;
+    setLoggedOut: () => void;
 }
 
 interface NavBarState {
@@ -173,16 +166,12 @@ interface NavBarState {
     changeToSize32: () => any;
     changeToSize40: () => any;
     fontSize: number;
-    getWebsiteLanding: () => any;
 }
 
 export class NavBar extends React.Component<INavBarProps, NavBarState> {
-    owner: IUser;
 
     constructor(props: INavBarProps) {
         super(props);
-
-        this.owner = testOwner;
 
         this.state = {
             hideProjectPage: props.hideProjectPage,
@@ -197,7 +186,6 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
             changeToSize32: props.changeToSize32,
             changeToSize40: props.changeToSize40,
             fontSize: props.fontSize,
-            getWebsiteLanding: props.getWebsiteLanding
         };
     }
 
@@ -205,12 +193,8 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
         this.state.hideProjectPage();
     }
 
-    getWebsiteLanding = () => {
-        this.state.getWebsiteLanding();
-    }
-
     logout = () => {
-        console.log("!!");
+        this.props.setLoggedOut();
     }
 
     checkTheme = () => {
@@ -290,12 +274,6 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
                                 variant="outline-dark"
                                 style={style.button}>
                                 Home
-                                </Button>
-                            <Button
-                                onClick={this.getWebsiteLanding}
-                                variant="outline-dark"
-                                style={style.button}>
-                                About
                                 </Button>
                         </Nav>
                     </Navbar.Collapse>
@@ -378,7 +356,8 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
                                 clientId={ApplicationConfig.googleAuth.clientID}
                                 buttonText="Logout"
                                 onLogoutSuccess={this.logout}
-                            ></GoogleLogout>
+                                onFailure={this.logout}
+                            />
                         </Nav>
                     </Navbar.Collapse>
                 </Navbar>
@@ -479,16 +458,12 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
                             </Dropdown>
                         </Nav>
                         <Nav>
-                            <Button
-                                className="g-signin2"
-                                data-onsuccess="onSignIn"
-                                data-height="48"
-                                data-width="162"
-                                data-borderStyle="none"
-                                variant="outline-light"
-                                style={styles.gButton}>
-                                Google
-                                </Button>
+                            <GoogleLogout
+                                clientId={ApplicationConfig.googleAuth.clientID}
+                                buttonText="Logout"
+                                onLogoutSuccess={this.logout}
+                                onFailure={this.logout}
+                            />
                         </Nav>
                     </Navbar.Collapse>
                 </Navbar>

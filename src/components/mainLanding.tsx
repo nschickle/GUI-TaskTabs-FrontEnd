@@ -9,7 +9,7 @@ import * as Logo from "../img/logo.png";
 const styles = {
     pageContainer: {
         margin: 0,
-        padding:0,
+        padding: 0,
         width: "match-parent"
     },
     titleIntroduction: {
@@ -41,7 +41,7 @@ const styles = {
     },
     center: {
         margin: "auto",
-        marginTop: 75        
+        marginTop: 75
     },
     centerCols: {
         margin: "auto"
@@ -61,7 +61,7 @@ const styles = {
 };
 
 interface MainLandProps {
-    reportLoginInfo: (isLoggedIn: boolean, userInfo:UserInfo) => any;
+    reportLoginInfo: (isLoggedIn: boolean, userInfo: UserInfo) => any;
 }
 
 export class MainLanding extends React.Component<MainLandProps, {}> {
@@ -69,12 +69,12 @@ export class MainLanding extends React.Component<MainLandProps, {}> {
         super(props);
     }
 
-    launchApp = (user:UserInfo) => {
+    launchApp = (user: UserInfo) => {
         this.props.reportLoginInfo(true, user);
     }
 
     render() {
-        return(
+        return (
             <Container fluid style={styles.pageContainer}>
                 <Row style={styles.titleIntroduction}>
                     <Col style={styles.logo}>
@@ -84,7 +84,7 @@ export class MainLanding extends React.Component<MainLandProps, {}> {
                             height="200"
                             className="d-inline-block"
                             style={styles.img}
-                            alt="TaskTabs Logo"/>
+                            alt="TaskTabs Logo" />
                     </Col>
                     <Col style={styles.label}>
                         <h1 className="text-center">
@@ -102,31 +102,31 @@ export class MainLanding extends React.Component<MainLandProps, {}> {
                     <Col sm={4} style={styles.bottomStyle}>
                         <Container style={styles.centerCols}>
                             <p style={styles.infoText}>TaskTabs is a project managements system to improve productivity in your projects:<br></br>
-                                <ul>
-                                    <li>
-                                        Use for personal or professional projects
-                                    </li>
-                                    <li>
-                                        Stay organized by planning your projects
-                                    </li>
-                                    <li>
-                                        Create and navigate your tasks and projects in a few clicks
-                                    </li>
-                                    <li>
-                                        Easy sign in with Google
-                                    </li>
-                                </ul>
                             </p>
+                            <ul>
+                                <li>
+                                    Use for personal or professional projects
+                                </li>
+                                <li>
+                                    Stay organized by planning your projects
+                                </li>
+                                <li>
+                                    Create and navigate your tasks and projects in a few clicks
+                                </li>
+                                <li>
+                                    Easy sign in with Google
+                                </li>
+                            </ul>
                         </Container>
                     </Col>
                     <Col sm={8} >
-                    <img
-                        src={Logo}
-                        className="d-inline-flex"
-                        style={styles.imgProjectPage}
-                        alt="TaskTabs Project Page"/>
+                        <img
+                            src={Logo}
+                            className="d-inline-flex"
+                            style={styles.imgProjectPage}
+                            alt="TaskTabs Project Page" />
                     </Col>
-                    </Row>
+                </Row>
             </Container>
         );
     }

@@ -33,24 +33,23 @@ const fonts = {
 };
 
 interface MainPageProps {
-    signedIn: boolean;
     projectPageUp: boolean;
     theme: string;
     font: string;
     fontSize: number;
     viewPage: string;
     userInfo: UserInfo;
+    setLoggedOut: () => void;
 }
 
 // TODO:
 // Make it so choosing a project on the landing changes it on project page
-export class MainPage extends React.Component<MainPageProps, { projectPageUp: boolean, projectID: number, theme: string, font: string, fontSize: number, viewPage: string, signedIn: boolean }>{
+export class MainPage extends React.Component<MainPageProps, { projectPageUp: boolean, projectID: number, theme: string, font: string, fontSize: number, viewPage: string }>{
 
     constructor(props: MainPageProps) {
         super(props);
 
         this.state = {
-            signedIn: props.signedIn,
             projectPageUp: props.projectPageUp,
             projectID: null,
             theme: props.theme,
@@ -61,7 +60,6 @@ export class MainPage extends React.Component<MainPageProps, { projectPageUp: bo
     }
 
     showProjectPage = (projectID: number) => {
-        this.setState({ signedIn: true })
         this.setState({ projectPageUp: true });
         this.setState({ projectID: projectID });
     }
@@ -70,10 +68,6 @@ export class MainPage extends React.Component<MainPageProps, { projectPageUp: bo
     hideProjectPage = () => {
         this.setState({ projectPageUp: false });
         this.setState({ projectID: null });
-    }
-
-    getWebsiteLanding = () => {
-        this.setState({ signedIn: false });
     }
 
     changeToDarkTheme = () => {
@@ -162,8 +156,8 @@ export class MainPage extends React.Component<MainPageProps, { projectPageUp: bo
                         changeToSize32={this.changeToSize32}
                         changeToSize40={this.changeToSize40}
                         fontSize={fontSize}
-                        getWebsiteLanding={this.getWebsiteLanding} 
                         owner={this.props.userInfo.name}
+                        setLoggedOut={this.props.setLoggedOut}
                     />
                 </Row>
                 <Row>
@@ -186,8 +180,8 @@ export class MainPage extends React.Component<MainPageProps, { projectPageUp: bo
                         changeToSize32={this.changeToSize32}
                         changeToSize40={this.changeToSize40}
                         fontSize={fontSize}
-                        getWebsiteLanding={this.getWebsiteLanding} 
                         owner={this.props.userInfo.name}
+                        setLoggedOut={this.props.setLoggedOut}
                         />
                 </Row>
                 <Row>
