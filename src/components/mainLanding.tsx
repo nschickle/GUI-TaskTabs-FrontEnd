@@ -1,17 +1,15 @@
 import * as React from "react";
-
-import Image from 'react-bootstrap/Image'
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from "react-bootstrap/Col";
 import { UserInfo } from "./userInfo";
 import { SignInButton } from "./signInButton";
-import Logo from "../img/logo.png";
+import * as Logo from "../img/logo.png";
 
 const styles = {
     pageContainer: {
         margin: 0,
-        padding:0,
+        padding: 0,
         width: "match-parent"
     },
     titleIntroduction: {
@@ -43,7 +41,7 @@ const styles = {
     },
     center: {
         margin: "auto",
-        marginTop: 75        
+        marginTop: 75
     },
     centerCols: {
         margin: "auto"
@@ -63,27 +61,20 @@ const styles = {
 };
 
 interface MainLandProps {
-    showProjectLanding: () => any;
-    userInfo: UserInfo;
+    reportLoginInfo: (isLoggedIn: boolean, userInfo: UserInfo) => any;
 }
 
-export class MainLanding extends React.Component<MainLandProps, { showProjectLanding: () => any}> {
-    owner: UserInfo;
+export class MainLanding extends React.Component<MainLandProps, {}> {
     constructor(props: MainLandProps) {
         super(props);
-
-        this.state = {
-            showProjectLanding: props.showProjectLanding
-        };
-        this.owner = this.props.userInfo
     }
 
-    launchApp = () =>{
-        this.state.showProjectLanding();
+    launchApp = (user: UserInfo) => {
+        this.props.reportLoginInfo(true, user);
     }
 
     render() {
-        return(
+        return (
             <Container fluid style={styles.pageContainer}>
                 <Row style={styles.titleIntroduction}>
                     <Col style={styles.logo}>
@@ -93,7 +84,7 @@ export class MainLanding extends React.Component<MainLandProps, { showProjectLan
                             height="200"
                             className="d-inline-block"
                             style={styles.img}
-                            alt="TaskTabs Logo"/>
+                            alt="TaskTabs Logo" />
                     </Col>
                     <Col style={styles.label}>
                         <h1 className="text-center">
@@ -101,8 +92,7 @@ export class MainLanding extends React.Component<MainLandProps, { showProjectLan
                         </h1>
                     </Col>
                     <Col style={styles.centerCols}>
-                            <SignInButton launchApp={this.launchApp} userInfo={this.owner}>
-                            </SignInButton> 
+                        <SignInButton launchApp={this.launchApp}></SignInButton>
                     </Col>
                 </Row>
                 <Row style={styles.welcomeText}>
@@ -112,35 +102,31 @@ export class MainLanding extends React.Component<MainLandProps, { showProjectLan
                     <Col sm={4} style={styles.bottomStyle}>
                         <Container style={styles.centerCols}>
                             <p style={styles.infoText}>TaskTabs is a project managements system to improve productivity in your projects:<br></br>
-                                <ul>
-                                    <li>
-                                        Use for personal or professional projects
-                                    </li>
-                                    <li>
-                                        Stay organized by planning your projects
-                                    </li>
-                                    <li>
-                                        Create and navigate your tasks and projects in a few clicks
-                                    </li>
-                                    <li>
-                                        Easy sign in with Google
-                                    </li>
-                                </ul>
                             </p>
-                        </Container>
-                        <Container style={styles.center}>
-                            <SignInButton launchApp={this.launchApp} userInfo={this.props.userInfo} >
-                            </SignInButton> 
+                            <ul>
+                                <li>
+                                    Use for personal or professional projects
+                                </li>
+                                <li>
+                                    Stay organized by planning your projects
+                                </li>
+                                <li>
+                                    Create and navigate your tasks and projects in a few clicks
+                                </li>
+                                <li>
+                                    Easy sign in with Google
+                                </li>
+                            </ul>
                         </Container>
                     </Col>
                     <Col sm={8} >
-                    <img
-                        src={Logo}
-                        className="d-inline-flex"
-                        style={styles.imgProjectPage}
-                        alt="TaskTabs Project Page"/>
+                        <img
+                            src={Logo}
+                            className="d-inline-flex"
+                            style={styles.imgProjectPage}
+                            alt="TaskTabs Project Page" />
                     </Col>
-                    </Row>
+                </Row>
             </Container>
         );
     }

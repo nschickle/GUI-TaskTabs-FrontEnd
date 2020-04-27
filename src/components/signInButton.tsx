@@ -2,7 +2,7 @@ import * as React from "react";
 import GoogleLogin from 'react-google-login';
 import { UserInfo } from "./userInfo";
 import Container from "react-bootstrap/Container";
-
+import { ApplicationConfig } from './applicationConfig';
 const styles = {
     button: {
         margin: "auto",
@@ -12,48 +12,36 @@ const styles = {
     }
 };
 
-
-const testOwner: UserInfo = { name: null, email: null };
-
-
-const responseGoogle = (response: any) => {
-    testOwner.name = response.profileObj.name;
-    testOwner.email = response.profileObj.email;
-}
-
 interface SignInButtonProps {
-    userInfo: UserInfo;
-    launchApp: () => any;
+    launchApp: (user: UserInfo) => any;
 }
 
-export class SignInButton extends React.Component<SignInButtonProps, {launchApp: () => any}> {
+export class SignInButton extends React.Component<SignInButtonProps, {}> {
     owner: UserInfo;
     constructor(props: SignInButtonProps) {
         super(props);
-        this.state = {
-            launchApp: props.launchApp
-        }
-        this.owner = this.props.userInfo
-        
+
     }
 
-    getUser = () => {
-        responseGoogle;
-        this.owner = testOwner;
+    responseGoogle = (response: any) => {
+        if (response.Pt) {
+            let user: UserInfo = { name: response.Pt.pW, email: response.Pt.yu }
+            this.props.launchApp(user);
+        }
     }
 
     public render() {
-                return (
-                        <Container style={styles.button}>
-                            <GoogleLogin
-                            clientId="528310070004-u0clc84o9iktpqi6tjujqe9pq9f6ns2n.apps.googleusercontent.com"
-                            buttonText="Sign In With Google and Launch!"
-                            onSuccess={this.props.launchApp}
-                            onFailure={responseGoogle}
-                            cookiePolicy={'single_host_origin'}
-                            />
-                        </Container>
-                );
-            
+        return (
+            <Container style={styles.button}>
+                <GoogleLogin
+                    clientId={ApplicationConfig.googleAuth.clientID}
+                    buttonText="Sign In With Google"
+                    onSuccess={this.responseGoogle}
+                    onFailure={this.responseGoogle}
+                    cookiePolicy={'single_host_origin'}
+                />
+            </Container>
+        );
+
     }
 }
