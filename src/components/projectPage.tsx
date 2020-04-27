@@ -204,7 +204,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 					description={task.description}
 					dueDate={deadline}
 					status={task.status}
-					assignee={task.assignedTo}
+					assignedTo={task.assignedTo}
 					owner={testOwner}
 					sharedUsers={testSharedWith}
 					userInfo={this.props.userInfo}

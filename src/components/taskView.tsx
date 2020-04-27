@@ -390,7 +390,7 @@ interface TaskViewProps {
     description: string;
     dueDate: Date;
     status: string;
-    assignee: number;
+    assignedTo: string;
     owner: User;
     sharedUsers: User[];
     theme: string;
@@ -408,7 +408,7 @@ interface TaskViewState {
     dueDate: Date;
     description: string;
     taskStatus: string;
-    assignee: number;
+    assignedTo: string;
     error: any;
     isLoaded: boolean;
     subTasks: Task[];
@@ -460,7 +460,7 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
         this.sharedUsers = props.sharedUsers;
 
         this.state = {
-            width: 0, height: 0, dueDate: this.props.dueDate, description: this.props.description, taskStatus: this.props.status, assignee: this.props.assignee, error: null, isLoaded: false,
+            width: 0, height: 0, dueDate: this.props.dueDate, description: this.props.description, taskStatus: this.props.status, assignedTo: this.props.assignedTo, error: null, isLoaded: false,
             subTasks: [], name: this.props.name, completion: this.props.completion, hasChanged: false, wasDeleteRequested: false, showHistoryTab: props.showHistoryTab, showStatTab: props.showStatTab
         };
 
@@ -468,7 +468,7 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
     }
 
     componentDidUpdate(oldProps: TaskViewProps) {
-        const { name, description, dueDate, assignee, status, taskID, completion } = this.props;
+        const { name, description, dueDate, assignedTo: assignee, status, taskID, completion } = this.props;
         if (oldProps.dueDate !== dueDate) {
             this.setState({ dueDate: dueDate })
         }
@@ -478,8 +478,8 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
         if (oldProps.description !== description) {
             this.setState({ description: description })
         }
-        if (oldProps.assignee !== assignee) {
-            this.setState({ assignee: assignee })
+        if (oldProps.assignedTo !== assignee) {
+            this.setState({ assignedTo: assignee })
         }
         if (oldProps.status !== status) {
             this.setState({ taskStatus: status })
@@ -513,8 +513,8 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
         this.deleteButtonText = "Delete";
     }
 
-    handleAssignedChange(e: React.ChangeEvent<HTMLSelectElement>) {
-        this.setState({ assignee: Number(e.target.value) });
+    handleAssignedChange(newAssign: string) {
+        this.setState({ assignedTo: newAssign });
         this.setState({ hasChanged: true });
         this.setState({ wasDeleteRequested: false })
         this.deleteButtonText = "Delete";
@@ -634,7 +634,7 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
         }
         // TODO
         // should be user from google oauth
-        const updatedTask = { owner: this.owner, parentId: this.props.parentId, projectId: this.props.projectId, title: this.state.name, status: this.state.taskStatus, assignedTo: this.state.assignee, progress: completion, deadline: this.state.dueDate, description: this.state.description };
+        const updatedTask = { owner: this.owner, parentId: this.props.parentId, projectId: this.props.projectId, title: this.state.name, status: this.state.taskStatus, assignedTo: this.state.assignedTo, progress: completion, deadline: this.state.dueDate, description: this.state.description };
 
         const request = new UserHeaderHttpRequest(`/api/tasks/${this.props.taskID}`, this.props.userInfo, { "Content-Type": "application/json" });
         RetryableFetch.fetch_retry(request,
@@ -831,7 +831,13 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                 </Row>
                 <Row>
                     <Col xs="5"> <StatusDropdown taskStatus={this.state.taskStatus} statusList={this.statusOptions} theme={this.props.theme} handleChange={this.handleStatusChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
-                    <Col xs="7"><AssignedDropdown assignedState={this.state.assignee} sharedUsers={this.sharedUsers} owner={this.owner} theme={this.props.theme} handleChange={this.handleAssignedChange.bind(this)} fontSize={this.props.fontSize} /> </Col>
+                    <Col xs="7"><AssignedDropdown
+                        projectId={this.props.projectId}
+                        theme={this.props.theme}
+                        handleChange={this.handleAssignedChange.bind(this)}
+                        fontSize={this.props.fontSize}
+                        userInfo={this.props.userInfo}/>
+                    </Col>
                 </Row>
                 <Row noGutters={true}>
                     <Form style={descFormStyle}>
