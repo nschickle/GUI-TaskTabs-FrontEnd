@@ -216,7 +216,8 @@ export class ShareUsers extends React.Component<IShareUserProps, IShareUserState
             width: calculatedSize,
             maxWidth: calculatedSize,
             height: calculatedSize,
-            maxHeight: calculatedSize
+            maxHeight: calculatedSize,
+            display: (this.state.isOwner) ? "inline-block" : "none"
         };
     }
 
