@@ -161,8 +161,7 @@ export class ShareUsers extends React.Component<IShareUserProps, IShareUserState
     }
 
     private handleOnAddCollaborator = () => {
-        const collaborators: String[] = this.state.collaborators
-            .map(c => c.email);
+        const collaborators: String[] = this.retrievedProject.collaborators;
 
         if (!collaborators.includes(this.addEmail)){
 
