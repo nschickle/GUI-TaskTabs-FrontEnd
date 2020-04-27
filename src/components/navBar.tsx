@@ -10,7 +10,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import { GoogleLogout } from 'react-google-login';
 import ApplicationConfig from './applicationConfig';
 
-import Logo from "../img/logo.png";
+import * as Logo from "../img/logo.png";
 
 
 const font16 = {
@@ -157,6 +157,7 @@ interface INavBarProps {
     changeToSize40: () => any;
     fontSize: number;
     getWebsiteLanding: () => any;
+    owner: string;
 }
 
 interface NavBarState {
@@ -305,7 +306,7 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
                                     variant="outline-dark"
                                     style={style.button}
                                     id="accountDropdown">
-                                    {this.owner.name}
+                                    {this.props.owner}
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu
                                     style={style.accountDrop}>
@@ -410,7 +411,7 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
                                     variant="outline-light"
                                     style={style.button}
                                     id="accountDropdown">
-                                    {this.owner.name}
+                                    {this.props.owner}
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu
                                     style={style.accountDrop}>

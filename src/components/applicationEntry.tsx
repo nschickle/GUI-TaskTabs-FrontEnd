@@ -16,22 +16,21 @@ export class AppEntryPage extends React.Component<{}, AppEntryPageState> {
     constructor(props: Readonly<{}>) {
         super(props);
 
-      this.state = {
-        isLoggedIn: false,
-        userInfo: null,
-      };
+        this.state = {
+            isLoggedIn: false,
+            userInfo: null,
+        };
     }
 
-    collectLoginInfo = (isLoggedIn: boolean, userInfo:UserInfo) => {
-        this.setState({ isLoggedIn, userInfo});
+    collectLoginInfo = (isLoggedIn: boolean, userInfo: UserInfo) => {
+        this.setState({ isLoggedIn, userInfo });
     }
-
 
     render() {
         if (this.state.isLoggedIn) {
-            return <MainPage signedIn={true} projectPageUp={false} theme="light" font="verdana" fontSize = {16} viewPage="loading"/>;
+            return <MainPage userInfo={this.state.userInfo} signedIn={true} projectPageUp={false} theme="light" font="verdana" fontSize={16} viewPage="loading" />;
         } else {
-            return <MainLanding reportLoginInfo ={this.collectLoginInfo}/>;
+            return <MainLanding reportLoginInfo={this.collectLoginInfo} />;
         }
     }
 }

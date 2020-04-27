@@ -39,13 +39,12 @@ interface MainPageProps {
     font: string;
     fontSize: number;
     viewPage: string;
+    userInfo: UserInfo;
 }
 
 // TODO:
 // Make it so choosing a project on the landing changes it on project page
 export class MainPage extends React.Component<MainPageProps, { projectPageUp: boolean, projectID: number, theme: string, font: string, fontSize: number, viewPage: string, signedIn: boolean }>{
-    private userInfo = new UserInfo("test@test.com", "test");
-
 
     constructor(props: MainPageProps) {
         super(props);
@@ -71,14 +70,6 @@ export class MainPage extends React.Component<MainPageProps, { projectPageUp: bo
     hideProjectPage = () => {
         this.setState({ projectPageUp: false });
         this.setState({ projectID: null });
-    }
-
-    showProjectLanding = () => {
-        this.setState({
-            signedIn: true,
-            projectPageUp: false,
-            projectID: null
-        });
     }
 
     getWebsiteLanding = () => {
@@ -135,7 +126,6 @@ export class MainPage extends React.Component<MainPageProps, { projectPageUp: bo
 
     render() {
         const projectPageUp = this.state.projectPageUp;
-        const signedIn = this.state.signedIn;
         const theme = this.state.theme;
         const font = this.state.font;
         const fontSize = this.state.fontSize;
@@ -172,10 +162,12 @@ export class MainPage extends React.Component<MainPageProps, { projectPageUp: bo
                         changeToSize32={this.changeToSize32}
                         changeToSize40={this.changeToSize40}
                         fontSize={fontSize}
-                        getWebsiteLanding={this.getWebsiteLanding} />
+                        getWebsiteLanding={this.getWebsiteLanding} 
+                        owner={this.props.userInfo.name}
+                    />
                 </Row>
                 <Row>
-                    <ProjectPage projectID={this.state.projectID} theme={theme} fontSize={fontSize} userInfo={this.userInfo} hideProjectPage={this.hideProjectPage} viewPage={this.state.viewPage} showLoading={this.showLoading} showStatTab={this.showStatTab} showHistoryTab={this.showHistoryTab} showTaskView={this.showTaskView} />
+                    <ProjectPage projectID={this.state.projectID} theme={theme} fontSize={fontSize} userInfo={this.props.userInfo} hideProjectPage={this.hideProjectPage} viewPage={this.state.viewPage} showLoading={this.showLoading} showStatTab={this.showStatTab} showHistoryTab={this.showHistoryTab} showTaskView={this.showTaskView} />
                 </Row>
             </Container>;
         } else {
@@ -194,10 +186,12 @@ export class MainPage extends React.Component<MainPageProps, { projectPageUp: bo
                         changeToSize32={this.changeToSize32}
                         changeToSize40={this.changeToSize40}
                         fontSize={fontSize}
-                        getWebsiteLanding={this.getWebsiteLanding} />
+                        getWebsiteLanding={this.getWebsiteLanding} 
+                        owner={this.props.userInfo.name}
+                        />
                 </Row>
                 <Row>
-                    <ProjectLanding showProjectPage={this.showProjectPage} theme={theme} fontSize={fontSize} userInfo={this.userInfo} showLoading={this.showLoading} />
+                    <ProjectLanding owner={this.props.userInfo.name} showProjectPage={this.showProjectPage} theme={theme} fontSize={fontSize} userInfo={this.props.userInfo} showLoading={this.showLoading} />
                 </Row>
             </Container>;
         }
