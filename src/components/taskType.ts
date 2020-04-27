@@ -4,7 +4,7 @@ export interface Task {
     title: string;
     description: string;
     notes: string;
-    assignedTo: number;
+    assignedTo: string;
     deadline: string;
     status: string;
     progress: number;
