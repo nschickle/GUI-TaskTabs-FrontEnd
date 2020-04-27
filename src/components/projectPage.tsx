@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Alert from "react-bootstrap/Alert";
+import Spinner from 'react-bootstrap/Spinner';
 
 import { ProjectColumn } from "./projectColumn";
 import { SubTaskColumn } from "./subTaskColumn";
@@ -25,10 +27,20 @@ const styles = {
 		paddingRight: 0,
 		minWidth: 1300
 	},
+	loader: {
+		width: 100,
+		height: 100
+	},
 	button: {
 		height: 20,
 		fontSize: 16
 	}
+};
+
+interface SpinnerStyle {
+	paddingLeft: number;
+	paddingTop: number;
+	mindWidth: number;
 };
 
 const HistoryRow = styled.div`
@@ -89,40 +101,38 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 	// This is needed because if the head was recently inserted, the fetch will
 	// likely return null as the database will not have caught up yet.
 	makeProjectQuery = () => {
-		let timeout = setTimeout(() => {
-			const request = new UserHeaderHttpRequest(`/api/tasks/${this.props.projectID}`, this.props.userInfo);
-			RetryableFetch.fetch_retry(request)
-				.then(res => res.json())
-				.then(
-					async (result) => {
-						if (result) {
+		const request = new UserHeaderHttpRequest(`/api/tasks/${this.props.projectID}`, this.props.userInfo);
+		RetryableFetch.fetch_retry(request)
+			.then(res => res.json())
+			.then(
+				async (result) => {
+					if (result) {
 
-							// add the project to the beginning of the history
-							let taskHistoryNode: ProjectHistory;
-							let childProgress: number[] = await this.retrieveChildProgress(result._id);
+						// add the project to the beginning of the history
+						let taskHistoryNode: ProjectHistory;
+						let childProgress: number[] = await this.retrieveChildProgress(result._id);
 
-							taskHistoryNode = { id: result._id, name: result.title, progress: result.progress, childProgress: childProgress };
-							// state should be treated as if it were immutable.
-							// However, concat returns a new array.
-							this.setState({
-								isLoaded: true,
-								task: result,
-								head: result._id,
-								history: this.state.history.concat([taskHistoryNode])
-							});
-						}
-					},
-					// Note: it's important to handle errors here
-					// instead of a catch() block so that we don't swallow
-					// exceptions from actual bugs in components.
-					(error) => {
+						taskHistoryNode = { id: result._id, name: result.title, progress: result.progress, childProgress: childProgress };
+						// state should be treated as if it were immutable.
+						// However, concat returns a new array.
 						this.setState({
 							isLoaded: true,
-							error
+							task: result,
+							head: result._id,
+							history: this.state.history.concat([taskHistoryNode])
 						});
 					}
-				);
-		}, 1000);
+				},
+				// Note: it's important to handle errors here
+				// instead of a catch() block so that we don't swallow
+				// exceptions from actual bugs in components.
+				(error) => {
+					this.setState({
+						isLoaded: true,
+						error
+					});
+				}
+			);
 	}
 
 	componentDidMount() {
@@ -137,18 +147,34 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 	public render() {
 
 		const { error, isLoaded, task, head, history, projectColumnKey } = this.state;
-		// TODO Style error and loading screens
 
 		if (error) {
 			return (
-				<>Error!</>
+				<Alert variant="danger">
+					<Alert.Heading>We've Experienced an Error</Alert.Heading>
+					<p> We could not establish a connection with our database. We apologise for the inconvenience. Please try again later.</p>
+				</Alert>
 			);
 		} else if (!isLoaded) {
-			return (
-				<>Loading...</>
-			);
+			let style: SpinnerStyle = {
+				mindWidth: 1300,
+				paddingLeft: (window.innerWidth - 50) / 2,
+				paddingTop: (window.innerHeight - 50) / 2,
+			};
+			if (this.props.theme === "light") {
+				return (
+					<Col xs="4" style={style}>
+						<Spinner animation="border" variant="dark" style={styles.loader} />
+					</Col>
+				);
+			} else {
+				return (
+					<Col xs="4" style={style}>
+						<Spinner animation="border" variant="light" style={styles.loader} />
+					</Col>
+				);
+			}
 		} else {
-
 			let historyComponent =
 				<Breadcrumb>
 					{history.map(node => {
@@ -508,7 +534,6 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 
 								taskHistoryNode = { id: result._id, name: result.title, progress: result.progress, childProgress: childProgress };
 
-								console.log(history);
 								let parentChildProgress: number[] = await this.retrieveChildProgress(history[history.length - 1].id);
 								// check if the parent's child progress array is up to date.
 								if (history[history.length - 1].childProgress.length !== parentChildProgress.length) {
