@@ -39,7 +39,9 @@ const font16 = {
     fontSize: {
         fontSize: 16
     },
-
+    buffer: {
+        marginRight: 25
+    }
 };
 
 const font24 = {
@@ -68,6 +70,9 @@ const font24 = {
     fontSize: {
         fontSize: 24
     },
+    buffer: {
+        marginRight: 25
+    }
 };
 
 const font32 = {
@@ -96,6 +101,9 @@ const font32 = {
     fontSize: {
         fontSize: 32
     },
+    buffer: {
+        marginRight: 75
+    }
 };
 
 const font40 = {
@@ -124,6 +132,9 @@ const font40 = {
     fontSize: {
         fontSize: 36
     },
+    buffer: {
+        marginRight: 100
+    }
 }
 
 const styles = {
@@ -131,7 +142,6 @@ const styles = {
         borderStyle: "none"
     },
     img: {
-
         margin: 20
     }
 }
@@ -277,8 +287,8 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
                                 </Button>
                         </Nav>
                     </Navbar.Collapse>
-                    <Navbar.Collapse className="justify-content-end">
-                        <Nav>
+                    <Navbar.Collapse className="justify-content-end" >
+                        <Nav style={style.buffer}>
                             <Dropdown>
                                 <Dropdown.Toggle
                                     variant="outline-dark"
@@ -305,7 +315,7 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
                                         onClick={this.checkFont}>
                                         Font: {font}
                                     </Button>
-                                    <Dropdown as={ButtonGroup} drop="right">
+                                    <Dropdown as={ButtonGroup} drop="down">
                                         <Button
                                             variant="outline-dark"
                                             style={style.dropdown}>
@@ -379,7 +389,7 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
                         </Nav>
                     </Navbar.Collapse>
                     <Navbar.Collapse className="justify-content-end">
-                        <Nav>
+                        <Nav style={style.buffer}>
                             <Dropdown>
                                 <Dropdown.Toggle
                                     variant="outline-light"
@@ -406,7 +416,7 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
                                         onClick={this.checkFont}>
                                         Font: {font}
                                     </Button>
-                                    <Dropdown as={ButtonGroup} drop="right">
+                                    <Dropdown as={ButtonGroup} drop="down">
                                         <Button
                                             variant="outline-dark"
                                             style={style.dropdown}>
