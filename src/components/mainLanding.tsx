@@ -1,16 +1,24 @@
 import * as React from "react";
+import styled from "styled-components";
+
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from "react-bootstrap/Col";
 import { UserInfo } from "./userInfo";
 import { SignInButton } from "./signInButton";
 import * as Logo from "../img/logo.png";
+import * as ExampleImage from "../img/landingImg.png";
+
+const Wrapper = styled.div`
+    height: 100vh;
+    background-color: #97d2f1;
+`;
 
 const styles = {
     pageContainer: {
         margin: 0,
         padding: 0,
-        width: "match-parent"
+        width: "match-parent",
     },
     titleIntroduction: {
         fontSize: 96,
@@ -75,59 +83,61 @@ export class MainLanding extends React.Component<MainLandProps, {}> {
 
     render() {
         return (
-            <Container fluid style={styles.pageContainer}>
-                <Row style={styles.titleIntroduction}>
-                    <Col style={styles.logo}>
-                        <img
-                            src={Logo}
-                            width="200"
-                            height="200"
-                            className="d-inline-block"
-                            style={styles.img}
-                            alt="TaskTabs Logo" />
-                    </Col>
-                    <Col style={styles.label}>
-                        <h1 className="text-center">
-                            Start Increasing Your Project Productivity With TaskTabs!
+            <Wrapper>
+                <Container fluid style={styles.pageContainer}>
+                    <Row style={styles.titleIntroduction}>
+                        <Col style={styles.logo}>
+                            <img
+                                src={Logo}
+                                width="200"
+                                height="200"
+                                className="d-inline-block"
+                                style={styles.img}
+                                alt="TaskTabs Logo" />
+                        </Col>
+                        <Col style={styles.label}>
+                            <h1 className="text-center">
+                                Start Increasing Your Project Productivity With TaskTabs!
                         </h1>
-                    </Col>
-                    <Col style={styles.centerCols}>
-                        <SignInButton launchApp={this.launchApp}></SignInButton>
-                    </Col>
-                </Row>
-                <Row style={styles.welcomeText}>
-                    <p style={styles.welcomeText}>Welcome, to TaskTabs!</p>
-                </Row>
-                <Row style={styles.infoText}>
-                    <Col sm={4} style={styles.bottomStyle}>
-                        <Container style={styles.centerCols}>
-                            <p style={styles.infoText}>TaskTabs is a project managements system to improve productivity in your projects:<br></br>
-                            </p>
-                            <ul>
-                                <li>
-                                    Use for personal or professional projects
+                        </Col>
+                        <Col style={styles.centerCols}>
+                            <SignInButton launchApp={this.launchApp}></SignInButton>
+                        </Col>
+                    </Row>
+                    <Row style={styles.welcomeText}>
+                        <p style={styles.welcomeText}>Welcome to TaskTabs!</p>
+                    </Row>
+                    <Row style={styles.infoText}>
+                        <Col sm={4} style={styles.bottomStyle}>
+                            <Container style={styles.centerCols}>
+                                <p style={styles.infoText}>TaskTabs is a project managements system to improve productivity in your projects:<br></br>
+                                </p>
+                                <ul>
+                                    <li>
+                                        Use for personal or professional projects
                                 </li>
-                                <li>
-                                    Stay organized by planning your projects
+                                    <li>
+                                        Stay organized by planning your projects
                                 </li>
-                                <li>
-                                    Create and navigate your tasks and projects in a few clicks
+                                    <li>
+                                        Create and navigate your tasks and projects in a few clicks
                                 </li>
-                                <li>
-                                    Easy sign in with Google
+                                    <li>
+                                        Easy sign in with Google
                                 </li>
-                            </ul>
-                        </Container>
-                    </Col>
-                    <Col sm={8} >
-                        <img
-                            src={Logo}
-                            className="d-inline-flex"
-                            style={styles.imgProjectPage}
-                            alt="TaskTabs Project Page" />
-                    </Col>
-                </Row>
-            </Container>
+                                </ul>
+                            </Container>
+                        </Col>
+                        <Col sm={8} >
+                            <img
+                                src={ExampleImage}
+                                className="d-inline-flex"
+                                style={styles.imgProjectPage}
+                                alt="TaskTabs Project Page" />
+                        </Col>
+                    </Row>
+                </Container>
+            </Wrapper>
         );
     }
 };
