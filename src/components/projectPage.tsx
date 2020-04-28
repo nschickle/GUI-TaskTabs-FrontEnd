@@ -82,7 +82,7 @@ interface ProjectPageProps {
 
 // ProjectPage contains the entire application past the Google oauth. This should include the left and right sidebars
 // task view, settings user info, etc.
-export class ProjectPage extends React.Component<ProjectPageProps, { error: any, isLoaded: boolean, task: Task, head: number, history: ProjectHistory[], projectColumnKey: number }>{
+export class ProjectPage extends React.Component<ProjectPageProps, { projectId: number, error: any, isLoaded: boolean, task: Task, head: number, history: ProjectHistory[], projectColumnKey: number }>{
 
 	constructor(props: ProjectPageProps) {
 		super(props);
@@ -93,7 +93,8 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 			task: null,
 			head: undefined,
 			history: [],
-			projectColumnKey: 1
+			projectColumnKey: 1,
+			projectId: this.props.projectID,
 		};
 	}
 
@@ -198,7 +199,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 					taskID={head}
 					changeHead={this.changeHeadFromDelete}
 					parentId={task.parentId}
-					projectId={this.props.projectID}
+					projectId={this.state.projectId}
 					name={task.title}
 					completion={task.progress}
 					description={task.description}
@@ -232,7 +233,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 					viewPage={this.props.viewPage}
 					showHistoryTab={this.props.showHistoryTab}
 					showTaskView={this.props.showTaskView}
-					projectId={this.props.projectID}
+					projectId={this.state.projectId}
 					task={task.title}
 					userInfo={this.props.userInfo}
 				/>;
@@ -498,6 +499,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { error: any,
 
 							// set new task
 							this.setState({
+								projectId: newHead,
 								isLoaded: true,
 								task: result,
 								history: newHistory
