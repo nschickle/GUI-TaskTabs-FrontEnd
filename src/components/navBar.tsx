@@ -300,11 +300,6 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
                                     style={style.accountDrop}>
                                     <Button
                                         variant="outline-dark"
-                                        style={style.dropdown}>
-                                        Account
-                                        </Button>
-                                    <Button
-                                        variant="outline-dark"
                                         style={style.dropdown}
                                         onClick={this.checkTheme}>
                                         Theme: {theme}
@@ -399,11 +394,6 @@ export class NavBar extends React.Component<INavBarProps, NavBarState> {
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu
                                     style={style.accountDrop}>
-                                    <Button
-                                        variant="outline-dark"
-                                        style={style.dropdown}>
-                                        Account
-                                        </Button>
                                     <Button
                                         variant="outline-dark"
                                         style={style.dropdown}
