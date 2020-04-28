@@ -97,6 +97,34 @@ export class ShareUsers extends React.Component<IShareUserProps, IShareUserState
             );
     }
 
+    public componentDidUpdate = (oldProps:IShareUserProps) => {
+        if (oldProps.userInfo !== this.props.userInfo || oldProps.projectId !== this.props.projectId ) {
+            const request = new UserHeaderHttpRequest(`/api/projects/${this.props.projectId}`, this.props.userInfo);
+            RetryableFetch.fetch_retry(request)
+                .then(res => res.json())
+                .then((result: IProject) => {
+                        this.retrievedProject = result;
+                        this.setState({ 
+                            owner: new UserViewModel(result.owner),
+                            collaborators: result.collaborators
+                                .filter(c => c != result.owner)
+                                .map((item) => {
+                                return new UserViewModel(item);
+                            }),
+                            isLoaded: true, 
+                            error: false,
+                            isOwner: (result.owner === this.props.userInfo.email)
+                        });
+                    },
+                    (error) => {
+                        this.setState({ 
+                            isLoaded: true, 
+                            error: true});
+                    }
+                );
+        }
+    }
+
     public render() {
 
         //TODO: implement loading functionality
