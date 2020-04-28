@@ -57,14 +57,12 @@ export class HomePage extends React.Component<MainPageProps, { projectPageUp: bo
     }
 
     showProjectPage = (projectID: number) => {
-        this.setState({ projectPageUp: true });
-        this.setState({ projectID: projectID });
+        this.setState({ projectPageUp: true, projectID: projectID });
     }
 
-    // Currently makes projectID null because it's state can't be guarentee
+    // Currently makes projectID null because it's state can't be guarenteed
     hideProjectPage = () => {
-        this.setState({ projectPageUp: false });
-        this.setState({ projectID: null });
+        this.setState({ projectPageUp: false, projectID: null  });
     }
 
     changeToDarkTheme = () => {
