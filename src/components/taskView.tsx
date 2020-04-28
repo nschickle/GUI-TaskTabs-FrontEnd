@@ -464,6 +464,9 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
             subTasks: [], name: this.props.name, completion: this.props.completion, hasChanged: false, wasDeleteRequested: false, showHistoryTab: props.showHistoryTab, showStatTab: props.showStatTab
         };
 
+        this.oldStatus = this.status;
+        console.log(this.status);
+
         this.makeSubTaskQuery(5);
     }
 
@@ -482,7 +485,7 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
             this.setState({ assignedTo: assignee })
         }
         if (oldProps.status !== status) {
-            this.setState({ taskStatus: status })
+            this.setState({ taskStatus: this.status })
         }
         if (oldProps.taskID !== taskID) {
             this.makeSubTaskQuery(5);
@@ -613,6 +616,7 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
             if (!valid) {
                 alert("WARNING: Can not set status to complete while there are uncompleted subtasks! Reverting status to previous state and saving other changes...");
                 this.setState({ taskStatus: this.oldStatus });
+                this.status = this.oldStatus;
             } else {
                 completion = 100;
                 this.setState({ completion: 100 });
@@ -627,6 +631,8 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
             if (!valid) {
                 alert("WARNING: Can not set status to active or inactive while there are completed subtasks! Reverting status to previous state and saving other changes...");
                 this.setState({ taskStatus: this.oldStatus });
+                this.status = this.oldStatus;
+
             } else {
                 completion = 0;
                 this.setState({ completion: 0 });
@@ -765,8 +771,6 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
             savedStatusMessage = <Badge/>;
         }
 
-
-
         return (
             <Container style={styles.container}>
                 <Row style={styles.row} noGutters={true}>
@@ -865,7 +869,7 @@ export class TaskView extends React.Component<TaskViewProps, TaskViewState>{
                 <Row noGutters={true}>
                     <Col xs={sharedTabCol1} style={styles.sharedTab}>
                         <ShareUsers
-                            projectId={this.props.projectId} 
+                            projectId={this.props.projectId}
                             theme={this.props.theme}
                             fontSize={this.props.fontSize}
                             userInfo={this.props.userInfo}/>
