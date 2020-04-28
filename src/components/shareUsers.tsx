@@ -103,11 +103,9 @@ export class ShareUsers extends React.Component<IShareUserProps, IShareUserState
             RetryableFetch.fetch_retry(request)
                 .then(res => res.json())
                 .then((result: IProject) => {
-                        this.retrievedProject = result;
                         this.setState({ 
                             owner: new UserViewModel(result.owner),
                             collaborators: result.collaborators
-                                .filter(c => c != result.owner)
                                 .map((item) => {
                                 return new UserViewModel(item);
                             }),
