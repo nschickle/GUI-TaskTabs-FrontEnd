@@ -52,7 +52,6 @@ interface IShareUserState {
 }
 
 export class ShareUsers extends React.Component<IShareUserProps, IShareUserState> {
-    retrievedProject: IProject;
     addEmail: string;
     handlePopup: ({ target }: { target: any; }) => void;
 
@@ -79,11 +78,9 @@ export class ShareUsers extends React.Component<IShareUserProps, IShareUserState
         RetryableFetch.fetch_retry(request)
             .then(res => res.json())
             .then((result: IProject) => {
-                    this.retrievedProject = result;
                     this.setState({ 
                         owner: new UserViewModel(result.owner),
                         collaborators: result.collaborators
-                            .filter(c => c != result.owner)
                             .map((item) => {
                             return new UserViewModel(item);
                         }),
@@ -161,7 +158,7 @@ export class ShareUsers extends React.Component<IShareUserProps, IShareUserState
     }
 
     private handleOnAddCollaborator = () => {
-        const collaborators: String[] = this.retrievedProject.collaborators;
+        const collaborators: String[] = this.state.collaborators.map(c => c.email);
 
         if (!collaborators.includes(this.addEmail)){
 
@@ -178,7 +175,6 @@ export class ShareUsers extends React.Component<IShareUserProps, IShareUserState
                 .then((result: IProject) => {
                     // This will refresh the page with the new project as the current head.
                     this.setState({collaborators: result.collaborators
-                        .filter(c => c != result.owner)
                         .map((item) => {
                     return new UserViewModel(item)}), showPopup: false});
                 })
