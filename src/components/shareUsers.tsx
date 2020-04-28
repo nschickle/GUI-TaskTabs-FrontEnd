@@ -165,7 +165,7 @@ export class ShareUsers extends React.Component<IShareUserProps, IShareUserState
 
         if (!collaborators.includes(this.addEmail)){
 
-            collaborators.push(this.addEmail);
+            collaborators.push(this.addEmail.toLowerCase());
             const newProject = { collaborators };
     
             const request = new UserHeaderHttpRequest(`/api/projects/${this.props.projectId}`, this.props.userInfo, { 'Content-Type': 'application/json' });

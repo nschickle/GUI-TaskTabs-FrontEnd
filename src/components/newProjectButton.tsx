@@ -66,7 +66,7 @@ export class ProjectButton extends React.Component<ProjectButtonProps, { showLoa
     createNewProject = () => {
         this.state.showLoading();
 
-        const newProject: NewProjectPost = { owner: this.props.userInfo.email, collaborators: [ this.props.userInfo.email ], parentId: null, title: "New project", description: "", notes: "", assignedTo: null, status: "Active", progress: 0 };
+        const newProject: NewProjectPost = { owner: this.props.userInfo.email.toLowerCase(), collaborators: [ this.props.userInfo.email.toLowerCase() ], parentId: null, title: "New project", description: "", notes: "", assignedTo: null, status: "Active", progress: 0 };
 
         const request = new UserHeaderHttpRequest("/api/projects", this.props.userInfo, { 'Content-Type': 'application/json' });
         RetryableFetch.fetch_retry(request,
