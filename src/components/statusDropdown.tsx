@@ -87,7 +87,9 @@ export class StatusDropdown extends React.Component<StatusDropdownProps, StatusS
 
     constructor(props: StatusDropdownProps) {
         super(props);
-        this.state = { taskStatus: props.taskStatus }
+        this.state = {
+            taskStatus: props.taskStatus
+         }
         this.options = props.statusList;
     }
 
@@ -109,186 +111,49 @@ export class StatusDropdown extends React.Component<StatusDropdownProps, StatusS
             )
         });
 
-        if(this.props.theme == "light"){
-            if(this.props.fontSize === 16) {
-                return(
-                    <Form style={light.font16}>
-                        <Form.Group as={Row} controlId="statusDropdown">
-                            <Form.Label column sm="4">Status:</Form.Label>
-                            <Col sm="8">
-                                <Form.Control
-                                    as="select"
-                                    onChange={(event: any) => {
-                                        this.setState({taskStatus: event.target.value});
-                                        this.props.handleChange(event);
-                                    }}
-                                    value={taskStatus}
-                                    size="lg"
-                                    style={light.font16}
-                                >
-                                    {arrayOp}
-                                </Form.Control>
-                            </Col>
-                        </Form.Group>
-                    </Form>
-                )
+        let style;
+        if(this.props.theme === "light"){
+            if(this.props.fontSize === 16){
+                style = light.font16;
             } else if(this.props.fontSize === 24) {
-                return(
-                    <Form style={light.font24}>
-                        <Form.Group as={Row} controlId="statusDropdown">
-                            <Form.Label column sm="4">Status:</Form.Label>
-                            <Col sm="8">
-                                <Form.Control
-                                    as="select"
-                                    onChange={(event: any) => {
-                                        this.setState({taskStatus: event.target.value});
-                                        this.props.handleChange(event);
-                                    }}
-                                    value={taskStatus}
-                                    size="lg"
-                                    style={light.font24}
-                                >
-                                    {arrayOp}
-                                </Form.Control>
-                            </Col>
-                        </Form.Group>
-                    </Form>
-                )
+                style = light.font24;
             } else if(this.props.fontSize === 32) {
-                return(
-                    <Form style={light.font32}>
-                        <Form.Group as={Row} controlId="statusDropdown">
-                            <Form.Label column sm="4">Status:</Form.Label>
-                            <Col sm="8">
-                                <Form.Control
-                                    as="select"
-                                    onChange={(event: any) => {
-                                        this.setState({taskStatus: event.target.value});
-                                        this.props.handleChange(event);
-                                    }}
-                                    value={taskStatus}
-                                    size="lg"
-                                    style={light.font32}
-                                >
-                                    {arrayOp}
-                                </Form.Control>
-                            </Col>
-                        </Form.Group>
-                    </Form>
-                )
+                style = light.font32;
             } else {
-                return(
-                    <Form style={light.font40}>
-                        <Form.Group as={Row} controlId="statusDropdown">
-                            <Form.Label column sm="4">Status:</Form.Label>
-                            <Col sm="8">
-                                <Form.Control
-                                    as="select"
-                                    onChange={(event: any) => {
-                                        this.setState({taskStatus: event.target.value});
-                                        this.props.handleChange(event);
-                                    }}
-                                    value={taskStatus}
-                                    size="lg"
-                                    style={light.font40}
-                                >
-                                    {arrayOp}
-                                </Form.Control>
-                            </Col>
-                        </Form.Group>
-                    </Form>
-                )
+                style = light.font40;
             }
         } else {
-            if(this.props.fontSize === 16) {
-                return(
-                    <Form style={dark.font16}>
-                        <Form.Group as={Row} controlId="statusDropdown">
-                            <Form.Label column sm="4" style={dark.label16}>Status:</Form.Label>
-                            <Col sm="8">
-                                <Form.Control
-                                    as="select"
-                                    onChange={(event: any) => {
-                                        this.setState({taskStatus: event.target.value});
-                                        this.props.handleChange(event);
-                                    }}
-                                    value={taskStatus}
-                                    size="lg"
-                                    style={dark.font16}
-                                >
-                                    {arrayOp}
-                                </Form.Control>
-                            </Col>
-                        </Form.Group>
-                    </Form>
-                )
+            if(this.props.fontSize === 16){
+                style = dark.font16;
             } else if(this.props.fontSize === 24) {
-                return(
-                    <Form style={dark.font24}>
-                        <Form.Group as={Row} controlId="statusDropdown">
-                            <Form.Label column sm="4" style={dark.label24}>Status:</Form.Label>
-                            <Col sm="8">
-                                <Form.Control
-                                    as="select"
-                                    onChange={(event: any) => {
-                                        this.setState({taskStatus: event.target.value});
-                                        this.props.handleChange(event);
-                                    }}
-                                    value={taskStatus}
-                                    size="lg"
-                                    style={dark.font24}
-                                >
-                                    {arrayOp}
-                                </Form.Control>
-                            </Col>
-                        </Form.Group>
-                    </Form>
-                )
+                style = dark.font24;
             } else if(this.props.fontSize === 32) {
-                return(
-                    <Form style={dark.font32}>
-                        <Form.Group as={Row} controlId="statusDropdown">
-                            <Form.Label column sm="4" style={dark.label32}>Status:</Form.Label>
-                            <Col sm="8">
-                                <Form.Control
-                                    as="select"
-                                    onChange={(event: any) => {
-                                        this.setState({taskStatus: event.target.value});
-                                        this.props.handleChange(event);
-                                    }}
-                                    value={taskStatus}
-                                    size="lg"
-                                    style={dark.font32}
-                                >
-                                    {arrayOp}
-                                </Form.Control>
-                            </Col>
-                        </Form.Group>
-                    </Form>
-                )
+                style = dark.font32;
             } else {
-                return(
-                    <Form style={dark.font40}>
-                        <Form.Group as={Row} controlId="statusDropdown">
-                            <Form.Label column sm="4" style={dark.label40}>Status:</Form.Label>
-                            <Col sm="8">
-                                <Form.Control
-                                    as="select"
-                                    onChange={(event: any) => {
-                                        this.setState({taskStatus: event.target.value});
-                                        this.props.handleChange(event);
-                                    }}
-                                    value={taskStatus}
-                                    size="lg"
-                                    style={dark.font40}
-                                >
-                                    {arrayOp}
-                                </Form.Control>
-                            </Col>
-                        </Form.Group>
-                    </Form>
-                )
+                style = dark.font40;
             }
         }
+
+        return (
+            <Form style={style}>
+                <Form.Group as={Row} controlId="statusDropdown">
+                    <Form.Label column sm="4">Status:</Form.Label>
+                    <Col sm="8">
+                        <Form.Control
+                            as="select"
+                            onChange={(event: any) => {
+                                this.setState({taskStatus: event.target.value});
+                                this.props.handleChange(event);
+                            }}
+                            value={taskStatus}
+                            size="lg"
+                            style={style}
+                        >
+                            {arrayOp}
+                        </Form.Control>
+                    </Col>
+                </Form.Group>
+            </Form>
+        );
     }
 }
