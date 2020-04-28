@@ -65,16 +65,24 @@ export class AssignedDropdown extends React.Component<IAssignedDropdownProps, IA
             .then(res => res.json())
             .then((result: IProject[]) => {
                     const proj: IProject = result.filter(p => p._id === this.props.projectId.toString())[0];
-                    this.setState({
-                        collaborators: proj.collaborators
-                            .map((item) => {
-                            return new UserViewModel(item);
-                        }),
-                        assignedTo: new UserViewModel(proj.assignedTo),
-                        selectIndex: proj.collaborators.findIndex(c => c === proj.assignedTo),
-                        isLoaded: true, 
-                        error: false,
-                    });
+                    if (proj) {
+                        this.setState({
+                            collaborators: proj.collaborators
+                                .map((item) => {
+                                return new UserViewModel(item);
+                            }),
+                            assignedTo: new UserViewModel(proj.assignedTo),
+                            selectIndex: proj.collaborators.findIndex(c => c === proj.assignedTo),
+                            isLoaded: true, 
+                            error: false,
+                        });
+                    }
+                    else {
+                        this.setState({
+                            isLoaded: true,
+                            error: true
+                        });
+                    }
                 },
                 (error) => {
                     this.setState({ 
