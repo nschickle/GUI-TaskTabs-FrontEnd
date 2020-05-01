@@ -456,7 +456,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { projectId: 
 
 	private updateProgress = async (id: number, progress: number) => {
 
-		const updatedTask = { owner: this.state.task.owner, title: this.state.task.title, status: this.state.task.status, assignedTo: this.state.task.assignedTo, progress: progress, deadline: this.state.task.deadline, description: this.state.task.description };
+		const updatedTask = { progress: progress };
 		//get subtask progress
 		const request = new UserHeaderHttpRequest(`/api/tasks/${id}`, this.props.userInfo, { 'Content-Type': 'application/json' });
 		await RetryableFetch.fetch_retry(request,
@@ -516,7 +516,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { projectId: 
 
 							// Check if the history is still correct, even though a task button was clicked
 							for (let i = 0; i < history.length; i++) {
-								if (history[i].id === newHead) {
+								if (history[i].id == newHead) {
 									isNewHeadInHistory = true;
 								}
 							}
@@ -524,7 +524,7 @@ export class ProjectPage extends React.Component<ProjectPageProps, { projectId: 
 							if (!isNewHeadInHistory) {
 								// destory the end of the history until the head is discovered
 								while (!headDiscovered && history.length !== 0) {
-									if (history[history.length - 1].id !== previousHead) {
+									if (history[history.length - 1].id != previousHead) {
 										history.pop();
 									} else {
 										headDiscovered = true;
