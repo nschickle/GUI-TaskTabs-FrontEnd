@@ -10,15 +10,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/JustinLaGree/GUI-TaskTabs.git"
+    "url": "git+https://github.com/nschickle/GUI-TaskTabs-FrontEnd.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/JustinLaGree/GUI-TaskTabs/issues"
+    "url": "https://github.com/nschickle/GUI-TaskTabs-FrontEnd/issues"
   },
-  "homepage": "https://github.com/JustinLaGree/GUI-TaskTabs#readme",
+  "homepage": "https://github.com/nschickle/GUI-TaskTabs-FrontEnd#readme",
   "devDependencies": {
     "tslint": "^6.1.0",
     "typescript": "^3.8.2"
@@ -34,7 +34,7 @@
     "bootstrap": "^4.4.1",
     "classnames": "^2.2.6",
     "date-fns": "^2.11.1",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "popper.js": "^1.16.1",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",

@@ -1,7 +1,7 @@
 export const ApplicationConfig = {
     api: {
         staging: {
-            baseUrl: "https://tasktabs-backend.herokuapp.com",
+            baseUrl: "https://backend-tasktabs.herokuapp.com/",
         }
     },
     googleAuth: {
