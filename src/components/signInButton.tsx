@@ -24,8 +24,8 @@ export class SignInButton extends React.Component<SignInButtonProps, {}> {
     }
 
     responseGoogle = (response: any) => {
-        if (response.Pt) {
-            let user: UserInfo = { name: response.Pt.pW, email: response.Pt.yu }
+        if (response.Tt) {
+            let user: UserInfo = { name: response.Tt.Bd, email: response.Tt.Du }
             this.props.launchApp(user);
         }
     }
